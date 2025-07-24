@@ -2,8 +2,6 @@ import sys
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import KFold, train_test_split
-
 from recsyslib.preprocess.base import Preprocessor
 from recsyslib.recsys_data_set import (
     FoldedData,
@@ -13,6 +11,7 @@ from recsyslib.recsys_data_set import (
     SplitDataDict,
 )
 from recsyslib.util import get_random_state
+from sklearn.model_selection import KFold, train_test_split
 
 
 class DataSplit(Preprocessor):
@@ -95,8 +94,8 @@ class UserCrossValidation(DataSplit):
         for fold in range(self._num_folds):
             for partition in ["train", "val", "test"]:
                 if len(data_splits[fold][partition]) > 0:
-                    concatenated_data_splits.get(fold, {})[partition] = pd.concat(
-                        data_splits[fold][partition]
+                    concatenated_data_splits.setdefault(fold, {})[partition] = (
+                        pd.concat(data_splits[fold][partition])
                     )
                 else:
                     del data_splits[fold][partition]
