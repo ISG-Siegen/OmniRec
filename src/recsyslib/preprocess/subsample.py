@@ -2,7 +2,7 @@ import sys
 
 from recsyslib.preprocess.base import Preprocessor
 from recsyslib.recsys_data_set import RawData, RecSysDataSet
-from recsyslib.util import get_random_state
+from recsyslib.util.util import get_random_state
 
 # TODO: DOCS
 

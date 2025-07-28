@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
-from recsyslib import util
 from recsyslib.recsys_data_set import DataVariant, RecSysDataSet
+from recsyslib.util import util
 
 # TODO (Python 3.12+): Replace TypeVar with inline generic syntax `class Box[T](...)`
 T = TypeVar("T", bound=DataVariant)

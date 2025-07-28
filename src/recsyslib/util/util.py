@@ -10,7 +10,7 @@ _logger = logging.getLogger(_LOGGER_NAME).getChild("util")
 
 _RANDOM_STATE = 42
 
-_DATA_DIR = Path(__file__).parent.parent / "data"
+_DATA_DIR = Path(__file__).parent.parent.parent / "data"
 _DATA_DIR.mkdir(exist_ok=True, parents=True)
 
 

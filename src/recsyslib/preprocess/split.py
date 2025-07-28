@@ -1,17 +1,20 @@
 import sys
+from collections import defaultdict
 
 import numpy as np
 import pandas as pd
-from recsyslib.preprocess.base import Preprocessor
-from recsyslib.recsys_data_set import (
+from sklearn.model_selection import KFold, train_test_split
+
+from recsyslib.data_variants import (
     FoldedData,
     RawData,
-    RecSysDataSet,
     SplitData,
     SplitDataDict,
+    # empty_split_dict,
 )
-from recsyslib.util import get_random_state
-from sklearn.model_selection import KFold, train_test_split
+from recsyslib.preprocess.base import Preprocessor
+from recsyslib.recsys_data_set import RecSysDataSet
+from recsyslib.util.util import get_random_state
 
 
 class DataSplit(Preprocessor):

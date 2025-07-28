@@ -7,80 +7,16 @@ from dataclasses import asdict, dataclass
 from os import PathLike
 from pathlib import Path
 from time import time
-from typing import Generic, Literal, Optional, TypedDict, TypeVar, cast
+from typing import Generic, Optional, TypeVar, cast
 
 import pandas as pd
 
-from recsyslib import util
 from recsyslib.data_loaders import registry
-from recsyslib.util import _DATA_DIR
+from recsyslib.data_variants import DataVariant, FoldedData, RawData, SplitData
+from recsyslib.util import util
+from recsyslib.util.util import _DATA_DIR
 
-logger = util._logger.getChild("dataset")
-
-
-class DataVariant: ...
-
-
-# TODO: Maybe Raw is a bit misleading, since after e.g. Core and Subsample it would still be Raw. Maybe change.
-# TODO: DOC
-@dataclass
-class RawData(DataVariant):
-    df: pd.DataFrame
-
-
-# TODO: DOC
-@dataclass
-class SplitData(DataVariant):
-    train: pd.DataFrame
-    val: pd.DataFrame
-    test: pd.DataFrame
-
-    def get(self, split: Literal["train", "val", "test"]) -> pd.DataFrame:
-        """Helper method for getting a portion of the split by specifying the name as a str.
-
-        Args:
-            split (Literal["train", "val", "test"]): The name of the split's portion to retrieve. Can be "train", "val" or "test".
-
-        Returns:
-            pd.DataFrame: Pandas `DataFrame` containing the split portion's data.
-
-        Example:
-            ```
-            splits: SplitData = ...
-
-            # Retrieve all splits in e.g. a loop:
-            for split_name in ["train", "val", "test"]:
-                data = splits.get(split_name)
-
-            # The above example would be a lot move verbose without the get method.
-            ```
-        """
-        if split == "train":
-            return self.train
-        elif split == "val":
-            return self.val
-        elif split == "test":
-            return self.test
-        else:
-            logger.critical(f"Uknown split: {split}")
-            sys.exit(1)
-
-
-class SplitDataDict(TypedDict):
-    train: pd.DataFrame
-    val: pd.DataFrame
-    test: pd.DataFrame
-
-
-# TODO: DOC
-@dataclass
-class FoldedData(DataVariant):
-    folds: dict[int, SplitData]
-
-    @classmethod
-    def from_split_dict(cls, raw: dict[int, SplitDataDict]):
-        folds = {k: SplitData(**v) for k, v in raw.items()}
-        return cls(folds)
+logger = util._logger.getChild("data")
 
 
 # TODO: Document methods

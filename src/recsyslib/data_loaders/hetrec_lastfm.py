@@ -1,7 +1,8 @@
-from pathlib import Path
 import zipfile
+from pathlib import Path
+
 import pandas as pd
-from pandas.core.api import DataFrame as DataFrame
+
 from recsyslib.data_loaders.base import DatasetInfo, Loader
 from recsyslib.data_loaders.registry import _loader
 
@@ -16,7 +17,7 @@ class HetrecLastFM(Loader):
         )
 
     @staticmethod
-    def load(source_dir: Path, name: str) -> DataFrame:
+    def load(source_dir: Path, name: str) -> pd.DataFrame:
         with zipfile.ZipFile(source_dir / "hetrec2011-lastfm-2k.zip", "r") as zipf:
             data = pd.read_csv(
                 zipf.open("user_taggedartists-timestamps.dat"),

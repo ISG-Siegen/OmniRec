@@ -8,9 +8,9 @@ import requests
 from pandas import DataFrame
 from tqdm import tqdm
 
-from recsyslib import util
 from recsyslib.data_loaders.base import Loader
-from recsyslib.util import _DATA_DIR, is_valid_url, verify_checksum
+from recsyslib.util import util
+from recsyslib.util.util import _DATA_DIR, is_valid_url, verify_checksum
 
 logger = util._logger.getChild("registry")
 

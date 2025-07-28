@@ -6,8 +6,8 @@ from pathlib import Path
 from subprocess import CalledProcessError
 from typing import Optional
 
-from recsyslib import util
-from recsyslib.util import _DATA_DIR
+from recsyslib.util import util
+from recsyslib.util.util import _DATA_DIR
 
 _ENVS_DIR = _DATA_DIR / "envs"
 
