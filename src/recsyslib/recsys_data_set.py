@@ -54,6 +54,26 @@ class RecSysDataSet(Generic[T]):
         force_download=False,
         force_canonicalize=False,
     ) -> "RecSysDataSet[RawData]":
+        """Loads a dataset using a registered DataLoader. If not already done the data set is downloaded and canonicalized.
+            Canonicalization means duplicates are dropped, identifiers are normalized and the data is saved in a standardized format.
+
+        Args:
+            data_set_name (str): The name of the dataset to load (must be registered in the DataLoader registry).
+            raw_dir (Optional[PathLike | str], optional): Target directory where the raw data is stored. If not provided, the data is downloaded to the default raw data directory (_DATA_DIR).
+            canon_path (Optional[PathLike | str], optional): Path where the canonicalized data should be saved. If not provided, the data is saved to the default canonicalized data directory (_DATA_DIR / "canon").
+            force_download (bool, optional): If True, forces re-downloading of the raw data even if it already exists. Defaults to False.
+            force_canonicalize (bool, optional): If True, forces re-canonicalization of the data even if a canonicalized file exists. Defaults to False.
+
+        Returns:
+            RecSysDataSet[RawData]: The loaded dataset in canonicalized RawData format.
+        
+        Example:
+            ```
+            # Load the MovieLens 100K dataset using the registered DataLoader
+            # Download the raw data to the default directory and save the canonicalized data to the default path
+            dataset = RecSysDataSet.use_dataloader(data_set_name="MovieLens100K")
+            ```
+        """
         dataset = RecSysDataSet[RawData]()
         if canon_path:
             dataset._meta.canon_pth = Path(canon_path)
@@ -164,6 +184,11 @@ class RecSysDataSet(Generic[T]):
     # TODO: check if path already exists
     # TODO: Error handling: logger.critical and sys.exit(1) if any step causes an error
     def save(self, file: str | PathLike):
+        """Saves the RecSysDataSet object to a file with the default suffix .rsds.
+
+        Args:
+            file (str | PathLike): The path where the file is saved.
+        """
         file = Path(file)
         if not file.suffix:
             file = file.with_suffix(".rsds")
@@ -207,6 +232,14 @@ class RecSysDataSet(Generic[T]):
     # TODO: Error handling: logger.critical and sys.exit(1) if any step causes an error
     @staticmethod
     def load(file: str | PathLike) -> "RecSysDataSet[T]":
+        """Loads a RecSysDataSet object from a file with the .rsds suffix.
+
+        Args:
+            file (str | PathLike): The path to the .rsds file.
+
+        Returns:
+            RecSysDataSet[T]: The loaded RecSysDataSet object.
+        """
         with zipfile.ZipFile(file, "r", zipfile.ZIP_STORED) as zf:
             version = zf.read("VERSION").decode()
             # HACK: Very simple versioning implementation in case we change anything in the future

@@ -16,4 +16,14 @@ class Preprocessor(ABC, Generic[T, U]):
         super().__init__()
 
     @abstractmethod
-    def process(self, dataset: RecSysDataSet[T]) -> RecSysDataSet[U]: ...
+    def process(self, dataset: RecSysDataSet[T]) -> RecSysDataSet[U]:
+        """Processes the dataset and returns a new dataset variant.
+
+            Args:
+                dataset (RecSysDataSet[T]): The dataset to process.
+
+            Returns:
+                RecSysDataSet[U]: The processed dataset.
+        """
+        pass
+        

@@ -44,9 +44,19 @@ def verify_checksum(file_pth: Path, checksum: str | None) -> bool:
 
 
 def set_random_state(random_state: int) -> None:
+    """Set the global random state for reproducibility.
+
+    Args:
+        random_state (int): The random state seed.
+    """
     global _RANDOM_STATE
     _RANDOM_STATE = random_state
 
 
 def get_random_state() -> int:
+    """Get the global random state for reproducibility.
+
+    Returns:
+        int: The current random state seed.
+    """
     return _RANDOM_STATE

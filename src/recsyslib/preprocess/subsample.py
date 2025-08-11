@@ -9,6 +9,13 @@ from recsyslib.util.util import get_random_state
 
 class Subsample(Preprocessor):
     def __init__(self, sample_size: int | float) -> None:
+        """Subsamples the dataset to a specified size.
+
+        Args:
+            sample_size (int | float): The size of the sample to draw from the dataset.
+                                        int: The absolute number of interactions to include in the sample.
+                                        float: The fraction of the dataset to include in the sample (between 0 and 1).
+        """
         super().__init__()
         self.sample_size = sample_size
 

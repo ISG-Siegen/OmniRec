@@ -45,8 +45,12 @@ def register_dataloader(names: str | list[str], cls: type[Loader]):
         _add_loader(names, cls)
 
 
-# TODO: DOC
 def list_datasets():
+    """List all registered dataset names.
+
+    Returns:
+        list[str]: A list of all registered dataset names.
+    """
     return list(_DATA_LOADERS.keys())
 
 

@@ -4,11 +4,16 @@ from recsyslib.recsys_data_set import RawData, RecSysDataSet
 
 from .base import Preprocessor
 
-# TODO: DOCS
-
 
 class MakeImplicit(Preprocessor):
     def __init__(self, threshold: int | float) -> None:
+        """Converts explicit feedback to implicit feedback using the specified threshold.
+
+        Args:
+            threshold (int | float): The threshold for converting feedback.
+                                        int: Used directly as the threshold, e.g. 3 -> only interactions with a rating of 3 or higher are included.
+                                        float: Interpreted as a fraction of the maximum rating, e.g. 0.5 -> only interactions with a rating of at least 50% of the maximum rating are included.
+        """
         super().__init__()
         self.threshold = threshold
 

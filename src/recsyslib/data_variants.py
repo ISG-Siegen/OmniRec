@@ -19,7 +19,6 @@ class RawData(DataVariant):
     df: pd.DataFrame
 
 
-# TODO: DOC
 @dataclass
 class SplitData(DataVariant):
     train: pd.DataFrame
@@ -58,17 +57,26 @@ class SplitData(DataVariant):
 
 
 class SplitDataDict(TypedDict, total=False):
+    """TypedDict for representing split data in a dictionary format. Values are expected to be DataFrames for the keys "train", "val", and "test".
+    """
     train: pd.DataFrame
     val: pd.DataFrame
     test: pd.DataFrame
 
 
-# TODO: DOC
 @dataclass
 class FoldedData(DataVariant):
     folds: dict[int, SplitData]
 
     @classmethod
     def from_split_dict(cls, raw: dict[int, SplitDataDict]):
+        """Creates a FoldedData instance from a dictionary of split data.
+
+        Args:
+            raw (dict[int, SplitDataDict]): A dictionary mapping fold indices to their corresponding split data.
+
+        Returns:
+            FoldedData: An instance of FoldedData containing the folded data.
+        """
         folds = {k: SplitData(**v) for k, v in raw.items()}
         return cls(folds)

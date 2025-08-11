@@ -24,7 +24,16 @@ class DataSplit(Preprocessor):
 
 
 class UserHoldout(DataSplit):
+    
     def __init__(self, validation_size: float | int, test_size: float | int) -> None:
+        """Applies the user holdout split to the dataset. Ensures that each user has interactions in the training, validation, and test sets.
+
+        Args:
+            validation_size (float | int): float: The proportion (between 0 and 1) of the dataset to include in the validation split.
+                                            int: The absolute number of interactions to include in the validation split.
+            test_size (float | int): float: The proportion (between 0 and 1) of the dataset to include in the test split.
+                                        int: The absolute number of interactions to include in the test split.
+        """
         super().__init__(validation_size)
         self._test_size = test_size
 
@@ -56,7 +65,15 @@ class UserHoldout(DataSplit):
 
 
 class UserCrossValidation(DataSplit):
+
     def __init__(self, num_folds: int, validation_size: float | int) -> None:
+        """Applies user-based cross-validation to the dataset. Ensures that each user has interactions in the training, validation, and test sets in each fold.
+
+        Args:
+            num_folds (int): The number of folds to use for cross-validation.
+            validation_size (float | int): float: The proportion (between 0 and 1) of the dataset to include in the validation split.
+                                            int: The absolute number of interactions to include in the validation split.
+        """
         super().__init__(validation_size)
         self._num_folds = num_folds
 
@@ -109,7 +126,16 @@ class UserCrossValidation(DataSplit):
 
 
 class RandomHoldout(DataSplit):
+
     def __init__(self, validation_size: float | int, test_size: float | int) -> None:
+        """Applies a random holdout split to the dataset. Randomly splits the dataset into training, validation, and test sets.
+
+        Args:
+            validation_size (float | int): float: The proportion (between 0 and 1) of the dataset to include in the validation split.
+                                            int: The absolute number of interactions to include in the validation split.    
+            test_size (float | int): float: The proportion (between 0 and 1) of the dataset to include in the test split.
+                                        int: The absolute number of interactions to include in the test split.
+        """
         super().__init__(validation_size)
         self._test_size = test_size
 
@@ -128,7 +154,15 @@ class RandomHoldout(DataSplit):
 
 
 class RandomCrossValidation(DataSplit):
+    
     def __init__(self, num_folds: int, validation_size: float | int) -> None:
+        """Applies random cross-validation to the dataset. Randomly splits the dataset into training, validation, and test sets for each fold.
+
+        Args:
+            num_folds (int): The number of folds to use for cross-validation.
+            validation_size (float | int): float: The proportion (between 0 and 1) of the dataset to include in the validation split.
+                                            int: The absolute number of interactions to include in the validation split.
+        """
         super().__init__(validation_size)
         self._num_folds = num_folds
 
