@@ -55,8 +55,8 @@ class RecSysDataSet(Generic[T]):
         force_download=False,
         force_canonicalize=False,
     ) -> "RecSysDataSet[RawData]":
-        """Loads a dataset using a registered DataLoader. If not already done the data set is downloaded and canonicalized.
-            Canonicalization means duplicates are dropped, identifiers are normalized and the data is saved in a standardized format.
+        """Loads a dataset using a registered DataLoader. If not already done the data set is downloaded and canonicalized. 
+        Canonicalization means duplicates are dropped, identifiers are normalized and the data is saved in a standardized format.
 
         Args:
             data_set_name (str): The name of the dataset to load (must be registered in the DataLoader registry).
@@ -69,7 +69,7 @@ class RecSysDataSet(Generic[T]):
             RecSysDataSet[RawData]: The loaded dataset in canonicalized RawData format.
 
         Example:
-            ```
+            ```Python
             # Load the MovieLens 100K dataset using the registered DataLoader
             # Download the raw data to the default directory and save the canonicalized data to the default path
             dataset = RecSysDataSet.use_dataloader(data_set_name="MovieLens100K")

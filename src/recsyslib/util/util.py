@@ -16,6 +16,7 @@ _logger = _root_logger.getChild("util")
 
 _RANDOM_STATE = 42
 
+# TODO: Change path to a more accessible location
 _DATA_DIR = Path(__file__).parent.parent.parent / "data"
 _DATA_DIR.mkdir(exist_ok=True, parents=True)
 

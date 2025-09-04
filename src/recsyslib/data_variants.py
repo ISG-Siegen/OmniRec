@@ -35,7 +35,7 @@ class SplitData(DataVariant):
             pd.DataFrame: Pandas `DataFrame` containing the split portion's data.
 
         Example:
-            ```
+            ```Python
             splits: SplitData = ...
 
             # Retrieve all splits in e.g. a loop:

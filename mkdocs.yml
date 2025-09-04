@@ -1,0 +1,64 @@
+site_name: OmniRec Docs
+nav:
+  - Home: index.md
+  - User Guide:
+      - Getting Started: getting_started.md
+      - Feature Overview: feature_overview.md
+      - Loading Datasets: loading_datasets.md
+      - Datasets Overview: datasets_overview.md
+      - Preprocessing Pipeline: preprocessing.md
+      - Configure Algorithms: conf_algo.md
+      - Evaluator: evaluator.md
+  - API Reference: API_references.md
+
+theme: 
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - content.code.copy
+    - navigation.sections
+    - toc.integrate
+  palette:
+
+  # Palette toggle for automatic mode
+  - media: "(prefers-color-scheme)"
+    toggle:
+      icon: material/brightness-auto
+      name: Switch to light mode
+
+  # Palette toggle for light mode
+  - media: "(prefers-color-scheme: light)"
+    scheme: default 
+    toggle:
+      icon: material/weather-sunny
+      name: Switch to dark mode
+
+    primary: blue grey
+    accent: amber
+
+  # Palette toggle for dark mode
+  - media: "(prefers-color-scheme: dark)"
+    scheme: slate
+    toggle:
+      icon: material/weather-night
+      name: Switch to system preference
+
+    primary: blue grey
+    accent: amber
+  
+  code:
+    highlight_theme: material
+
+plugins:
+  - search
+  - mkdocstrings
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences

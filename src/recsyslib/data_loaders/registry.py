@@ -73,6 +73,7 @@ def _loader(names: str | list[str]):
 for p in Path(__file__).parent.glob("*.py"):
     module = p.stem
     if module != "__init__":
+        # TODO: Change import path as soon as library is renamed
         importlib.import_module(f"recsyslib.data_loaders.{module}")
 
 
@@ -176,4 +177,5 @@ def _run_loader(
         logger.info(f"Successfully loaded {name}!")
         return data
     except Exception as e:
+        # HACK: Catch all exceptions to avoid breaking the framework
         raise NotImplementedError(e)
