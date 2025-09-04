@@ -10,7 +10,7 @@ U = TypeVar("U", bound=DataVariant)
 
 
 class Preprocessor(ABC, Generic[T, U]):
-    logger = util._logger.getChild("preprocess")
+    logger = util._root_logger.getChild("preprocess")
 
     def __init__(self) -> None:
         super().__init__()

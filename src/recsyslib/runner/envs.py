@@ -11,7 +11,7 @@ from recsyslib.util.util import _DATA_DIR
 
 _ENVS_DIR = _DATA_DIR / "envs"
 
-logger = util._logger.getChild("envs")
+logger = util._root_logger.getChild("envs")
 
 
 class Env:
@@ -24,7 +24,14 @@ class Env:
     ) -> None:
         self._name = name
         self._python_version = python_version
-        self._packages = ("RPyC",) + packages
+        local_lib_pth = (
+            Path(__file__).parent.parent.parent.parent / "packages" / "recsyslib_runner"
+        )
+        if local_lib_pth.exists():
+            self._packages = (str(local_lib_pth.resolve()),) + packages
+        else:
+            # TODO: Change package name once we have a name
+            self._packages = ("recsyslib-runner",) + packages
         if path:
             self._path = Path(path)
         else:
@@ -32,6 +39,7 @@ class Env:
 
     def create(self):
         try:
+            # TODO: Creating env shows up every time, this might be misleading
             logger.info(f"Creating env '{self._name}' at {self._path}")
             self._run(["uv", "venv", "-p", self._python_version, self._path])
 
@@ -39,8 +47,10 @@ class Env:
             self._run(["uv", "pip", "install", "-p", self.py_path, *self._packages])
 
         except CalledProcessError as e:
+            # TODO: Does this exception trigger for exit code != 0 ?
             logger.critical(f"Error while creating env '{self._name}':")
             logger.critical(e)
+            # TODO: Log for each stdout/err line
             logger.critical(f"STDOUT: {e.stdout}")
             logger.critical(f"STDERR: {e.stderr}")
 

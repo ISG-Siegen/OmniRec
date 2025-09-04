@@ -12,7 +12,7 @@ from recsyslib.data_loaders.base import Loader
 from recsyslib.util import util
 from recsyslib.util.util import _DATA_DIR, is_valid_url, verify_checksum
 
-logger = util._logger.getChild("registry")
+logger = util._root_logger.getChild("registry")
 
 _DATA_LOADERS: dict[str, type[Loader]] = {}
 

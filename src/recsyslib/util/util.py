@@ -1,12 +1,18 @@
 import hashlib
 import logging
 from pathlib import Path
+from typing import TYPE_CHECKING
 from urllib.parse import urlparse
+
+# Lazy import to solve circular import
+if TYPE_CHECKING:
+    from recsyslib.data_variants import SplitData
 
 # TODO: Maybe we can switch to getLogger(__name__) everywhere instead of using this constant here
 # TODO: Get log level from env and provide methods to set it
 _LOGGER_NAME = "isg-rec-framework"
-_logger = logging.getLogger(_LOGGER_NAME).getChild("util")
+_root_logger = logging.getLogger(_LOGGER_NAME)
+_logger = _root_logger.getChild("util")
 
 _RANDOM_STATE = 42
 
@@ -60,3 +66,9 @@ def get_random_state() -> int:
         int: The current random state seed.
     """
     return _RANDOM_STATE
+
+
+# TODO: Doc
+def splits_to_csv(files: tuple[Path, Path, Path], split_data: "SplitData"):
+    for split_file, (_, data) in zip(files, split_data.iter_splits()):
+        data.to_csv(split_file, index=False)

@@ -1,15 +1,19 @@
 [project]
 name = "recsyslib"
 version = "0.1.0"
-description = "Add your description here"
+description = "Add your description here" # TODO:
 readme = "README.md"
 authors = [
     # TODO: Add other authors
     { name = "Moritz Baumgart", email = "moritz.baumgart@student.uni-siegen.de" },
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
+    "cryptography>=45.0.6",
+    "dacite>=1.9.2",
     "pandas>=2.3.0",
+    "pydantic>=2.11.7",
+    "recsyslib-runner",
     "requests>=2.32.4",
     "rpyc>=6.0.2",
     "scikit-learn>=1.7.0",
@@ -17,16 +21,15 @@ dependencies = [
     "uv>=0.8.0",
 ]
 
+[tool.uv.workspace]
+members = ["packages/recsyslib_runner"]
+
+[tool.uv.sources]
+recsyslib-runner = { workspace = true }
+
 [build-system]
-requires = ["uv_build>=0.7.19,<0.8.0"]
-build-backend = "uv_build"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.uv.build-backend]
-wheel-exclude = ["src/recsyslib/data"]
-source-exclude = ["src/recsyslib/data"]
-
-[dependency-groups]
-dev = [
-    "matplotlib>=3.10.3",
-    "tabulate>=0.9.0",
-]
+[tool.hatch.build.targets.wheel]
+packages = ["src/recsyslib", "packages/recsyslib_runner"]

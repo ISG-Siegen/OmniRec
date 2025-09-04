@@ -1,12 +1,12 @@
 import sys
 from dataclasses import dataclass
-from typing import Literal, TypedDict
+from typing import Generator, Literal, TypedDict
 
 import pandas as pd
 
 from recsyslib.util import util
 
-logger = util._logger.getChild("data")
+logger = util._root_logger.getChild("data")
 
 
 class DataVariant: ...
@@ -55,10 +55,17 @@ class SplitData(DataVariant):
             logger.critical(f"Uknown split: {split}")
             sys.exit(1)
 
+    # TODO: Doc
+    def iter_splits(
+        self,
+    ) -> Generator[tuple[Literal["train", "val", "test"], pd.DataFrame], None, None]:
+        for split in ("train", "val", "test"):
+            yield split, self.get(split)
+
 
 class SplitDataDict(TypedDict, total=False):
-    """TypedDict for representing split data in a dictionary format. Values are expected to be DataFrames for the keys "train", "val", and "test".
-    """
+    """TypedDict for representing split data in a dictionary format. Values are expected to be DataFrames for the keys "train", "val", and "test"."""
+
     train: pd.DataFrame
     val: pd.DataFrame
     test: pd.DataFrame

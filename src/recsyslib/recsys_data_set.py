@@ -7,7 +7,7 @@ from dataclasses import asdict, dataclass
 from os import PathLike
 from pathlib import Path
 from time import time
-from typing import Generic, Optional, TypeVar, cast
+from typing import Generic, Optional, TypeVar, cast, overload
 
 import pandas as pd
 
@@ -16,7 +16,7 @@ from recsyslib.data_variants import DataVariant, FoldedData, RawData, SplitData
 from recsyslib.util import util
 from recsyslib.util.util import _DATA_DIR
 
-logger = util._logger.getChild("data")
+logger = util._root_logger.getChild("data")
 
 
 # TODO: Document methods
@@ -34,6 +34,7 @@ R = TypeVar("R", bound=DataVariant)
 class _DatasetMeta:
     canon_pth: Optional[Path] = None
     raw_dir: Optional[Path] = None
+    name: str = "UnnamedDataset"
 
 
 class RecSysDataSet(Generic[T]):
@@ -66,7 +67,7 @@ class RecSysDataSet(Generic[T]):
 
         Returns:
             RecSysDataSet[RawData]: The loaded dataset in canonicalized RawData format.
-        
+
         Example:
             ```
             # Load the MovieLens 100K dataset using the registered DataLoader
@@ -75,6 +76,9 @@ class RecSysDataSet(Generic[T]):
             ```
         """
         dataset = RecSysDataSet[RawData]()
+
+        dataset._meta.name = data_set_name
+
         if canon_path:
             dataset._meta.canon_pth = Path(canon_path)
         else:
@@ -151,12 +155,35 @@ class RecSysDataSet(Generic[T]):
 
     # region Dataset Statistics
 
-    def num_interactions(self) -> int:
-        # TODO: # HACK: I feel like these should easily implemented
-        if not isinstance(self._data, RawData):
-            logger.error("Cannot get num_interactions on non raw data, aborting!")
+    @overload
+    def num_interactions(self: "RecSysDataSet[RawData]") -> int: ...
+
+    @overload
+    def num_interactions(self: "RecSysDataSet[SplitData]") -> dict[str, int]: ...
+
+    @overload
+    def num_interactions(
+        self: "RecSysDataSet[FoldedData]",
+    ) -> dict[int, dict[str, int]]: ...
+
+    @overload
+    def num_interactions(
+        self: "RecSysDataSet[T]",
+    ) -> int | dict[str, int] | dict[int, dict[str, int]]: ...
+
+    def num_interactions(self):
+        if isinstance(self._data, RawData):
+            return len(self._data.df)
+        elif isinstance(self._data, SplitData):
+            return {split: len(df) for split, df in self._data.iter_splits()}
+        elif isinstance(self._data, FoldedData):
+            return {
+                fold_num: {split: len(df) for split, df in fold_data.iter_splits()}
+                for fold_num, fold_data in self._data.folds.items()
+            }
+        else:
+            logger.error("Unknown data variant!")
             return -1
-        return len(self._data.df)
 
     def min_rating(self) -> float | int:
         # TODO: # HACK: I feel like these should easily implemented
