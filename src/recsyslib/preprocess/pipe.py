@@ -15,7 +15,7 @@ class Pipe(Preprocessor, Generic[T]):
         """Pipeline for automatically applying sequential preprocessing steps. Takes as input a sequence of Preprocessor objects.
         If process() is called, each step's process method is called in the order they were provided.
         Example:
-            ```
+            ```Python
                 # Define preprocessing steps
                 pipe = Pipe[FoldedData](
                     Subsample(0.1),

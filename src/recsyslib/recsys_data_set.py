@@ -68,7 +68,7 @@ class RecSysDataSet(Generic[T]):
             RecSysDataSet[RawData]: The loaded dataset in canonicalized RawData format.
         
         Example:
-            ```
+            ```Python
             # Load the MovieLens 100K dataset using the registered DataLoader
             # Download the raw data to the default directory and save the canonicalized data to the default path
             dataset = RecSysDataSet.use_dataloader(data_set_name="MovieLens100K")
