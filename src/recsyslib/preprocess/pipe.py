@@ -13,7 +13,7 @@ T = TypeVar("T", bound=DataVariant)
 class Pipe(Preprocessor, Generic[T]):
     def __init__(self, *steps: Preprocessor) -> None:
         """Pipeline for automatically applying sequential preprocessing steps. Takes as input a sequence of Preprocessor objects.
-            If process() is called, each step's process method is called in the order they were provided.
+        If process() is called, each step's process method is called in the order they were provided.
         Example:
             ```
                 # Define preprocessing steps

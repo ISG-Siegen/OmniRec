@@ -7,7 +7,7 @@ from recsyslib.recsys_data_set import RawData, RecSysDataSet
 class CorePruning(Preprocessor):
     def __init__(self, core: int) -> None:
         """Prune the dataset to the specified core. 
-            Core pruning with a threshold of e.g. 5 means that only users and items with at least 5 interactions are included in the pruned dataset.
+        Core pruning with a threshold of e.g. 5 means that only users and items with at least 5 interactions are included in the pruned dataset.
 
         Args:
             core (int): The core threshold for pruning.

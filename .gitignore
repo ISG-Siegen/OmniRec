@@ -1,6 +1,9 @@
 # Lib data folder
 src/data/
 
+# MkDocs output
+/site/
+
 # Python-generated files
 __pycache__/
 *.py[oc]
