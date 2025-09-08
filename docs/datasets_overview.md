@@ -38,7 +38,7 @@ The framework includes many built-in datasets. Use the exact name with the `use_
 To see all registered datasets:
 
 ```python
-from recsyslib.data_loaders.registry import list_datasets
+from omnirec.data_loaders.registry import list_datasets
 
 available_datasets = list_datasets()
 print("Available datasets:", available_datasets)

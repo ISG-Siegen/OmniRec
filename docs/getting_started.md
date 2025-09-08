@@ -9,7 +9,7 @@ First you need to setup a python environment at least python <\version> and inst
 
 ## Loading datasets
 
-Central part of the recsyslib library is the [`RecSysDataSet`](API_references.md#recsyslib.RecSysDataSet) class. It loads the data in an object of this class by calling the static [`use_dataloader()`](API_references.md#recsyslib.RecSysDataSet.use_dataloader) function that return a [`RecSysDataSet`](API_references.md#recsyslib.RecSysDataSet) object. If provided a registered data set name [`use_dataloader()`](API_references.md#recsyslib.RecSysDataSet.use_dataloader) downloads the data set, removes duplicates and normalizes the identifiers:
+Central part of the OmniRec library is the [`RecSysDataSet`](API_references.md#omnirec.RecSysDataSet) class. It loads the data in an object of this class by calling the static [`use_dataloader()`](API_references.md#omnirec.RecSysDataSet.use_dataloader) function that return a [`RecSysDataSet`](API_references.md#omnirec.RecSysDataSet) object. If provided a registered data set name [`use_dataloader()`](API_references.md#omnirec.RecSysDataSet.use_dataloader) downloads the data set, removes duplicates and normalizes the identifiers:
 
 ```python
 from OmniRec import RedSysDataSet
@@ -24,10 +24,10 @@ We can now apply the desired preprocessing steps to the data. The easiest way is
 <!-- TODO: Change imports according to final project structure -->
 
 ```python
-from recsyslib.preprocess.core_pruning import CorePruning
-from recsyslib.preprocess.feedback_conversion import MakeImplicit
-from recsyslib.preprocess.pipe import Pipe
-from recsyslib.preprocess.split import UseCrossValidation
+from omnirec.preprocess.core_pruning import CorePruning
+from omnirec.preprocess.feedback_conversion import MakeImplicit
+from omnirec.preprocess.pipe import Pipe
+from omnirec.preprocess.split import UseCrossValidation
 
 pipe = Pipe[FoldedData](
     Subsample(sample_size=0.1),

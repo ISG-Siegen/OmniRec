@@ -25,7 +25,7 @@ All datasets follow a standardized column structure:
 The recommended way to load datasets is using the `use_dataloader` method with registered data loaders:
 
 ```python
-from recsyslib import RecSysDataSet
+from omnirec import RecSysDataSet
 
 # Load MovieLens 100K dataset
 dataset = RecSysDataSet.use_dataloader("MovieLens100K")
@@ -134,8 +134,8 @@ To implement a custom data loader, create a class that inherits from `Loader` an
 ```python
 from pathlib import Path
 import pandas as pd
-from recsyslib.data_loaders.base import Loader, DatasetInfo
-from recsyslib.data_loaders.registry import register_dataloader
+from omnirec.data_loaders.base import Loader, DatasetInfo
+from omnirec.data_loaders.registry import register_dataloader
 
 class MyCustomLoader(Loader):
     @staticmethod

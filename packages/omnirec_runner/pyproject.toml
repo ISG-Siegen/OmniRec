@@ -1,0 +1,17 @@
+[project]
+name = "omnirec-runner"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    # TODO: Add other authors
+    { name = "Moritz Baumgart", email = "baumgartmoritz@web.de" },
+]
+requires-python = ">=3.4" # TODO: change to oldest possible version
+dependencies = [
+    "rpyc>=6.0.2",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

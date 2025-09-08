@@ -9,7 +9,7 @@ All preprocessing operations inherit from the `Preprocessor` base class, which d
 The `Pipe` class allows you to chain multiple preprocessing steps together into a single preprocessing pipeline:
 
 ```python
-from recsyslib.preprocess import Pipe, Subsample, MakeImplicit, CorePruning
+from omnirec.preprocess import Pipe, Subsample, MakeImplicit, CorePruning
 
 # Create a preprocessing pipeline
 pipeline = Pipe(
@@ -29,7 +29,7 @@ The pipeline executes each step in the order they were provided, passing the out
 **Subsample** - Reduces the dataset size by sampling a subset of interactions:
 
 ```python
-from recsyslib.preprocess import Subsample
+from omnirec.preprocess import Subsample
 
 # Sample 10% of interactions
 subsample = Subsample(0.1)
@@ -48,7 +48,7 @@ dataset = subsample.process(dataset)
 **MakeImplicit** - Converts explicit feedback to implicit feedback by filtering interactions above a threshold:
 
 ```python
-from recsyslib.preprocess import MakeImplicit
+from omnirec.preprocess import MakeImplicit
 
 # Keep ratings >= 3
 make_implicit = MakeImplicit(3)
@@ -67,7 +67,7 @@ dataset = make_implicit.process(dataset)
 **CorePruning** - Removes users and items with fewer than a specified number of interactions:
 
 ```python
-from recsyslib.preprocess import CorePruning
+from omnirec.preprocess import CorePruning
 
 # Keep only users and items with at least 5 interactions
 core_pruning = CorePruning(5)
@@ -82,7 +82,7 @@ dataset = core_pruning.process(dataset)
 **Holdout Splits** - Create train/validation/test splits:
 
 ```python
-from recsyslib.preprocess import UserHoldout, RandomHoldout
+from omnirec.preprocess import UserHoldout, RandomHoldout
 
 # User-aware split (each user appears in all sets)
 user_split = UserHoldout(validation_size=0.15, test_size=0.15)
@@ -104,7 +104,7 @@ dataset = random_split.process(dataset)
 **Cross-Validation** - Create multiple folds for cross-validation:
 
 ```python
-from recsyslib.preprocess import UserCrossValidation, RandomCrossValidation
+from omnirec.preprocess import UserCrossValidation, RandomCrossValidation
 
 # User-aware cross-validation (each user appears in all splits)
 user_cv = UserCrossValidation(num_folds=5, validation_size=0.1)
@@ -134,8 +134,8 @@ The preprocessing operations transform datasets between different data variants:
 ## Complete Example
 
 ```python
-from recsyslib import RecSysDataSet
-from recsyslib.preprocess import (
+from omnirec import RecSysDataSet
+from omnirec.preprocess import (
     Pipe, Subsample, MakeImplicit, CorePruning, UserCrossValidation
 )
 

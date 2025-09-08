@@ -1,5 +1,5 @@
 [project]
-name = "recsyslib"
+name = "omnirec"
 version = "0.1.0"
 description = "Add your description here" # TODO:
 readme = "README.md"
@@ -13,7 +13,7 @@ dependencies = [
     "dacite>=1.9.2",
     "pandas>=2.3.0",
     "pydantic>=2.11.7",
-    "recsyslib-runner",
+    "omnirec-runner",
     "requests>=2.32.4",
     "rpyc>=6.0.2",
     "scikit-learn>=1.7.0",
@@ -22,17 +22,17 @@ dependencies = [
 ]
 
 [tool.uv.workspace]
-members = ["packages/recsyslib_runner"]
+members = ["packages/omnirec_runner"]
 
 [tool.uv.sources]
-recsyslib-runner = { workspace = true }
+omnirec-runner = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/recsyslib", "packages/recsyslib_runner"]
+packages = ["src/omnirec", "packages/omnirec_runner"]
 [dependency-groups]
 dev = [
     "matplotlib>=3.10.3",
