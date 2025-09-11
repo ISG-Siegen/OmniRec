@@ -35,6 +35,7 @@ class RunnerService(ABC):
         self,
         algorithm_name: str,
         algorithm_config: str,
+        dataset_name: str,
         train_file: str,
         val_file: str,
         test_file: str,
@@ -70,6 +71,7 @@ class Runner(RunnerService, rpyc.Service, ABC):
         self,
         algorithm_name: str,
         algorithm_config: str,
+        dataset_name: str,
         train_file: str,
         val_file: str,
         test_file: str,
@@ -79,6 +81,7 @@ class Runner(RunnerService, rpyc.Service, ABC):
     ):
         self.algorithm_name = algorithm_name
         self.algorithm_config: dict[str, Any] = json.loads(algorithm_config)
+        self.dataset_name = dataset_name
         self.train_file = Path(train_file)
         self.val_file = Path(val_file)
         self.test_file = Path(test_file)
