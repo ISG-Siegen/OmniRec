@@ -55,7 +55,7 @@ class RecSysDataSet(Generic[T]):
         force_download=False,
         force_canonicalize=False,
     ) -> "RecSysDataSet[RawData]":
-        """Loads a dataset using a registered DataLoader. If not already done the data set is downloaded and canonicalized. 
+        """Loads a dataset using a registered DataLoader. If not already done the data set is downloaded and canonicalized.
         Canonicalization means duplicates are dropped, identifiers are normalized and the data is saved in a standardized format.
 
         Args:
@@ -319,6 +319,6 @@ class RecSysDataSet(Generic[T]):
 
             meta = zf.read("META").decode()
             meta = _DatasetMeta(**json.loads(meta))
-            return cast(RecSysDataSet[T], RecSysDataSet(data))
+            return cast(RecSysDataSet[T], RecSysDataSet(data, meta))
 
     # endregion
