@@ -6,7 +6,8 @@ import tempfile
 import traceback
 from os import PathLike
 from pathlib import Path
-from typing import Any, Iterable, Optional, TypeVar
+from threading import Event, Thread
+from typing import IO, Any, Iterable, Optional, TypeVar
 
 import pandas as pd
 import rpyc
@@ -22,6 +23,7 @@ from omnirec.util import util
 from omnirec.util.cert import Side, ensure_certs, get_cert_pth, get_key_pth
 
 logger = util._root_logger.getChild("coordinator")
+runner_logger = util._root_logger.getChild("runner")
 
 
 _RUNNER_REGISTRY: dict[str, RunnerInfo] = {}
@@ -45,6 +47,9 @@ class Coordinator:
                 tempfile.TemporaryDirectory()
             )
             self._tmp_dir = Path(self._tmp_dir_obj.name)
+
+        self._out_reader: Optional[OutputReader] = None
+        self._err_reader: Optional[OutputReader] = None
 
         self._register_default_runners()
         ensure_certs()
@@ -168,6 +173,7 @@ class Coordinator:
                     port,
                     get_key_pth(Side.Client),
                     get_cert_pth(Side.Client),
+                    config={"sync_request_timeout": 600},
                 )
                 root: RunnerService = conn.root
 
@@ -262,7 +268,7 @@ class Coordinator:
                 else:
                     self.stop(logger.info)
                 # print(self._proc.returncode) # TODO: Handle bad return code?
-                self.log_output()
+                # TODO: Return at some other point or we only run one runner
                 return evaluator
 
     def start_runner(self, algorithm: str) -> tuple[str, str]:
@@ -317,6 +323,10 @@ class Coordinator:
             self.stop()
 
             sys.exit(1)
+
+        self._out_reader = OutputReader(runner_name, self._proc.stdout)
+        self._err_reader = OutputReader(runner_name, self._proc.stderr, is_err=True)
+
         logger.info(f"Runner started with pid: {self._proc.pid}")
 
         return host, port
@@ -433,6 +443,7 @@ class Coordinator:
 
     def stop(self, logger_fn=logger.critical):
         logger_fn("Stopping runner...")
+        # FIXME: self._proc might be None here
         self._proc.terminate()
         try:
             self._proc.wait(5)
@@ -441,6 +452,10 @@ class Coordinator:
             self._proc.kill()
             self._proc.wait()
 
+        for reader in (self._out_reader, self._err_reader):
+            if reader is not None:
+                reader.stop(self._checkpoint_dir)
+
     def log_output(self):
         for name, io in (("stdout", self._proc.stdout), ("stderr", self._proc.stderr)):
             if io is not None:
@@ -448,3 +463,40 @@ class Coordinator:
                 for line in io.readlines():
                     line = line.rstrip("\n")
                     logger.debug(f"> {line}")
+
+
+class OutputReader:
+    def __init__(self, runner_name: str, pipe: Optional[IO[str]], is_err=False) -> None:
+        self._runner_name = runner_name
+        self._is_err = is_err
+        self._done_event = Event()
+        self._output: list[str] = []
+
+        self._start(pipe)
+
+    def _start(self, pipe: Optional[IO[str]]):
+        if pipe is None:
+            return
+
+        Thread(target=self._read, args=(pipe,), daemon=True).start()
+
+    def _read(self, pipe: IO[str]):
+        for line in pipe:
+            # TODO: Check if we have \n at the of line and strip/log without line break. Also see below when writing to file
+            self._output.append(line)
+            if self._is_err:
+                runner_logger.debug(f"Runner sterr: {line.rstrip('\n')}")
+            else:
+                runner_logger.debug(f"Runner stdout: {line.rstrip('\n')}")
+        self._done_event.set()
+
+    def stop(self, out_dir: Path):
+        self._done_event.wait()
+
+        if self._is_err:
+            out_file = out_dir / "err.log"
+        else:
+            out_file = out_dir / "out.log"
+
+        with open(out_file, "a") as out_file_h:
+            out_file_h.writelines(self._output)
