@@ -17,13 +17,13 @@ class RankingMetric(Metric):
         self, predictions: DataFrame
     ) -> dict[int, tuple[list[int], list[float]]]:
         """
-        Convert predictions DataFrame with columns [user, item, rating, rank]
+        Convert predictions DataFrame with columns [user, item, score, rank]
         into {user: ([items sorted by rank], [scores])}.
         """
-        topk = {}
+        topk: dict[int, tuple[list[int], list[float]]] = {}
         for user, group in predictions.sort_values("rank").groupby("user"):
             items = group["item"].to_list()
-            scores = group["rating"].to_list()
+            scores = group["score"].to_list()
             topk[user] = (items, scores)
         return topk
 
