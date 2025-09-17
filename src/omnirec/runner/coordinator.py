@@ -79,6 +79,53 @@ class Coordinator:
             ),
         )
 
+        self.register_runner(
+            "RecBole",
+            RunnerInfo(
+                runner_dir / "recbole_runner.py",
+                [
+                    "Pop",
+                    "ItemKNN",
+                    "BPR",
+                    "NeuMF",
+                    "ConvNCF",
+                    "DMF",
+                    "FISM",
+                    "NAIS",
+                    "SpectralCF",
+                    "GCMC",
+                    "NGCF",
+                    "LightGCN",
+                    "DGCF",
+                    "LINE",
+                    "MultiVAE",
+                    "MultiDAE",
+                    "MacridVAE",
+                    "CDAE",
+                    "ENMF",
+                    "NNCF",
+                    "RecVAE",
+                    "EASE",
+                    "SLIMElastic",
+                    "SGL",
+                    "ADMMSLIM",
+                    "NCEPLRec",
+                    "SimpleX",
+                    "NCL",
+                    "Random",
+                    "DiffRec",
+                    "LDiffRec",
+                ],
+                "3.11",
+                [
+                    "recbole==1.2.1",
+                    "numpy==1.26.4",
+                    "torch==2.5.1",
+                    "debugpy",
+                ],  # HACK: debugpy
+            ),
+        )
+
     def register_runner(self, name: str, info: RunnerInfo):
         if name in _RUNNER_REGISTRY:
             logger.critical(
