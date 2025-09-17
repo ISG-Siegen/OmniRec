@@ -3,7 +3,6 @@ from pathlib import Path
 import binpickle
 import numpy as np
 import pandas as pd
-from lenskit import predict as n_predict
 from lenskit.als import (
     BiasedMFConfig,
     BiasedMFScorer,
@@ -18,8 +17,9 @@ from lenskit.knn import ItemKNNConfig, ItemKNNScorer, UserKNNConfig, UserKNNScor
 from lenskit.pipeline import predict_pipeline, topn_pipeline
 from lenskit.pipeline.components import Component
 from lenskit.training import TrainingOptions
-from omnirec_runner.runner import Runner
 from pydantic import BaseModel
+
+from omnirec_runner.runner import Runner
 
 
 class Lenskit(Runner):
@@ -130,7 +130,7 @@ class Lenskit(Runner):
         predictions_df.to_csv(test_out)
         print(predictions_df.columns)
         predictions_df.rename(
-            columns={"user_id": "user", "item_id": "item", "score": "rating"},
+            columns={"user_id": "user", "item_id": "item"},
             inplace=True,
         )
         print(predictions_df.columns)
