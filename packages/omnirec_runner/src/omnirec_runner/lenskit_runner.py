@@ -115,25 +115,16 @@ class Lenskit(Runner):
         self.test.rename(columns={"user": "user_id", "item": "item_id"}, inplace=True)
 
         if "rating" in self.train.columns:
-            print("DOING PRED")
             self.test.drop(columns="rating", inplace=True)
             predictions = predict(self.model, self.test)
         else:
-            print("DOING REC")
             predictions = recommend(self.model, self.test)
 
         predictions_df = predictions.to_df()
-
-        # HACK:
-        test_out = Path("D:/Users/baumg/Documents/Uni/ISG/RecSysLib_TEST/expl.csv")
-        print(test_out.resolve())
-        predictions_df.to_csv(test_out)
-        print(predictions_df.columns)
         predictions_df.rename(
             columns={"user_id": "user", "item_id": "item"},
             inplace=True,
         )
-        print(predictions_df.columns)
         return predictions_df.to_dict(orient="list")
 
 
