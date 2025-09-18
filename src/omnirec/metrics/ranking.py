@@ -29,33 +29,32 @@ class RankingMetric(Metric):
 
 
 class NDCG(RankingMetric):
-    """The Normalized Discounted Cumulative Gain (NDCG) considers the position of relevant items in a ranked list of predictions.
-
-    For a user $u$, the discounted cumulative gain at cutoff $k$ is
-
-    $DCG@k(u) = \\sum_{i=1}^{k} \\frac{\\mathbf{1}\\{\\text{pred}_i \\in \\text{Rel}(u)\\}}{\\log_2(i+1)}$
-
-    where $\\mathbf{1}\\{\\cdot\\}$ is the indicator function and
-    
-    $\\text{Rel}(u)$ is the set of relevant items for user $u$.
-
-    The ideal discounted cumulative gain is
-
-    $IDCG@k = \\sum_{i=1}^{k} \\frac{1}{\\log_2(i+1)}$
-
-    The normalized score is
-
-    $NDCG@k(u) = \\frac{DCG@k(u)}{IDCG@k}$
-
-    Finally, the reported score is averaged over all users:
-
-    $\\text{NDCG@k} = \\frac{1}{|U|} \\sum_{u \\in U} NDCG@k(u)$
-
-    """
 
     def __init__(self, k: int | list[int]) -> None:
-        """Initializes the NDCG metric. k is the number of top predictions to consider. 
+        """Initializes the NDCG (Normalized Discounted Cumulative Gain) metric. k is the number of top predictions to consider.
         It can be a single integer or a list of integers, in which case the metric will be computed for each value of k.
+
+        The NDCG considers the position of relevant items in a ranked list of predictions.
+
+        For a user u, the discounted cumulative gain at cutoff k is
+
+        $DCG@k(u) = \\sum_{i=1}^{k} \\frac{\\mathbf{1}\\{\\text{pred}_i \\in \\text{Rel}(u)\\}}{\\log_2(i+1)}$
+
+        where $\\mathbf{1}\\{\\cdot\\}$ is the indicator function and
+        
+        $\\text{Rel}(u)$ is the set of relevant items for user u.
+
+        The ideal discounted cumulative gain is
+
+        $IDCG@k = \\sum_{i=1}^{k} \\frac{1}{\\log_2(i+1)}$
+
+        The normalized score is
+
+        $NDCG@k(u) = \\frac{DCG@k(u)}{IDCG@k}$
+
+        Finally, the reported score is averaged over all users:
+
+        $\\text{NDCG@k} = \\frac{1}{|U|} \\sum_{u \\in U} NDCG@k(u)$
 
         Args:
             k (int | list[int]): The number of top predictions to consider.
@@ -98,19 +97,18 @@ class NDCG(RankingMetric):
 
 
 class HR(RankingMetric):
-    """Computes hitrate: the fraction of users with at least one relevant item in their top-k recommendations (for a single k or a list of k values).
-    It follows the formula:
-    $HR@k = \\frac{1}{|U|} \\sum_{u \\in U} \\mathbf{1}\\{\\text{Rel}(u) \\cap \\text{Pred}_k(u) \\neq \\emptyset\\}$
-
-    where $\\text{Pred}_k(u)$ is the set of top-k predicted items for user $u$.
-    """    
     
     def __init__(self, k: int | list[int]) -> None:
-        """Initializes the HR metric. k is the number of top predictions to consider.
+        """
+        Computes the HR metric. k is the number of top recommendations to consider.
         It can be a single integer or a list of integers, in which case the metric will be computed for each value of k.
+        It follows the formula:
+        $HR@k = \\frac{1}{|U|} \\sum_{u \\in U} \\mathbf{1}\\{\\text{Rel}(u) \\cap \\text{Pred}_k(u) \\neq \\emptyset\\}$
+
+        where $\\text{Pred}_k(u)$ is the set of top-k predicted items for user u.
 
         Args:
-            k (int | list[int]): The number of top predictions to consider.
+            k (int | list[int]): The number of top recommendations to consider.
         """
         super().__init__(k)
 
@@ -141,19 +139,16 @@ class HR(RankingMetric):
 
 
 class Recall(RankingMetric):
-    """Calculates the average recall at k for one or multiple k values. Recall at k is defined as the proportion of relevant items that are found in the top-k recommendations.
-    It follows the formula:
-    $Recall@k = \\frac{1}{|U|} \\sum_{u \\in U} \\frac{|\\text{Rel}(u) \\cap \\text{Pred}_k(u)|}{\\min(|\\text{Rel}(u)|, k)}$
-
-    where $\\text{Pred}_k(u)$ is the set of top-k predicted items for user $u$.
-    """
 
     def __init__(self, k: int | list[int]) -> None:
-        """Initializes the Recall metric. k is the number of top predictions to consider.
-        It can be a single integer or a list of integers, in which case the metric will be computed for each value of k.
+        """Calculates the average recall at k for one or multiple k values. Recall at k is defined as the proportion of relevant items that are found in the top-k recommendations.
+        It follows the formula:
+        $Recall@k = \\frac{1}{|U|} \\sum_{u \\in U} \\frac{|\\text{Rel}(u) \\cap \\text{Pred}_k(u)|}{\\min(|\\text{Rel}(u)|, k)}$
+
+        where $\\text{Pred}_k(u)$ is the set of top-k predicted items for user u.
 
         Args:
-            k (int | list[int]): The number of top predictions to consider.
+            k (int | list[int]): The number of top recommendations to consider.
         """
         super().__init__(k)
 

@@ -1,5 +1,5 @@
 site_name: OmniRec Docs
-site_url: https://omnirec.recommender-systems.com
+site_url: http://omnirec.recommender-systems.com
 
 nav:
   - Home: index.md
