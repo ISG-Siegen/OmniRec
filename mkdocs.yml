@@ -1,4 +1,6 @@
 site_name: OmniRec Docs
+site_url: https://omnirec.recommender-systems.com
+
 nav:
   - Home: index.md
   - User Guide:
@@ -62,3 +64,8 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js

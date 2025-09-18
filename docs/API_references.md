@@ -1,2 +1,4 @@
 # API References
-:::omnirec
+::: omnirec.recsys_data_set
+
+::: omnirec.metrics.ranking
