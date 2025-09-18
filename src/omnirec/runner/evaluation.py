@@ -15,7 +15,7 @@ EvalutaionResults: TypeAlias = dict[
 
 
 class Evaluator:
-    def __init__(self, metrics: Metric | Iterable[Metric]) -> None:
+    def __init__(self, *metrics: Metric) -> None:
         if not isinstance(metrics, Iterable):
             metrics = [metrics]
         self._metrics = metrics
