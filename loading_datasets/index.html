@@ -8,8 +8,6 @@
       
       
       
-        <link rel="canonical" href="https://omnirec.recommender-systems.com/loading_datasets/">
-      
       
         <link rel="prev" href="../feature_overview/">
       
@@ -489,6 +487,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="RecSysDataSet Class">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Structure
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -698,7 +711,7 @@
 <li><strong>SplitData</strong>: Contains train, validation, and test DataFrames </li>
 <li><strong>FoldedData</strong>: Contains multiple folds, each with their own train/validation/test splits</li>
 </ul>
-<p><strong>Data Structure</strong></p>
+<h3 id="data-structure">Data Structure</h3>
 <p>All datasets follow a standardized column structure:</p>
 <ul>
 <li><code>user</code>: User identifier (normalized to integers starting from 0)</li>
@@ -727,16 +740,12 @@
 </span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="n">canon_path</span><span class="o">=</span><span class="s2">&quot;/path/to/canonicalized/data.csv&quot;</span>
 </span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="p">)</span>
 </span></code></pre></div>
-<p>The data loading process includes:</p>
-<ol>
-<li><strong>Download</strong>: Raw data is downloaded if not already present</li>
-<li><strong>Canonicalization</strong> (data is cleaned and standardized): <ul>
-<li>Duplicate interactions are removed (keeping the latest)</li>
-<li>User and item identifiers are normalized to consecutive integers</li>
-<li>Data is saved in a standardized CSV format</li>
-</ul>
-</li>
-</ol>
+<p>The data loading process includes:
+1. <strong>Download</strong>: Raw data is downloaded if not already present
+2. <strong>Canonicalization</strong>: Data is cleaned and standardized:
+   - Duplicate interactions are removed (keeping the latest)
+   - User and item identifiers are normalized to consecutive integers
+   - Data is saved in a standardized CSV format</p>
 <h3 id="dataset-statistics">Dataset Statistics</h3>
 <p>You can get basic statistics about loaded datasets:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Get number of interactions</span>
@@ -747,19 +756,17 @@
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">max_rating</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">max_rating</span><span class="p">()</span>
 </span></code></pre></div>
 <h3 id="saving-and-loading-datasets">Saving and Loading Datasets</h3>
-<p>Save any <code>RecSysDataSet</code> object to a <code>.rsds</code> file with the <code>save()</code> function:</p>
+<p>Save any <code>RecSysDataSet</code> object to a compressed <code>.rsds</code> file with the <code>save()</code> function:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Save to file (extension .rsds will be added automatically)</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">dataset</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;my_dataset&quot;</span><span class="p">)</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Or specify full path</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">dataset</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;/path/to/my_dataset.rsds&quot;</span><span class="p">)</span>
 </span></code></pre></div>
-<p>The save format preserves:</p>
-<ul>
-<li>All data variants (Raw, Split, or Folded)</li>
-<li>Metadata about the dataset</li>
-<li>Version information for compatibility</li>
-</ul>
+<p>The save format preserves:
+- All data variants (Raw, Split, or Folded)
+- Metadata about the dataset
+- Version information for compatibility</p>
 <p>You can load previously saved datasets with the <code>load()</code> function:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Load from .rsds file</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">RecSysDataSet</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;my_dataset.rsds&quot;</span><span class="p">)</span>

@@ -8,8 +8,6 @@
       
       
       
-        <link rel="canonical" href="https://omnirec.recommender-systems.com/API_references/">
-      
       
         <link rel="prev" href="../evaluator/">
       
@@ -1026,7 +1024,7 @@
 </span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>        <span class="n">force_download</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 </span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>        <span class="n">force_canonicalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 </span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RecSysDataSet[RawData]&quot;</span><span class="p">:</span>
-</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads a dataset using a registered DataLoader. If not already done the data set is downloaded and canonicalized. </span>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads a dataset using a registered DataLoader. If not already done the data set is downloaded and canonicalized.</span>
 </span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="sd">        Canonicalization means duplicates are dropped, identifiers are normalized and the data is saved in a standardized format.</span>
 </span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a>
 </span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a><span class="sd">        Args:</span>
@@ -1290,7 +1288,7 @@
 </span><span id="__span-0-319"><a id="__codelineno-0-319" name="__codelineno-0-319"></a>
 </span><span id="__span-0-320"><a id="__codelineno-0-320" name="__codelineno-0-320"></a>            <span class="n">meta</span> <span class="o">=</span> <span class="n">zf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;META&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
 </span><span id="__span-0-321"><a id="__codelineno-0-321" name="__codelineno-0-321"></a>            <span class="n">meta</span> <span class="o">=</span> <span class="n">_DatasetMeta</span><span class="p">(</span><span class="o">**</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">meta</span><span class="p">))</span>
-</span><span id="__span-0-322"><a id="__codelineno-0-322" name="__codelineno-0-322"></a>            <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">RecSysDataSet</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+</span><span id="__span-0-322"><a id="__codelineno-0-322" name="__codelineno-0-322"></a>            <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">RecSysDataSet</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">meta</span><span class="p">))</span>
 </span></code></pre></div></td></tr></table></div>
               </details>
 
@@ -1505,7 +1503,7 @@
 </span><span id="__span-0-319"><a id="__codelineno-0-319" name="__codelineno-0-319"></a>
 </span><span id="__span-0-320"><a id="__codelineno-0-320" name="__codelineno-0-320"></a>        <span class="n">meta</span> <span class="o">=</span> <span class="n">zf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;META&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
 </span><span id="__span-0-321"><a id="__codelineno-0-321" name="__codelineno-0-321"></a>        <span class="n">meta</span> <span class="o">=</span> <span class="n">_DatasetMeta</span><span class="p">(</span><span class="o">**</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">meta</span><span class="p">))</span>
-</span><span id="__span-0-322"><a id="__codelineno-0-322" name="__codelineno-0-322"></a>        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">RecSysDataSet</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+</span><span id="__span-0-322"><a id="__codelineno-0-322" name="__codelineno-0-322"></a>        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">RecSysDataSet</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">meta</span><span class="p">))</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -1667,7 +1665,7 @@
 
     <div class="doc doc-contents ">
 
-        <p>Loads a dataset using a registered DataLoader. If not already done the data set is downloaded and canonicalized. 
+        <p>Loads a dataset using a registered DataLoader. If not already done the data set is downloaded and canonicalized.
 Canonicalization means duplicates are dropped, identifiers are normalized and the data is saved in a standardized format.</p>
 
 
@@ -1861,7 +1859,7 @@ Canonicalization means duplicates are dropped, identifiers are normalized and th
 </span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>    <span class="n">force_download</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 </span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>    <span class="n">force_canonicalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 </span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RecSysDataSet[RawData]&quot;</span><span class="p">:</span>
-</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads a dataset using a registered DataLoader. If not already done the data set is downloaded and canonicalized. </span>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads a dataset using a registered DataLoader. If not already done the data set is downloaded and canonicalized.</span>
 </span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="sd">    Canonicalization means duplicates are dropped, identifiers are normalized and the data is saved in a standardized format.</span>
 </span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a>
 </span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a><span class="sd">    Args:</span>
