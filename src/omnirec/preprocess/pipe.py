@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar
+from typing import Any, Generic, TypeVar, TypeVarTuple, Unpack, cast
 
 from omnirec.preprocess.base import Preprocessor
 from omnirec.recsys_data_set import DataVariant, RecSysDataSet
@@ -6,18 +6,17 @@ from omnirec.recsys_data_set import DataVariant, RecSysDataSet
 # TODO: DOCS
 
 T = TypeVar("T", bound=DataVariant)
+Ts = TypeVarTuple("Ts")
 
-# TODO: Add explaining node with link to PEP that will enable better typing here in the future
 
-
-class Pipe(Preprocessor, Generic[T]):
-    def __init__(self, *steps: Preprocessor) -> None:
+class Pipe(Generic[T]):
+    def __init__(self, *steps: Unpack[tuple[Unpack[Ts], Preprocessor[Any, T]]]) -> None:
         """Pipeline for automatically applying sequential preprocessing steps. Takes as input a sequence of Preprocessor objects.
         If process() is called, each step's process method is called in the order they were provided.
         Example:
             ```Python
                 # Define preprocessing steps
-                pipe = Pipe[FoldedData](
+                pipe = Pipe(
                     Subsample(0.1),
                     MakeImplicit(3),
                     CorePruning(5),
@@ -31,7 +30,9 @@ class Pipe(Preprocessor, Generic[T]):
         super().__init__()
         self._steps = steps
 
-    def process(self, dataset: RecSysDataSet) -> RecSysDataSet[T]:
-        for step in self._steps:
-            dataset = step.process(dataset)
-        return dataset
+    def process(self, data: RecSysDataSet) -> RecSysDataSet[T]:
+        for step in self._steps[:-1]:
+            step = cast(Preprocessor, step)
+            data = step.process(data)
+        data = self._steps[-1].process(data)
+        return data

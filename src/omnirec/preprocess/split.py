@@ -1,11 +1,12 @@
 import sys
-from collections import defaultdict
+from typing import TypeVar
 
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import KFold, train_test_split
 
 from omnirec.data_variants import (
+    DataVariant,
     FoldedData,
     RawData,
     SplitData,
@@ -16,15 +17,17 @@ from omnirec.preprocess.base import Preprocessor
 from omnirec.recsys_data_set import RecSysDataSet
 from omnirec.util.util import get_random_state
 
+T = TypeVar("T", bound=DataVariant)
+U = TypeVar("U", bound=DataVariant)
 
-class DataSplit(Preprocessor):
+
+class DataSplit(Preprocessor[T, U]):
     def __init__(self, validation_size: float | int) -> None:
         super().__init__()
         self._valid_size = validation_size
 
 
-class UserHoldout(DataSplit):
-    
+class UserHoldout(DataSplit[RawData, SplitData]):
     def __init__(self, validation_size: float | int, test_size: float | int) -> None:
         """Applies the user holdout split to the dataset. Ensures that each user has interactions in the training, validation, and test sets.
 
@@ -64,8 +67,7 @@ class UserHoldout(DataSplit):
         )
 
 
-class UserCrossValidation(DataSplit):
-
+class UserCrossValidation(DataSplit[RawData, FoldedData]):
     def __init__(self, num_folds: int, validation_size: float | int) -> None:
         """Applies user-based cross-validation to the dataset. Ensures that each user has interactions in the training, validation, and test sets in each fold.
 
@@ -125,14 +127,13 @@ class UserCrossValidation(DataSplit):
         )
 
 
-class RandomHoldout(DataSplit):
-
+class RandomHoldout(DataSplit[RawData, SplitData]):
     def __init__(self, validation_size: float | int, test_size: float | int) -> None:
         """Applies a random holdout split to the dataset. Randomly splits the dataset into training, validation, and test sets.
 
         Args:
             validation_size (float | int): float: The proportion (between 0 and 1) of the dataset to include in the validation split.
-                                            int: The absolute number of interactions to include in the validation split.    
+                                            int: The absolute number of interactions to include in the validation split.
             test_size (float | int): float: The proportion (between 0 and 1) of the dataset to include in the test split.
                                         int: The absolute number of interactions to include in the test split.
         """
@@ -153,8 +154,7 @@ class RandomHoldout(DataSplit):
         return dataset.replace_data(SplitData(train, valid, test))
 
 
-class RandomCrossValidation(DataSplit):
-    
+class RandomCrossValidation(DataSplit[RawData, FoldedData]):
     def __init__(self, num_folds: int, validation_size: float | int) -> None:
         """Applies random cross-validation to the dataset. Randomly splits the dataset into training, validation, and test sets for each fold.
 
