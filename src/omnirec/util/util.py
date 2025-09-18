@@ -4,21 +4,34 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
+from rich.logging import RichHandler
+
 # Lazy import to solve circular import
 if TYPE_CHECKING:
     from omnirec.data_variants import SplitData
 
-# TODO: Maybe we can switch to getLogger(__name__) everywhere instead of using this constant here
-# TODO: Get log level from env and provide methods to set it
-_LOGGER_NAME = "isg-rec-framework"
+_LOGGER_NAME = "omnirec"
 _root_logger = logging.getLogger(_LOGGER_NAME)
 _logger = _root_logger.getChild("util")
+
+logging.basicConfig(
+    format="%(message)s", datefmt="[%Y/%m/%d %H:%M:%S]", handlers=[RichHandler()]
+)
 
 _RANDOM_STATE = 42
 
 # TODO: Change path to a more accessible location
 _DATA_DIR = Path(__file__).parent.parent.parent / "data"
 _DATA_DIR.mkdir(exist_ok=True, parents=True)
+
+
+def set_log_level(level: str):
+    level = level.upper()
+    if level in logging._nameToLevel:
+        _root_logger.setLevel(level)
+        _root_logger.debug("LOG LEVEL IS SET TO DEBUG")
+    else:
+        raise ValueError(f"Unknown log level: {level}")
 
 
 def is_valid_url(url) -> bool:
