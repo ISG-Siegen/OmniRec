@@ -5,7 +5,7 @@ from omnirec.recsys_data_set import RawData, RecSysDataSet
 from .base import Preprocessor
 
 
-class MakeImplicit(Preprocessor):
+class MakeImplicit(Preprocessor[RawData, RawData]):
     def __init__(self, threshold: int | float) -> None:
         """Converts explicit feedback to implicit feedback using the specified threshold.
 

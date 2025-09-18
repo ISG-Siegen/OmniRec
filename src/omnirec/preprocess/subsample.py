@@ -7,7 +7,7 @@ from omnirec.util.util import get_random_state
 # TODO: DOCS
 
 
-class Subsample(Preprocessor):
+class Subsample(Preprocessor[RawData, RawData]):
     def __init__(self, sample_size: int | float) -> None:
         """Subsamples the dataset to a specified size.
 
