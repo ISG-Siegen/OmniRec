@@ -126,8 +126,7 @@ class Coordinator:
                     "recbole==1.2.1",
                     "numpy==1.26.4",
                     "torch==2.5.1",
-                    "debugpy",
-                ],  # HACK: debugpy
+                ],
             ),
         )
 
