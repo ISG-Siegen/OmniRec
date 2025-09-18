@@ -8,9 +8,7 @@ from urllib.parse import urlparse
 if TYPE_CHECKING:
     from omnirec.data_variants import SplitData
 
-# TODO: Maybe we can switch to getLogger(__name__) everywhere instead of using this constant here
-# TODO: Get log level from env and provide methods to set it
-_LOGGER_NAME = "isg-rec-framework"
+_LOGGER_NAME = "omnirec"
 _root_logger = logging.getLogger(_LOGGER_NAME)
 _logger = _root_logger.getChild("util")
 
