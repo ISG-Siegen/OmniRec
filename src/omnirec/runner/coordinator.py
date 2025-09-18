@@ -268,8 +268,7 @@ class Coordinator:
                 else:
                     self.stop(logger.info)
                 # print(self._proc.returncode) # TODO: Handle bad return code?
-                # TODO: Return at some other point or we only run one runner
-                return evaluator
+        return evaluator
 
     def start_runner(self, algorithm: str) -> tuple[str, str]:
         runner_name, algo_name = Coordinator.split_runner_algo(algorithm)
