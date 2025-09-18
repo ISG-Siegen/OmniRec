@@ -353,7 +353,6 @@ class Coordinator:
             f"Running split with parameters: {root=}, {progress=}, {algo_name=}, {algo_config=}, {train_file=}, {val_file=}, {test_file=}, {predictions_file=}, {current_checkpoint_dir=}, {current_tmp_dir=}"
         )
 
-        print("RUNNING SPLIT")
         root._config(
             algo_name,
             json.dumps(algo_config),
@@ -372,22 +371,27 @@ class Coordinator:
         def advance_phase():
             progress.advance_phase(dataset_namehash, config_namehash)
 
+        did_progress = False
+
         # TODO: Info log in else case
         if get_phase() <= Phase.Fit:
-            print("FIT")
+            did_progress = True
+            self.log_phase_info(dataset_name, algo_name, "'Fit'")
             root._fit()
 
             advance_phase()
 
         if get_phase() <= Phase.Predict:
-            print("PREDICT")
+            did_progress = True
+            self.log_phase_info(dataset_name, algo_name, "'Predict'")
             root._predict()
 
             advance_phase()
 
         if get_phase() <= Phase.Eval:
+            did_progress = True
             # TODO: Load predictions.json and do unified evaluation
-            print("EVAL")
+            self.log_phase_info(dataset_name, algo_name, "'Evaluate'")
             # TODO: Save and load evaluations for checkpointing
             predictions = pd.DataFrame(json.loads(predictions_file.read_text()))
             test = pd.read_csv(test_file)
@@ -398,8 +402,15 @@ class Coordinator:
             advance_phase()
 
         if get_phase() <= Phase.Done:
-            # TODO: Info log done
-            print("DONE")
+            if did_progress:
+                logger.info(f"{dataset_name}/{algo_name} done!")
+            else:
+                logger.info(
+                    f"All phases for {dataset_name}/{algo_name} already complete, skipping..."
+                )
+
+    def log_phase_info(self, dataset_name: str, algo_name: str, phase: str):
+        logger.info(f"Running phase {phase} for {dataset_name}/{algo_name}")
 
     @staticmethod
     def dataset_hash(dataset: RecSysDataSet[T]) -> str:
