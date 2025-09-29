@@ -2,6 +2,7 @@ import itertools
 import sys
 from typing import Any, Optional, TypeAlias
 
+from omnirec.runner.algos import Algorithms
 from omnirec.util import util
 
 logger = util._root_logger.getChild("config")
@@ -15,12 +16,17 @@ class ExperimentPlan:
         self._name = plan_name
         self._config: dict[str, AlgorithmConfig] = {}
 
+    # TODO: Doc
     def add_algorithm(
         self,
-        algorithm_name: str,
+        algorithm: Algorithms | str,
         algorithm_config: Optional[AlgorithmConfig] = None,
         force=False,
     ):
+        if isinstance(algorithm, Algorithms):
+            algorithm_name = algorithm.value
+        else:
+            algorithm_name = algorithm
         # TODO: Force option?
         if not algorithm_config:
             algorithm_config = {}

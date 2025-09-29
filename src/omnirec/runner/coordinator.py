@@ -68,7 +68,7 @@ class Coordinator:
         # TODO: Add other runner:
         # TODO: Maybe move this to a config file or smth and dont hard code
         self.register_runner(
-            "Lenskit",
+            "LensKit",
             RunnerInfo(
                 runner_dir / "lenskit_runner.py",
                 [

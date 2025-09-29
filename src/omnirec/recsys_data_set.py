@@ -12,6 +12,7 @@ from typing import Generic, Optional, TypeVar, cast, overload
 import pandas as pd
 
 from omnirec.data_loaders import registry
+from omnirec.data_loaders.datasets import DataSet
 from omnirec.data_variants import DataVariant, FoldedData, RawData, SplitData
 from omnirec.util import util
 from omnirec.util.util import _DATA_DIR
@@ -47,9 +48,10 @@ class RecSysDataSet(Generic[T]):
             self._data = data
         self._meta = meta
 
+    # TODO: Update doc
     @staticmethod
     def use_dataloader(
-        data_set_name: str,
+        data_set: DataSet | str,
         raw_dir: Optional[PathLike | str] = None,  # TODO: Name that right
         canon_path: Optional[PathLike | str] = None,  # TODO: Name that right
         force_download=False,
@@ -75,6 +77,10 @@ class RecSysDataSet(Generic[T]):
             dataset = RecSysDataSet.use_dataloader(data_set_name="MovieLens100K")
             ```
         """
+        if isinstance(data_set, DataSet):
+            data_set_name = data_set.value
+        else:
+            data_set_name = data_set
         dataset = RecSysDataSet[RawData]()
 
         dataset._meta.name = data_set_name
