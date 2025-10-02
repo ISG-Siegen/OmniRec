@@ -130,10 +130,10 @@ class RecBole(Runner):
             load_data_and_model(model_file=str(self.model_file))
         )
 
-        train = pd.read_csv(self.train_file)
+        self.train = pd.read_csv(self.train_file)
         test = pd.read_csv(self.test_file)
 
-        unique_train_users = train["user"].unique()
+        unique_train_users = self.train["user"].unique()
         unique_test_users = test["user"].unique()
         users_to_predict = np.intersect1d(unique_test_users, unique_train_users)
 
@@ -163,7 +163,16 @@ class RecBole(Runner):
 
         # TODO: Put stuff like this in post_predict
 
-        predictions_df = pd.DataFrame(rows, columns=["user", "item", "rank", "score"])
+        predictions_df = pd.DataFrame(
+            rows,
+            columns=[
+                "user",
+                "item",
+                "rank",
+                "rating" if "rating" in self.train.columns else "score",
+            ],
+        )
+        print(predictions_df)
         predictions_df["item"] = self.dataset.id2token(
             "item_id", predictions_df["item"]
         )
