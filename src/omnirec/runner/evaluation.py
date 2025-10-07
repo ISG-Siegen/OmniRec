@@ -114,7 +114,3 @@ class Evaluator:
             tables.append(table)
 
         return tables
-
-    def _eval_error(self, algorithm: str):
-        logger.critical(f"Algorithm {algorithm} already evaluated!")
-        sys.exit(1)
