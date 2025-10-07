@@ -11,7 +11,7 @@ from omnirec.util import util
 logger = util._root_logger.getChild("eval")
 
 
-EvalutaionColumns = ["algorithm", "fold", "name", "k", "value"]
+EvaluationColumns = ["algorithm", "fold", "name", "k", "value"]
 ColumnStyles = {"algorithm": "cyan", "fold": "magenta"}
 
 
@@ -52,7 +52,7 @@ class Evaluator:
                 logger.critical(f"Invalid result type: {type(value)}")
                 sys.exit(1)
 
-        new_df = DataFrame(new_rows, columns=EvalutaionColumns)
+        new_df = DataFrame(new_rows, columns=EvaluationColumns)
         if old_df is None:
             self._results[dataset] = new_df
         else:
