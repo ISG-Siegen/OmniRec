@@ -394,7 +394,7 @@ class Coordinator:
             predictions = pd.DataFrame(json.loads(predictions_file.read_text()))
             test = pd.read_csv(test_file)
             self._evaluator.run_evaluation(
-                f"{config_namehash}", predictions, test, fold
+                dataset_namehash, config_namehash, predictions, test, fold
             )
 
             advance_phase()
