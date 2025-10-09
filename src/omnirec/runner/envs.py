@@ -3,7 +3,7 @@ import subprocess
 import sys
 from os import PathLike
 from pathlib import Path
-from subprocess import CalledProcessError
+from subprocess import Popen
 from typing import Optional
 
 from omnirec.util import util
@@ -38,23 +38,14 @@ class Env:
             self._path = _ENVS_DIR / name
 
     def create(self):
-        try:
-            # TODO: Creating env shows up every time, this might be misleading
-            logger.info(f"Creating env '{self._name}' at {self._path}")
-            self._run(["uv", "venv", "-p", self._python_version, self._path])
+        # TODO: Creating env shows up every time, this might be misleading
+        logger.info(f"Creating env '{self._name}' at {self._path}")
+        proc = self._run(["uv", "venv", "-p", self._python_version, self._path])
+        self._handle_proc(proc)
 
-            logger.info("Installing packages...")
-            self._run(["uv", "pip", "install", "-p", self.py_path, *self._packages])
-
-        except CalledProcessError as e:
-            # TODO: Does this exception trigger for exit code != 0 ?
-            logger.critical(f"Error while creating env '{self._name}':")
-            logger.critical(e)
-            # TODO: Log for each stdout/err line
-            logger.critical(f"STDOUT: {e.stdout}")
-            logger.critical(f"STDERR: {e.stderr}")
-
-            sys.exit(1)
+        logger.info("Installing packages...")
+        proc = self._run(["uv", "pip", "install", "-p", self.py_path, *self._packages])
+        self._handle_proc(proc)
 
         logger.info("Done.")
 
@@ -66,9 +57,21 @@ class Env:
             return self._path / "bin/python"
 
     def _run(self, cmd: list):
-        return subprocess.run(
+        logger.debug(f'Running command "{" ".join(map(str, cmd))}"')
+        return subprocess.Popen(
             cmd,
-            capture_output=True,
-            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
             text=True,
         )
+
+    def _handle_proc(self, proc: Popen[str]):
+        if proc.stdout is not None:
+            for line in proc.stdout:
+                logger.debug(f"uv proc: {line.rstrip('\n')}")
+
+        logger.debug("Waiting for proc...")
+        proc.wait()
+        if proc.returncode != 0:
+            logger.critical(f"Error while creating env '{self._name}'")
+            sys.exit(1)
