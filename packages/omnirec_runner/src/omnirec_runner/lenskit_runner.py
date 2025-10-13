@@ -125,6 +125,8 @@ class Lenskit(Runner):
             columns={"user_id": "user", "item_id": "item"},
             inplace=True,
         )
+        if "rating" in self.train.columns:
+            predictions_df.rename(columns={"score": "rating"}, inplace=True)
         return predictions_df.to_dict(orient="list")
 
 

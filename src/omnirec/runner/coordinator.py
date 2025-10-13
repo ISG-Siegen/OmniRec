@@ -130,6 +130,16 @@ class Coordinator:
             ),
         )
 
+        self.register_runner(
+            "RecPack",
+            RunnerInfo(
+                runner_dir / "recpack_runner.py",
+                ["SVD", "NMF", "ItemKNN"],
+                "3.12",
+                ["recpack==0.3.6"],
+            ),
+        )
+
     def register_runner(self, name: str, info: RunnerInfo):
         if name in _RUNNER_REGISTRY:
             logger.critical(
@@ -394,7 +404,7 @@ class Coordinator:
             predictions = pd.DataFrame(json.loads(predictions_file.read_text()))
             test = pd.read_csv(test_file)
             self._evaluator.run_evaluation(
-                f"{config_namehash}", predictions, test, fold
+                dataset_namehash, config_namehash, predictions, test, fold
             )
 
             advance_phase()

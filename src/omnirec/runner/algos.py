@@ -45,4 +45,10 @@ class RecBole(StrEnum):
     LDiffRec = "RecBole.LDiffRec"
 
 
-Algorithms: TypeAlias = LensKit | RecBole
+class RecPack(StrEnum):
+    SVD = "RecPack.SVD"
+    NMF = "RecPack.NMF"
+    ItemKNN = "RecPack.ItemKNN"
+
+
+Algorithms: TypeAlias = LensKit | RecBole | RecPack

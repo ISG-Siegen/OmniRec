@@ -35,7 +35,7 @@ from omnirec.data_loaders.registry import _loader
         "Amazon2014AmazonInstantVideo",
     ]
 )
-class Amazon(Loader):
+class Amazon2014(Loader):
     @staticmethod
     def info(name: str) -> DatasetInfo:
         if name == "Amazon2014Books":
@@ -159,7 +159,9 @@ class Amazon(Loader):
                 "249e1061d30db8c1230e4f3edd0523be12c37e6a8e6b9872a312cf6c326f157b",
             )
         else:
-            raise ValueError(f'Unknown dataset name "{name}" for Amazon dataloader!')
+            raise ValueError(
+                f'Unknown dataset name "{name}" for Amazon2014 dataloader!'
+            )
 
     @staticmethod
     def load(source_dir: Path, name: str) -> DataFrame:
