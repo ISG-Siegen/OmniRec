@@ -19,8 +19,6 @@ _DATA_LOADERS: dict[str, type[Loader]] = {}
 
 # TODO: Switch some log messages from info to debug; we dont need that much clutter
 
-# TODO: DOCS
-
 
 def _add_loader(name: str, cls: type):
     if name in _DATA_LOADERS:

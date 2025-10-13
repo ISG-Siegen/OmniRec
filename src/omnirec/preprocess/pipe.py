@@ -3,7 +3,6 @@ from typing import Any, Generic, TypeVar, TypeVarTuple, Unpack, cast
 from omnirec.preprocess.base import Preprocessor
 from omnirec.recsys_data_set import DataVariant, RecSysDataSet
 
-# TODO: DOCS
 
 T = TypeVar("T", bound=DataVariant)
 Ts = TypeVarTuple("Ts")

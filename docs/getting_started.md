@@ -13,7 +13,7 @@ Central part of the OmniRec library is the [`RecSysDataSet`](API_references.md#o
 
 ```python
 from OmniRec import RedSysDataSet
-data = RecSysDataSet.use_dataloader(data_set_name="MovieLens100K")
+dataset = RecSysDataSet.use_dataloader(DataSet.MovieLens100K)
 ```
 We provide a more detailed documentation [here](loading_datasets.md).
 
@@ -29,12 +29,10 @@ from omnirec.preprocess.feedback_conversion import MakeImplicit
 from omnirec.preprocess.pipe import Pipe
 from omnirec.preprocess.split import UseCrossValidation
 
-pipe = Pipe[FoldedData](
-    Subsample(sample_size=0.1),
-    MakeImplicit(threshold=3),
-    CorePruning(core=5),
-    UserCrossValidation(num_folds=5, validation_size=0.1),
-)
+pipe = Pipe(
+        MakeImplicit(0), 
+        CorePruning(5), 
+        UserHoldout(0.3, 0.1))
 data = pipe.process(data)
 ```
 

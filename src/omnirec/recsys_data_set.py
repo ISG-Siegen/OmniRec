@@ -13,6 +13,7 @@ import pandas as pd
 
 from omnirec.data_loaders import registry
 from omnirec.data_loaders.datasets import DataSet
+from omnirec.data_loaders.datasets import DataSet
 from omnirec.data_variants import DataVariant, FoldedData, RawData, SplitData
 from omnirec.util import util
 from omnirec.util.util import _DATA_DIR
@@ -48,7 +49,6 @@ class RecSysDataSet(Generic[T]):
             self._data = data
         self._meta = meta
 
-    # TODO: Update doc
     @staticmethod
     def use_dataloader(
         data_set: DataSet | str,
@@ -61,7 +61,7 @@ class RecSysDataSet(Generic[T]):
         Canonicalization means duplicates are dropped, identifiers are normalized and the data is saved in a standardized format.
 
         Args:
-            data_set_name (str): The name of the dataset to load (must be registered in the DataLoader registry).
+            data_set (DataSet | str): The name of the dataset from the DataSet enum. Must be a registered DataLoader name.
             raw_dir (Optional[PathLike | str], optional): Target directory where the raw data is stored. If not provided, the data is downloaded to the default raw data directory (_DATA_DIR).
             canon_path (Optional[PathLike | str], optional): Path where the canonicalized data should be saved. If not provided, the data is saved to the default canonicalized data directory (_DATA_DIR / "canon").
             force_download (bool, optional): If True, forces re-downloading of the raw data even if it already exists. Defaults to False.
@@ -74,7 +74,7 @@ class RecSysDataSet(Generic[T]):
             ```Python
             # Load the MovieLens 100K dataset using the registered DataLoader
             # Download the raw data to the default directory and save the canonicalized data to the default path
-            dataset = RecSysDataSet.use_dataloader(data_set_name="MovieLens100K")
+            dataset = RecSysDataSet.use_dataloader(data_set_name=DataSet.MovieLens100K)
             ```
         """
         if isinstance(data_set, DataSet):

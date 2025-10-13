@@ -14,5 +14,12 @@ def run_omnirec(
     plan: ExperimentPlan,
     evaluator: Evaluator,  # TODO: Make optional
 ):
+    """Run the OmniRec framework with the specified datasets, experiment plan, and evaluator.
+
+    Args:
+        datasets (RecSysDataSet[T] | Iterable[RecSysDataSet[T]]): The dataset(s) to use for the experiment.
+        plan (ExperimentPlan): The experiment plan to follow.
+        evaluator (Evaluator): The evaluator to use for the experiment.
+    """
     c = Coordinator()
     c.run(datasets, plan, evaluator)

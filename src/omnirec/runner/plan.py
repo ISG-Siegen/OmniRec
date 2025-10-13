@@ -16,13 +16,31 @@ class ExperimentPlan:
         self._name = plan_name
         self._config: dict[str, AlgorithmConfig] = {}
 
-    # TODO: Doc
     def add_algorithm(
         self,
         algorithm: Algorithms | str,
         algorithm_config: Optional[AlgorithmConfig] = None,
         force=False,
     ):
+        """Adds an algorithm to the experiment plan.
+
+        Args:
+            algorithm (Algorithms | str): The algorithm to add.
+            algorithm_config (Optional[AlgorithmConfig], optional): The configuration for the algorithm. Algorithm config depends of the origin library of the algorithm. We refer to their documentation for details about the algorithm hyperparameters.
+            force (bool, optional): Whether to forcefully overwrite an existing algorithm config. Defaults to False.
+
+        Example:
+            ```Python
+            # Create a new experiment plan
+            plan = ExperimentPlan(plan_name="Example Plan")
+
+            # Define algorithm configuration based on the lenskit ItemKNNScorer parameters
+            lenskit_itemknn = {"max_nbrs": [10, 20], "min_nbrs": 5, "feedback": "implicit"}
+
+            # Add algorithm with configuration to the plan
+            plan.add_algorithm(Algorithms.ItemKNNScorer, lenskit_itemknn)
+            ```    
+        """
         if isinstance(algorithm, Algorithms):
             algorithm_name = algorithm.value
         else:
@@ -39,6 +57,12 @@ class ExperimentPlan:
         self._config[algorithm_name] = algorithm_config
 
     def update_algorithm(self, algorithm_name: str, algorithm_config: AlgorithmConfig):
+        """Updates the configuration for an existing algorithm in the experiment plan.
+
+        Args:
+            algorithm_name (str): The name of the algorithm to update.
+            algorithm_config (AlgorithmConfig): The new configuration for the algorithm.
+        """
         if algorithm_name not in self._config:
             self._config[algorithm_name] = algorithm_config
         else:

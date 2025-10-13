@@ -1,5 +1,8 @@
 site_name: OmniRec Docs
-site_url: http://omnirec.recommender-systems.com
+site_url: https://omnirec.recommender-systems.com
+options:
+            show_source: true
+            show_root_heading: true
 
 nav:
   - Home: index.md
@@ -21,6 +24,7 @@ theme:
     - content.code.copy
     - navigation.sections
     - toc.integrate
+  toc_depth: 2
   palette:
 
   # Palette toggle for automatic mode
@@ -54,7 +58,23 @@ theme:
 
 plugins:
   - search
-  - mkdocstrings
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: true
+            show_root_heading: true
+            show_root_toc_entry: false
+            heading_level: 3
+            members_order: source
+            show_if_no_docstring: false
+            merge_init_into_class: true
+            show_symbol_type_heading: true
+            show_signature_annotations: true
+            show_signature: true
+            show_bases: true
+            filters:
+              - "!^_"
 
 markdown_extensions:
   - pymdownx.highlight:

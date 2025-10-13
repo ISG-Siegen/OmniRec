@@ -102,7 +102,9 @@ class HR(RankingMetric):
         """
         Computes the HR metric. k is the number of top recommendations to consider.
         It can be a single integer or a list of integers, in which case the metric will be computed for each value of k.
+
         It follows the formula:
+        
         $HR@k = \\frac{1}{|U|} \\sum_{u \\in U} \\mathbf{1}\\{\\text{Rel}(u) \\cap \\text{Pred}_k(u) \\neq \\emptyset\\}$
 
         where $\\text{Pred}_k(u)$ is the set of top-k predicted items for user u.
@@ -142,7 +144,9 @@ class Recall(RankingMetric):
 
     def __init__(self, k: int | list[int]) -> None:
         """Calculates the average recall at k for one or multiple k values. Recall at k is defined as the proportion of relevant items that are found in the top-k recommendations.
+        
         It follows the formula:
+
         $Recall@k = \\frac{1}{|U|} \\sum_{u \\in U} \\frac{|\\text{Rel}(u) \\cap \\text{Pred}_k(u)|}{\\min(|\\text{Rel}(u)|, k)}$
 
         where $\\text{Pred}_k(u)$ is the set of top-k predicted items for user u.

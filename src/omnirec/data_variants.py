@@ -13,7 +13,6 @@ class DataVariant: ...
 
 
 # TODO: Maybe Raw is a bit misleading, since after e.g. Core and Subsample it would still be Raw. Maybe change.
-# TODO: DOC
 @dataclass
 class RawData(DataVariant):
     df: pd.DataFrame
@@ -55,7 +54,6 @@ class SplitData(DataVariant):
             logger.critical(f"Uknown split: {split}")
             sys.exit(1)
 
-    # TODO: Doc
     def iter_splits(
         self,
     ) -> Generator[tuple[Literal["train", "val", "test"], pd.DataFrame], None, None]:

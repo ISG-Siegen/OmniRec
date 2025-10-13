@@ -4,8 +4,6 @@ from omnirec.preprocess.base import Preprocessor
 from omnirec.recsys_data_set import RawData, RecSysDataSet
 from omnirec.util.util import get_random_state
 
-# TODO: DOCS
-
 
 class Subsample(Preprocessor[RawData, RawData]):
     def __init__(self, sample_size: int | float) -> None:
