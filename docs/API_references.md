@@ -51,6 +51,11 @@
 
 ## Evaluation Metrics
 
+::: omnirec.runner.evaluation.Evaluator
+    options:
+      show_root_heading: true
+      show_root_toc_entry: false
+
 ### Ranking Metrics
 ::: omnirec.metrics.ranking.HR
     options:
@@ -87,6 +92,12 @@
 
 ## Runner Function
 ::: omnirec.util.run.run_omnirec
+    options:
+      show_root_heading: true
+      show_root_toc_entry: false
+
+## Coordinator Class
+::: omnirec.runner.coordinator.Coordinator
     options:
       show_root_heading: true
       show_root_toc_entry: false

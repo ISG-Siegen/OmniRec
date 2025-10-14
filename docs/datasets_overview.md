@@ -33,7 +33,7 @@ The framework includes many built-in datasets. Use the exact name with the `use_
 | HetrecLastFM                | Music               | Implicit   | HetRec         |
 
 
-**Listing Available Datasets**
+## Listing Available Datasets
 
 To see all registered datasets:
 

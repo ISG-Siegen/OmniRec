@@ -17,6 +17,15 @@ ColumnStyles = {"algorithm": "cyan", "fold": "magenta"}
 
 class Evaluator:
     def __init__(self, *metrics: Metric) -> None:
+        """Initialize the Evaluator with metrics to compute on predictions.
+        The Evaluator computes specified metrics on algorithm predictions and accumulates
+        results across experiments. Use `get_tables()` to retrieve formatted result tables.
+
+        Args:
+            *metrics (Metric): One or more metric instances to compute. Common metrics include
+                NDCG, HR (Hit Rate), and Recall. Each metric can be configured with multiple
+                k values (e.g., `NDCG([5, 10, 20])`).
+        """
         if not isinstance(metrics, Iterable):
             metrics = [metrics]
         self._metrics = metrics

@@ -1,19 +1,17 @@
 site_name: OmniRec Docs
 site_url: https://omnirec.recommender-systems.com
-options:
-            show_source: true
-            show_root_heading: true
 
 nav:
   - Home: index.md
   - User Guide:
       - Getting Started: getting_started.md
-      - Feature Overview: feature_overview.md
       - Loading Datasets: loading_datasets.md
       - Datasets Overview: datasets_overview.md
       - Preprocessing Pipeline: preprocessing.md
       - Configure Algorithms: conf_algo.md
+      - Algorithms Overview: algorithms_overview.md
       - Evaluator: evaluator.md
+      - Checkpointing and Results: checkpointing.md
   - API Reference: API_references.md
 
 theme: 

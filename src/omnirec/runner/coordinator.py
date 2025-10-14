@@ -39,6 +39,24 @@ class Coordinator:
         checkpoint_dir: PathLike | str = Path("./checkpoints"),
         tmp_dir: Optional[PathLike | str] = None,
     ) -> None:
+        """Initialize the Coordinator for orchestrating recommendation algorithm experiments.
+        The Coordinator manages the execution of experiments across multiple datasets, algorithms,
+        and configurations. It handles environment isolation, checkpointing, progress tracking,
+        and communication with framework-specific runners.
+
+        Args:
+            checkpoint_dir (PathLike | str, optional): Directory for storing persistent experiment data
+                including model checkpoints, predictions, and progress files. Directory is created if it
+                doesn't exist. Defaults to "./checkpoints".
+            tmp_dir (Optional[PathLike | str], optional): Directory for temporary files such as intermediate
+                CSV exports. If None, a temporary directory is created automatically and cleaned up on exit.
+                Defaults to None.
+
+        Note:
+            - Automatically registers default runners (LensKit, RecBole, RecPack) on initialization
+            - Generates SSL certificates for secure RPC communication with runner subprocesses
+            - The checkpoint directory structure is: `checkpoint_dir/dataset-hash/config-hash/`
+        """
         self._checkpoint_dir = Path(checkpoint_dir)
         if tmp_dir:
             self._tmp_dir = Path(tmp_dir)
@@ -155,7 +173,35 @@ class Coordinator:
         datasets: RecSysDataSet[T] | Iterable[RecSysDataSet[T]],
         config: ExperimentPlan,
         evaluator: Evaluator,  # TODO: Make optional
-    ):
+    ) -> Evaluator:
+        """Execute recommendation algorithm experiments across datasets and configurations.
+        Orchestrates the complete experiment lifecycle: environment setup, model training,
+        prediction generation, and evaluation. Supports automatic checkpointing and resuming
+        of interrupted experiments.
+
+        Args:
+            datasets (RecSysDataSet[T] | Iterable[RecSysDataSet[T]]): Single dataset or list of datasets
+                to run experiments on. Datasets must contain either SplitData (train/val/test) or
+                FoldedData (cross-validation folds). Use preprocessing steps to create these splits.
+            config (ExperimentPlan): Experiment configuration specifying algorithms and their hyperparameters.
+                Each algorithm in the plan will be executed with all specified parameter combinations.
+            evaluator (Evaluator): Evaluator instance containing metrics to compute on predictions.
+                Results are accumulated across all experiments and accessible via `evaluator.get_tables()`.
+
+        Returns:
+            Evaluator: The same evaluator instance passed in, now containing results from all experiments.
+                Use `evaluator.get_tables()` to retrieve formatted result tables.
+
+        Raises:
+            SystemExit: If the experiment plan is empty or if runner/algorithm validation fails.
+
+        Note:
+            - Each algorithm runs in an isolated Python environment with framework-specific dependencies
+            - Progress is checkpointed after each phase (Fit, Predict, Eval) for fault tolerance
+            - Identical dataset/config combinations are cached and skipped automatically
+            - For cross-validation (FoldedData), experiments run sequentially across all folds
+            - Runner subprocesses are automatically started and terminated for each algorithm
+        """
         # TODO: Force fit, pred, eval parameters to overwrite status tracker
         # TODO: Dataset Normalization stuff etc. beforehand
         exception_occurred = False
