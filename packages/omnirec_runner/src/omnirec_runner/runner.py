@@ -2,10 +2,10 @@ import json
 import socket
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from time import time
-from typing import Any
+from typing import Any, Dict, List, Type
 
 import rpyc
 from rpyc.utils.authenticators import SSLAuthenticator
@@ -15,9 +15,10 @@ from rpyc.utils.server import ThreadedServer
 @dataclass
 class RunnerInfo:
     runner_path: Path
-    algorithms: list[str]
+    algorithms: List[str]
     python_version: str
-    packages: list[str]
+    packages: List[str]
+    no_build_isolation_packages: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -124,13 +125,13 @@ class Runner(RunnerService, rpyc.Service, ABC):
     def setup_predict(self): ...
 
     @abstractmethod
-    def predict(self) -> dict[Any, Any]: ...
+    def predict(self) -> Dict[Any, Any]: ...
 
     def post_predict(self): ...
 
 
 class RunnerServer:
-    def __init__(self, key_pth: Path, cert_pth: Path, cls: type[Runner]) -> None:
+    def __init__(self, key_pth: Path, cert_pth: Path, cls: Type[Runner]) -> None:
         auth = SSLAuthenticator(key_pth, cert_pth)
 
         self._server = ThreadedServer(cls(), authenticator=auth)
