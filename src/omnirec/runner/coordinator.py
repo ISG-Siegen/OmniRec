@@ -299,7 +299,10 @@ class Coordinator:
             sys.exit(1)
 
         env = Env(
-            f"{runner_name}_env", runner_info.python_version, *runner_info.packages
+            f"{runner_name}_env",
+            runner_info.python_version,
+            runner_info.packages,
+            runner_info.no_build_isolation_packages,
         )
         env.create()
 

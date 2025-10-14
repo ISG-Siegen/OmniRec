@@ -19,7 +19,8 @@ class Env:
         self,
         name: str,
         python_version: str,
-        *packages: str,
+        packages: list[str],
+        build_packages: list[str] = [],
         path: Optional[PathLike | str] = None,
     ) -> None:
         self._name = name
@@ -28,10 +29,15 @@ class Env:
             Path(__file__).parent.parent.parent.parent / "packages" / "omnirec_runner"
         )
         if local_lib_pth.exists():
-            self._packages = (str(local_lib_pth.resolve()),) + packages
+            self._packages = [str(local_lib_pth.resolve())] + packages
         else:
             # TODO: Change package name once we have a name
-            self._packages = ("omnirec-runner",) + packages
+            self._packages = ["omnirec-runner"] + packages
+        if build_packages:
+            self._no_isolate_build = True
+        else:
+            self._no_isolate_build = False
+        self._build_packages = ["hatchling"] + build_packages
         if path:
             self._path = Path(path)
         else:
@@ -43,8 +49,28 @@ class Env:
         proc = self._run(["uv", "venv", "-p", self._python_version, self._path])
         self._handle_proc(proc)
 
+        if self._no_isolate_build:
+            logger.debug("Using non isolated build environment!")
+            logger.debug("Installing build packages...")
+            proc = self._run(
+                [
+                    "uv",
+                    "pip",
+                    "install",
+                    "--no-build-isolation",
+                    "-p",
+                    str(self.py_path),
+                    *self._build_packages,
+                ]
+            )
+
         logger.info("Installing packages...")
-        proc = self._run(["uv", "pip", "install", "-p", self.py_path, *self._packages])
+        cmd = ["uv", "pip", "install"]
+        if self._no_isolate_build:
+            cmd.append("--no-build-isolation")
+        cmd.extend(["-p", str(self.py_path), *self._packages])
+
+        proc = self._run(cmd)
         self._handle_proc(proc)
 
         logger.info("Done.")
