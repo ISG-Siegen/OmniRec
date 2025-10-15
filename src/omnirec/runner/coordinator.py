@@ -157,6 +157,43 @@ class Coordinator:
                 ["recpack==0.3.6"],
             ),
         )
+        self.register_runner(
+            "Elliot",
+            RunnerInfo(
+                runner_dir / "elliot_runner.py",
+                [
+                    "ItemKNN",
+                    "UserKNN",
+                    "AMF",
+                    "SlopeOne",
+                    "MultiDAE",
+                    "MultiVAE",
+                    "LightGCN",
+                    "NGCF",
+                    "MostPop",
+                    "BPRMF",
+                    "BPRMF_batch",
+                    "FM",
+                    "FunkSVD",
+                    "NonNegMF",
+                    "PureSVD",
+                    "SVDpp",
+                    "WRMF",
+                    "ConvMF",
+                    "DeepFM",
+                    "DMF",
+                    "GMF",
+                    "ItemAutoRec",
+                    "NeuMF",
+                    "UserAutoRec",
+                ],
+                "3.8",
+                [
+                    # patched elliot version
+                    "git+https://github.com/moritz-baumgart/elliot.git",
+                ],
+            ),
+        )
 
     def register_runner(self, name: str, info: RunnerInfo):
         if name in _RUNNER_REGISTRY:

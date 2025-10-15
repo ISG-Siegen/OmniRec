@@ -51,4 +51,31 @@ class RecPack(StrEnum):
     ItemKNN = "RecPack.ItemKNN"
 
 
-Algorithms: TypeAlias = LensKit | RecBole | RecPack
+class Elliot(StrEnum):
+    ItemKNN = "Elliot.ItemKNN"
+    UserKNN = "Elliot.UserKNN"
+    AMF = "Elliot.AMF"
+    SlopeOne = "Elliot.SlopeOne"
+    MultiDAE = "Elliot.MultiDAE"
+    MultiVAE = "Elliot.MultiVAE"
+    LightGCN = "Elliot.LightGCN"
+    NGCF = "Elliot.NGCF"
+    MostPop = "Elliot.MostPop"
+    BPRMF = "Elliot.BPRMF"
+    BPRMF_batch = "Elliot.BPRMF_batch"
+    FM = "Elliot.FM"
+    FunkSVD = "Elliot.FunkSVD"
+    NonNegMF = "Elliot.NonNegMF"
+    PureSVD = "Elliot.PureSVD"
+    SVDpp = "Elliot.SVDpp"
+    WRMF = "Elliot.WRMF"
+    ConvMF = "Elliot.ConvMF"
+    DeepFM = "Elliot.DeepFM"
+    DMF = "Elliot.DMF"
+    GMF = "Elliot.GMF"
+    ItemAutoRec = "Elliot.ItemAutoRec"
+    NeuMF = "Elliot.NeuMF"
+    UserAutoRec = "Elliot.UserAutoRec"
+
+
+Algorithms: TypeAlias = LensKit | RecBole | RecPack | Elliot

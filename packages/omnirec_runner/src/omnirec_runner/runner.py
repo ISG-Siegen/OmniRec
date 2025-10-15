@@ -2,7 +2,7 @@ import json
 import socket
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from time import time
 from typing import Any, Dict, List, Type
@@ -18,7 +18,6 @@ class RunnerInfo:
     algorithms: List[str]
     python_version: str
     packages: List[str]
-    no_build_isolation_packages: List[str] = field(default_factory=list)
 
 
 @dataclass
