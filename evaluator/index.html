@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="http://omnirec.recommender-systems.com/evaluator/">
+        <link rel="canonical" href="https://omnirec.recommender-systems.com/evaluator/">
       
       
-        <link rel="prev" href="../conf_algo/">
+        <link rel="prev" href="../algorithms_overview/">
       
       
-        <link rel="next" href="../API_references/">
+        <link rel="next" href="../checkpointing/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -74,6 +74,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#evaluation-metrics" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -405,29 +410,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../feature_overview/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Feature Overview
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../loading_datasets/" class="md-nav__link">
         
   
@@ -517,6 +499,29 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../algorithms_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Algorithms Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -526,6 +531,21 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Evaluator
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -539,6 +559,84 @@
 
       </a>
       
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#evaluator-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evaluator Class
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#available-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available Metrics
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-experiments-with-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running Experiments with Evaluation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom Metrics
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../checkpointing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Checkpointing and Results
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -589,9 +687,125 @@
 
 
 
-  <h1>Evaluator</h1>
-
-
+<h1 id="evaluation-metrics">Evaluation Metrics</h1>
+<p>This section explains how to configure and use metrics to evaluate recommendation algorithms. The evaluation system provides a flexible approach to compute various metrics after model predictions, supporting both explicit and implicit feedback scenarios.</p>
+<p>The <code>Evaluator</code> class manages metric computation across all algorithm runs. It automatically loads predictions and applies the specified metrics, supporting both holdout and cross-validation splits.</p>
+<h2 id="evaluator-class">Evaluator Class</h2>
+<p>The <code>Evaluator</code> class coordinates metric calculation across experiments. Create an evaluator by passing one or more metric instances, then provide it to <code>run_omnirec</code> to automatically evaluate all algorithm runs:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.evaluation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.metrics.ranking</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDCG</span><span class="p">,</span> <span class="n">HR</span><span class="p">,</span> <span class="n">Recall</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Create evaluator with ranking metrics for implicit feedback</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">NDCG</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]),</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">HR</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]),</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">Recall</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>The evaluator can combine multiple metrics of the same type in a single evaluation run. Choose metrics appropriate for your feedback type: use prediction metrics (RMSE, MAE) for explicit ratings, and ranking metrics (NDCG, HR, Recall) for implicit feedback or top-k recommendations.</p>
+<h2 id="available-metrics">Available Metrics</h2>
+<p><strong>Prediction Metrics</strong> - For explicit feedback scenarios where ratings are predicted:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.metrics.prediction</span><span class="w"> </span><span class="kn">import</span> <span class="n">RMSE</span><span class="p">,</span> <span class="n">MAE</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># Root Mean Squared Error</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">rmse</span> <span class="o">=</span> <span class="n">RMSE</span><span class="p">()</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># Mean Absolute Error  </span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">mae</span> <span class="o">=</span> <span class="n">MAE</span><span class="p">()</span>
+</span></code></pre></div>
+<p>Use prediction metrics when evaluating algorithms that predict rating values, such as matrix factorization methods on explicit feedback datasets.</p>
+<p><strong>Ranking Metrics</strong> - For top-k recommendation scenarios:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.metrics.ranking</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDCG</span><span class="p">,</span> <span class="n">HR</span><span class="p">,</span> <span class="n">Recall</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Normalized Discounted Cumulative Gain at k=[5, 10, 20]</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">ndcg</span> <span class="o">=</span> <span class="n">NDCG</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># Hit Rate at k=[5, 10]</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">hr</span> <span class="o">=</span> <span class="n">HR</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># Recall at k=[10, 20]</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">recall</span> <span class="o">=</span> <span class="n">Recall</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>
+</span></code></pre></div>
+<p>Ranking metrics evaluate the quality of top-k recommendation lists. Specify cutoff values (k) to measure performance at different list lengths. For example, <code>NDCG([5, 10, 20])</code> computes NDCG@5, NDCG@10, and NDCG@20.</p>
+<h2 id="running-experiments-with-evaluation">Running Experiments with Evaluation</h2>
+<p>Provide the evaluator when launching experiments with <code>run_omnirec</code>. The framework automatically applies all metrics after each algorithm completes:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec</span><span class="w"> </span><span class="kn">import</span> <span class="n">RecSysDataSet</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.plan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExperimentPlan</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.evaluation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.algos</span><span class="w"> </span><span class="kn">import</span> <span class="n">RecBole</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.metrics.ranking</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDCG</span><span class="p">,</span> <span class="n">Recall</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.pipe</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.feedback_conversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">MakeImplicit</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.split</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserHoldout</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.util.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_omnirec</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="c1"># Load dataset and convert to implicit feedback</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">RecSysDataSet</span><span class="o">.</span><span class="n">use_dataloader</span><span class="p">(</span><span class="s2">&quot;MovieLens100K&quot;</span><span class="p">)</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="n">MakeImplicit</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>           <span class="c1"># Convert ratings &gt;= 3 to implicit feedback</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="n">UserHoldout</span><span class="p">(</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span>    <span class="c1"># Split data</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="p">)</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="c1"># Create experiment plan with implicit feedback algorithm</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="n">plan</span> <span class="o">=</span> <span class="n">ExperimentPlan</span><span class="p">(</span><span class="s2">&quot;MyExperiment&quot;</span><span class="p">)</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="n">plan</span><span class="o">.</span><span class="n">add_algorithm</span><span class="p">(</span><span class="n">RecBole</span><span class="o">.</span><span class="n">BPR</span><span class="p">)</span>  <span class="c1"># BPR is for implicit feedback</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="c1"># Configure evaluator with ranking metrics (appropriate for implicit feedback)</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">NDCG</span><span class="p">([</span><span class="mi">10</span><span class="p">]),</span> <span class="n">Recall</span><span class="p">([</span><span class="mi">10</span><span class="p">]))</span>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="c1"># Run experiments with automatic evaluation</span>
+</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="n">run_omnirec</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">evaluator</span><span class="p">)</span>
+</span></code></pre></div>
+<p>All metric computations happen automatically without additional code. Ensure your metrics match your data type: ranking metrics (NDCG, HR, Recall) for implicit feedback, and prediction metrics (RMSE, MAE) for explicit feedback.</p>
+<p>Additionally, metric results are logged during execution and stored in checkpoint directories alongside model predictions.</p>
+<h2 id="custom-metrics">Custom Metrics</h2>
+<p>To implement custom evaluation metrics, create a subclass of <code>omnirec.metrics.base.Metric</code> and implement the <code>calculate</code> method:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.metrics.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Metric</span><span class="p">,</span> <span class="n">MetricResult</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">CustomMetric</span><span class="p">(</span><span class="n">Metric</span><span class="p">):</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">calculate</span><span class="p">(</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        <span class="bp">self</span><span class="p">,</span> 
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="n">predictions</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> 
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>        <span class="n">test</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MetricResult</span><span class="p">:</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="sd">        Calculate custom metric from predictions and test data.</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="sd">        Args:</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="sd">            predictions: DataFrame with predictions</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="sd">            test: DataFrame with ground truth test data</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="sd">        Returns:</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="sd">            MetricResult with metric name and computed value</span>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>        <span class="c1"># Implement your metric calculation logic</span>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>        <span class="n">metric_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_value</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>        <span class="k">return</span> <span class="n">MetricResult</span><span class="p">(</span>
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;CustomMetric&quot;</span><span class="p">,</span>
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>            <span class="n">result</span><span class="o">=</span><span class="n">metric_value</span>
+</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>        <span class="p">)</span>
+</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>
+</span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_value</span><span class="p">(</span>
+</span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a>        <span class="bp">self</span><span class="p">,</span> 
+</span><span id="__span-4-30"><a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a>        <span class="n">predictions</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> 
+</span><span id="__span-4-31"><a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a>        <span class="n">test</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
+</span><span id="__span-4-32"><a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="__span-4-33"><a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a>        <span class="c1"># Custom calculation logic</span>
+</span><span id="__span-4-34"><a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a>        <span class="k">pass</span>
+</span></code></pre></div>
+<p>Use custom metrics the same way as built-in metrics:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.metrics.prediction</span><span class="w"> </span><span class="kn">import</span> <span class="n">RMSE</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># Add custom metric to evaluator (both for explicit feedback)</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="n">RMSE</span><span class="p">(),</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">CustomMetric</span><span class="p">()</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>The custom metric will be automatically applied to all algorithm runs alongside the standard metrics. Ensure your custom metric is appropriate for the feedback type of your dataset.</p>
 
 
 

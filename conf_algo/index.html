@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="http://omnirec.recommender-systems.com/conf_algo/">
+        <link rel="canonical" href="https://omnirec.recommender-systems.com/conf_algo/">
       
       
         <link rel="prev" href="../preprocessing/">
       
       
-        <link rel="next" href="../evaluator/">
+        <link rel="next" href="../algorithms_overview/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -74,6 +74,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#algorithm-configuration" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -405,29 +410,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../feature_overview/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Feature Overview
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../loading_datasets/" class="md-nav__link">
         
   
@@ -503,6 +485,21 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Configure Algorithms
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -516,6 +513,141 @@
 
       </a>
       
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#experimentplan" class="md-nav__link">
+    <span class="md-ellipsis">
+      ExperimentPlan
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ExperimentPlan">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#algorithm-identifiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Algorithm Identifiers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-algorithms" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding Algorithms
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hyperparameter-grid-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hyperparameter Grid Search
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multiple-algorithms" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multiple Algorithms
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updating-algorithms" class="md-nav__link">
+    <span class="md-ellipsis">
+      Updating Algorithms
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-experiments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running Experiments
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running Experiments">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multiple-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multiple Datasets
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#complete-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Complete Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../algorithms_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Algorithms Overview
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -534,6 +666,29 @@
   
   <span class="md-ellipsis">
     Evaluator
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../checkpointing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Checkpointing and Results
     
   </span>
   
@@ -589,9 +744,195 @@
 
 
 
-  <h1>Configure Algorithms</h1>
-
-
+<h1 id="algorithm-configuration">Algorithm Configuration</h1>
+<p>This section explains how to configure algorithms and hyperparameters for recommendation experiments. The experiment planning system provides a flexible approach to define algorithm configurations and automatically generate all hyperparameter combinations.</p>
+<p>The <code>ExperimentPlan</code> class manages algorithm configurations and hyperparameter grids. It expands every combination you define, automating the execution of multiple algorithm variants with different hyperparameter settings.</p>
+<h2 id="experimentplan">ExperimentPlan</h2>
+<p>The <code>ExperimentPlan</code> class serves as the central configuration for all algorithms in your experiments. Create a plan by optionally providing a name, then add algorithms with their hyperparameters:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.plan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExperimentPlan</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Create an experiment plan with optional name</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">plan</span> <span class="o">=</span> <span class="n">ExperimentPlan</span><span class="p">(</span><span class="s2">&quot;MovieLens-Experiments&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>The plan name helps organize checkpoints and logs when storing experiment results.</p>
+<h3 id="algorithm-identifiers">Algorithm Identifiers</h3>
+<p>Algorithms are referenced using the format <code>&lt;Runner&gt;.&lt;Algorithm&gt;</code>. The framework provides enums in <code>omnirec.runner.algos</code> that expose all built-in algorithm names:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.algos</span><span class="w"> </span><span class="kn">import</span> <span class="n">LensKit</span><span class="p">,</span> <span class="n">RecBole</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># Access algorithm identifiers via enums</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">lenskit_algo</span> <span class="o">=</span> <span class="n">LensKit</span><span class="o">.</span><span class="n">ImplicitMFScorer</span>  <span class="c1"># &quot;LensKit.ImplicitMFScorer&quot;</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">recbole_algo</span> <span class="o">=</span> <span class="n">RecBole</span><span class="o">.</span><span class="n">LightGCN</span>          <span class="c1"># &quot;RecBole.LightGCN&quot;</span>
+</span></code></pre></div>
+<h3 id="adding-algorithms">Adding Algorithms</h3>
+<p>Add algorithms to the plan using the <code>add_algorithm</code> method. Provide the algorithm identifier and a dictionary of hyperparameters:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.algos</span><span class="w"> </span><span class="kn">import</span> <span class="n">LensKit</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Add algorithm with hyperparameters</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">plan</span><span class="o">.</span><span class="n">add_algorithm</span><span class="p">(</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="n">LensKit</span><span class="o">.</span><span class="n">ItemKNNScorer</span><span class="p">,</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="p">{</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        <span class="s2">&quot;max_nbrs&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>        <span class="c1"># Fixed value</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>        <span class="s2">&quot;min_nbrs&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>         <span class="c1"># Fixed value</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>        <span class="s2">&quot;center&quot;</span><span class="p">:</span> <span class="kc">True</span>         <span class="c1"># Fixed value</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="p">}</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>algorithm</code> (str | Enum): Algorithm identifier in format <code>&lt;Runner&gt;.&lt;Algorithm&gt;</code></li>
+<li><code>hyperparameters</code> (dict): Dictionary of hyperparameter names and values</li>
+<li>Single values: Parameter is fixed across all runs</li>
+<li>Lists: Parameter values for grid search (creates multiple runs)</li>
+</ul>
+<p><strong>Hyperparameter Reference:</strong></p>
+<p>Hyperparameter names and default values are defined by each algorithm's original library implementation. The framework passes your hyperparameter dictionary directly to the underlying algorithm, so refer to the respective library documentation for available parameters and their expected formats.</p>
+<h3 id="hyperparameter-grid-search">Hyperparameter Grid Search</h3>
+<p>Provide lists of values for any hyperparameter to automatically generate a grid search. The framework creates separate runs for every combination:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.algos</span><span class="w"> </span><span class="kn">import</span> <span class="n">LensKit</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Grid search with multiple parameter values</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">plan</span><span class="o">.</span><span class="n">add_algorithm</span><span class="p">(</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">LensKit</span><span class="o">.</span><span class="n">ItemKNNScorer</span><span class="p">,</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="p">{</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>        <span class="s2">&quot;max_nbrs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span>      <span class="c1"># Two values</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>        <span class="s2">&quot;min_nbrs&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>             <span class="c1"># Fixed value</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        <span class="s2">&quot;center&quot;</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>    <span class="c1"># Two values</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="p">}</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>This configuration generates four separate runs (2 × 2 combinations):</p>
+<ul>
+<li><code>max_nbrs=20, min_nbrs=5, center=True</code></li>
+<li><code>max_nbrs=20, min_nbrs=5, center=False</code></li>
+<li><code>max_nbrs=40, min_nbrs=5, center=True</code></li>
+<li><code>max_nbrs=40, min_nbrs=5, center=False</code></li>
+</ul>
+<h3 id="multiple-algorithms">Multiple Algorithms</h3>
+<p>Combine multiple algorithms from different runners in the same experiment plan:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.algos</span><span class="w"> </span><span class="kn">import</span> <span class="n">LensKit</span><span class="p">,</span> <span class="n">RecBole</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Add LensKit algorithm</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">plan</span><span class="o">.</span><span class="n">add_algorithm</span><span class="p">(</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">LensKit</span><span class="o">.</span><span class="n">ItemKNNScorer</span><span class="p">,</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="p">{</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>        <span class="s2">&quot;max_nbrs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>        <span class="s2">&quot;min_nbrs&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="p">}</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="p">)</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="c1"># Add RecBole algorithm</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="n">plan</span><span class="o">.</span><span class="n">add_algorithm</span><span class="p">(</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    <span class="n">RecBole</span><span class="o">.</span><span class="n">LightGCN</span><span class="p">,</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    <span class="p">{</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>        <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">],</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>        <span class="s2">&quot;embedding_size&quot;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>    <span class="p">}</span>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>Each call to <code>add_algorithm</code> appends a new algorithm configuration. Avoid using the same algorithm identifier multiple times unless you intend to overwrite the previous configuration.</p>
+<h3 id="updating-algorithms">Updating Algorithms</h3>
+<p>Modify existing algorithm configurations using the <code>update_algorithm</code> method:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Update previously added algorithm</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">plan</span><span class="o">.</span><span class="n">update_algorithm</span><span class="p">(</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">LensKit</span><span class="o">.</span><span class="n">ItemKNNScorer</span><span class="p">,</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="p">{</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>        <span class="s2">&quot;max_nbrs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span>  <span class="c1"># Add third value</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>        <span class="s2">&quot;min_sim&quot;</span><span class="p">:</span> <span class="mf">0.01</span>            <span class="c1"># Add new parameter</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="p">}</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>The update merges with the existing configuration, adding new parameters and updating existing ones.</p>
+<h2 id="running-experiments">Running Experiments</h2>
+<p>Pass the configured plan to <code>run_omnirec</code> alongside your dataset and evaluator to execute all algorithm configurations:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec</span><span class="w"> </span><span class="kn">import</span> <span class="n">RecSysDataSet</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.evaluation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.metrics.ranking</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDCG</span><span class="p">,</span> <span class="n">Recall</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.pipe</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.feedback_conversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">MakeImplicit</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.split</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserHoldout</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.util.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_omnirec</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="c1"># Load and preprocess dataset to implicit feedback</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">RecSysDataSet</span><span class="o">.</span><span class="n">use_dataloader</span><span class="p">(</span><span class="s2">&quot;MovieLens100K&quot;</span><span class="p">)</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    <span class="n">MakeImplicit</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>           <span class="c1"># Convert to implicit feedback</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    <span class="n">UserHoldout</span><span class="p">(</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span>    <span class="c1"># Split data</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="p">)</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="c1"># Configure evaluator with ranking metrics (for implicit feedback)</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">NDCG</span><span class="p">([</span><span class="mi">10</span><span class="p">]),</span> <span class="n">Recall</span><span class="p">([</span><span class="mi">10</span><span class="p">]))</span>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="c1"># Run all algorithm configurations</span>
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="n">run_omnirec</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">evaluator</span><span class="p">)</span>
+</span></code></pre></div>
+<p>The framework executes every algorithm configuration in the plan, automatically managing:
+- Model training and prediction
+- Checkpoint storage under <code>./checkpoints/&lt;dataset&gt;/&lt;algorithm&gt;/</code>
+- Metric evaluation via the evaluator
+- Progress tracking and logging</p>
+<h3 id="multiple-datasets">Multiple Datasets</h3>
+<p>Run the same experiment plan across multiple datasets by passing a list of datasets:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Load multiple datasets</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">RecSysDataSet</span><span class="o">.</span><span class="n">use_dataloader</span><span class="p">(</span><span class="s2">&quot;MovieLens100K&quot;</span><span class="p">),</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">RecSysDataSet</span><span class="o">.</span><span class="n">use_dataloader</span><span class="p">(</span><span class="s2">&quot;HetrecLastFM&quot;</span><span class="p">),</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="p">]</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># Run all algorithms on all datasets</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="n">run_omnirec</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">evaluator</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Each algorithm configuration in the plan is executed for every dataset. Results are organized separately by dataset in the checkpoint directory structure.</p>
+<h3 id="complete-example">Complete Example</h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec</span><span class="w"> </span><span class="kn">import</span> <span class="n">RecSysDataSet</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.plan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExperimentPlan</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.algos</span><span class="w"> </span><span class="kn">import</span> <span class="n">LensKit</span><span class="p">,</span> <span class="n">RecBole</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.evaluation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.metrics.ranking</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDCG</span><span class="p">,</span> <span class="n">Recall</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.pipe</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.feedback_conversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">MakeImplicit</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.core_pruning</span><span class="w"> </span><span class="kn">import</span> <span class="n">CorePruning</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.split</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserHoldout</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.util.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_omnirec</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="c1"># Load dataset and preprocess to implicit feedback</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">RecSysDataSet</span><span class="o">.</span><span class="n">use_dataloader</span><span class="p">(</span><span class="s2">&quot;MovieLens100K&quot;</span><span class="p">)</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>    <span class="n">MakeImplicit</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>           <span class="c1"># Convert to implicit (ratings &gt;= 3)</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>    <span class="n">CorePruning</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>            <span class="c1"># Keep 5-core users and items</span>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>    <span class="n">UserHoldout</span><span class="p">(</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span>    <span class="c1"># Split into train/val/test</span>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="p">)</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="c1"># Create experiment plan</span>
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="n">plan</span> <span class="o">=</span> <span class="n">ExperimentPlan</span><span class="p">(</span><span class="s2">&quot;Comparison-Study&quot;</span><span class="p">)</span>
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="c1"># Add multiple algorithms with grid search</span>
+</span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="n">plan</span><span class="o">.</span><span class="n">add_algorithm</span><span class="p">(</span>
+</span><span id="__span-8-26"><a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a>    <span class="n">LensKit</span><span class="o">.</span><span class="n">ItemKNNScorer</span><span class="p">,</span>
+</span><span id="__span-8-27"><a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a>    <span class="p">{</span>
+</span><span id="__span-8-28"><a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a>        <span class="s2">&quot;max_nbrs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span>
+</span><span id="__span-8-29"><a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a>        <span class="s2">&quot;min_nbrs&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-8-30"><a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a>        <span class="s2">&quot;feedback&quot;</span><span class="p">:</span> <span class="s2">&quot;implicit&quot;</span>  <span class="c1"># Specify implicit feedback mode</span>
+</span><span id="__span-8-31"><a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a>    <span class="p">}</span>
+</span><span id="__span-8-32"><a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a><span class="p">)</span>
+</span><span id="__span-8-33"><a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a>
+</span><span id="__span-8-34"><a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a><span class="n">plan</span><span class="o">.</span><span class="n">add_algorithm</span><span class="p">(</span>
+</span><span id="__span-8-35"><a id="__codelineno-8-35" name="__codelineno-8-35" href="#__codelineno-8-35"></a>    <span class="n">RecBole</span><span class="o">.</span><span class="n">LightGCN</span><span class="p">,</span>
+</span><span id="__span-8-36"><a id="__codelineno-8-36" name="__codelineno-8-36" href="#__codelineno-8-36"></a>    <span class="p">{</span>
+</span><span id="__span-8-37"><a id="__codelineno-8-37" name="__codelineno-8-37" href="#__codelineno-8-37"></a>        <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">],</span>
+</span><span id="__span-8-38"><a id="__codelineno-8-38" name="__codelineno-8-38" href="#__codelineno-8-38"></a>        <span class="s2">&quot;embedding_size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">],</span>
+</span><span id="__span-8-39"><a id="__codelineno-8-39" name="__codelineno-8-39" href="#__codelineno-8-39"></a>        <span class="s2">&quot;n_layers&quot;</span><span class="p">:</span> <span class="mi">3</span>
+</span><span id="__span-8-40"><a id="__codelineno-8-40" name="__codelineno-8-40" href="#__codelineno-8-40"></a>    <span class="p">}</span>
+</span><span id="__span-8-41"><a id="__codelineno-8-41" name="__codelineno-8-41" href="#__codelineno-8-41"></a><span class="p">)</span>
+</span><span id="__span-8-42"><a id="__codelineno-8-42" name="__codelineno-8-42" href="#__codelineno-8-42"></a>
+</span><span id="__span-8-43"><a id="__codelineno-8-43" name="__codelineno-8-43" href="#__codelineno-8-43"></a><span class="c1"># Configure evaluation with ranking metrics (appropriate for implicit feedback)</span>
+</span><span id="__span-8-44"><a id="__codelineno-8-44" name="__codelineno-8-44" href="#__codelineno-8-44"></a><span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">NDCG</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]),</span> <span class="n">Recall</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]))</span>
+</span><span id="__span-8-45"><a id="__codelineno-8-45" name="__codelineno-8-45" href="#__codelineno-8-45"></a>
+</span><span id="__span-8-46"><a id="__codelineno-8-46" name="__codelineno-8-46" href="#__codelineno-8-46"></a><span class="c1"># Execute all experiments</span>
+</span><span id="__span-8-47"><a id="__codelineno-8-47" name="__codelineno-8-47" href="#__codelineno-8-47"></a><span class="n">run_omnirec</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">evaluator</span><span class="p">)</span>
+</span></code></pre></div>
+<p>This executes 6 algorithm runs (2 ItemKNN variants + 4 LightGCN variants) with automatic evaluation of NDCG and Recall metrics. Since LightGCN requires implicit feedback, we preprocess MovieLens100K from explicit ratings to implicit feedback using <code>MakeImplicit(3)</code>, and use ranking metrics appropriate for implicit feedback evaluation.</p>
 
 
 

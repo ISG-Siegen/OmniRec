@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="http://omnirec.recommender-systems.com/feature_overview/">
+        <link rel="canonical" href="https://omnirec.recommender-systems.com/algorithms_overview/">
       
       
-        <link rel="prev" href="../getting_started/">
+        <link rel="prev" href="../conf_algo/">
       
       
-        <link rel="next" href="../loading_datasets/">
+        <link rel="next" href="../evaluator/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Feature Overview - OmniRec Docs</title>
+        <title>Algorithms Overview - OmniRec Docs</title>
       
     
     
@@ -75,6 +75,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#algorithm-overview" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -107,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Feature Overview
+              Algorithms Overview
             
           </span>
         </div>
@@ -402,37 +407,6 @@
                 
   
   
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    Feature Overview
-    
-  </span>
-  
-
-      </a>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
   
   
     <li class="md-nav__item">
@@ -525,6 +499,149 @@
                 
   
   
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Algorithms Overview
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Algorithms Overview
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lenskit-algorithms" class="md-nav__link">
+    <span class="md-ellipsis">
+      LensKit Algorithms
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recbole-algorithms" class="md-nav__link">
+    <span class="md-ellipsis">
+      RecBole Algorithms
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RecBole Algorithms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#baseline-and-neighborhood-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Baseline and Neighborhood Methods
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matrix-factorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Matrix Factorization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deep-learning-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deep Learning Methods
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#graph-based-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Graph-Based Methods
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-and-optimization-based-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Linear and Optimization-Based Methods
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-algorithms-in-experiments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Algorithms in Experiments
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
   
   
     <li class="md-nav__item">
@@ -534,6 +651,29 @@
   
   <span class="md-ellipsis">
     Evaluator
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../checkpointing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Checkpointing and Results
     
   </span>
   
@@ -589,18 +729,359 @@
 
 
 
-  <h1>Feature Overview</h1>
+<h1 id="algorithm-overview">Algorithm Overview</h1>
+<p>The framework integrates algorithms from multiple recommendation system libraries through unified runner interfaces. Use the algorithm identifiers with the <code>ExperimentPlan</code> to configure experiments. Here is the comprehensive list of all available algorithms:</p>
+<h2 id="lenskit-algorithms">LensKit Algorithms</h2>
+<p>LensKit provides traditional collaborative filtering algorithms optimized for research reproducibility.</p>
+<table>
+<thead>
+<tr>
+<th>Algorithm Name</th>
+<th>Type</th>
+<th>Feedback</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LensKit.PopScorer</td>
+<td>Baseline</td>
+<td>Both</td>
+<td>Popularity-based scorer</td>
+</tr>
+<tr>
+<td>LensKit.ItemKNNScorer</td>
+<td>Neighborhood</td>
+<td>Both</td>
+<td>Item-based k-nearest neighbors</td>
+</tr>
+<tr>
+<td>LensKit.UserKNNScorer</td>
+<td>Neighborhood</td>
+<td>Both</td>
+<td>User-based k-nearest neighbors</td>
+</tr>
+<tr>
+<td>LensKit.ImplicitMFScorer</td>
+<td>Matrix Factorization</td>
+<td>Implicit</td>
+<td>Implicit feedback matrix factorization (ALS)</td>
+</tr>
+<tr>
+<td>LensKit.BiasedMFScorer</td>
+<td>Matrix Factorization</td>
+<td>Explicit</td>
+<td>Biased matrix factorization</td>
+</tr>
+<tr>
+<td>LensKit.FunkSVDScorer</td>
+<td>Matrix Factorization</td>
+<td>Explicit</td>
+<td>FunkSVD matrix factorization</td>
+</tr>
+</tbody>
+</table>
+<h2 id="recbole-algorithms">RecBole Algorithms</h2>
+<p>RecBole provides a comprehensive collection of modern recommendation algorithms including deep learning and graph-based methods.</p>
+<h3 id="baseline-and-neighborhood-methods">Baseline and Neighborhood Methods</h3>
+<table>
+<thead>
+<tr>
+<th>Algorithm Name</th>
+<th>Type</th>
+<th>Feedback</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RecBole.Pop</td>
+<td>Baseline</td>
+<td>Both</td>
+<td>Popularity-based recommender</td>
+</tr>
+<tr>
+<td>RecBole.ItemKNN</td>
+<td>Neighborhood</td>
+<td>Both</td>
+<td>Item-based k-nearest neighbors</td>
+</tr>
+<tr>
+<td>RecBole.Random</td>
+<td>Baseline</td>
+<td>Both</td>
+<td>Random recommendation baseline</td>
+</tr>
+</tbody>
+</table>
+<h3 id="matrix-factorization">Matrix Factorization</h3>
+<table>
+<thead>
+<tr>
+<th>Algorithm Name</th>
+<th>Type</th>
+<th>Feedback</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RecBole.BPR</td>
+<td>Matrix Factorization</td>
+<td>Implicit</td>
+<td>Bayesian Personalized Ranking</td>
+</tr>
+<tr>
+<td>RecBole.FISM</td>
+<td>Matrix Factorization</td>
+<td>Implicit</td>
+<td>Factored Item Similarity Models</td>
+</tr>
+<tr>
+<td>RecBole.NAIS</td>
+<td>Matrix Factorization</td>
+<td>Implicit</td>
+<td>Neural Attentive Item Similarity</td>
+</tr>
+<tr>
+<td>RecBole.DMF</td>
+<td>Matrix Factorization</td>
+<td>Explicit</td>
+<td>Deep Matrix Factorization</td>
+</tr>
+<tr>
+<td>RecBole.ENMF</td>
+<td>Matrix Factorization</td>
+<td>Implicit</td>
+<td>Efficient Neural Matrix Factorization</td>
+</tr>
+<tr>
+<td>RecBole.NNCF</td>
+<td>Matrix Factorization</td>
+<td>Implicit</td>
+<td>Neural Network Collaborative Filtering</td>
+</tr>
+</tbody>
+</table>
+<h3 id="deep-learning-methods">Deep Learning Methods</h3>
+<table>
+<thead>
+<tr>
+<th>Algorithm Name</th>
+<th>Type</th>
+<th>Feedback</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RecBole.NeuMF</td>
+<td>Deep Learning</td>
+<td>Implicit</td>
+<td>Neural Matrix Factorization</td>
+</tr>
+<tr>
+<td>RecBole.ConvNCF</td>
+<td>Deep Learning</td>
+<td>Implicit</td>
+<td>Convolutional Neural Collaborative Filtering</td>
+</tr>
+<tr>
+<td>RecBole.CDAE</td>
+<td>Deep Learning</td>
+<td>Implicit</td>
+<td>Collaborative Denoising Auto-Encoder</td>
+</tr>
+<tr>
+<td>RecBole.MultiVAE</td>
+<td>Deep Learning</td>
+<td>Implicit</td>
+<td>Variational Autoencoders for Collaborative Filtering</td>
+</tr>
+<tr>
+<td>RecBole.MultiDAE</td>
+<td>Deep Learning</td>
+<td>Implicit</td>
+<td>Denoising Autoencoders for Collaborative Filtering</td>
+</tr>
+<tr>
+<td>RecBole.MacridVAE</td>
+<td>Deep Learning</td>
+<td>Implicit</td>
+<td>Macroscopic and Microscopic Variational Autoencoder</td>
+</tr>
+<tr>
+<td>RecBole.RecVAE</td>
+<td>Deep Learning</td>
+<td>Implicit</td>
+<td>Variational Autoencoders for Recommendations</td>
+</tr>
+<tr>
+<td>RecBole.DiffRec</td>
+<td>Deep Learning</td>
+<td>Implicit</td>
+<td>Diffusion Recommender Model</td>
+</tr>
+<tr>
+<td>RecBole.LDiffRec</td>
+<td>Deep Learning</td>
+<td>Implicit</td>
+<td>Latent Diffusion Recommender Model</td>
+</tr>
+</tbody>
+</table>
+<h3 id="graph-based-methods">Graph-Based Methods</h3>
+<table>
+<thead>
+<tr>
+<th>Algorithm Name</th>
+<th>Type</th>
+<th>Feedback</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RecBole.SpectralCF</td>
+<td>Graph Neural Network</td>
+<td>Implicit</td>
+<td>Spectral Collaborative Filtering</td>
+</tr>
+<tr>
+<td>RecBole.GCMC</td>
+<td>Graph Neural Network</td>
+<td>Explicit</td>
+<td>Graph Convolutional Matrix Completion</td>
+</tr>
+<tr>
+<td>RecBole.NGCF</td>
+<td>Graph Neural Network</td>
+<td>Implicit</td>
+<td>Neural Graph Collaborative Filtering</td>
+</tr>
+<tr>
+<td>RecBole.LightGCN</td>
+<td>Graph Neural Network</td>
+<td>Implicit</td>
+<td>Light Graph Convolutional Network</td>
+</tr>
+<tr>
+<td>RecBole.DGCF</td>
+<td>Graph Neural Network</td>
+<td>Implicit</td>
+<td>Disentangled Graph Collaborative Filtering</td>
+</tr>
+<tr>
+<td>RecBole.SGL</td>
+<td>Graph Neural Network</td>
+<td>Implicit</td>
+<td>Self-supervised Graph Learning</td>
+</tr>
+<tr>
+<td>RecBole.NCL</td>
+<td>Graph Neural Network</td>
+<td>Implicit</td>
+<td>Neighborhood-enriched Contrastive Learning</td>
+</tr>
+<tr>
+<td>RecBole.LINE</td>
+<td>Graph Embedding</td>
+<td>Implicit</td>
+<td>Large-scale Information Network Embedding</td>
+</tr>
+</tbody>
+</table>
+<h3 id="linear-and-optimization-based-methods">Linear and Optimization-Based Methods</h3>
+<table>
+<thead>
+<tr>
+<th>Algorithm Name</th>
+<th>Type</th>
+<th>Feedback</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RecBole.EASE</td>
+<td>Linear</td>
+<td>Implicit</td>
+<td>Embarrassingly Shallow Autoencoders</td>
+</tr>
+<tr>
+<td>RecBole.SLIMElastic</td>
+<td>Linear</td>
+<td>Implicit</td>
+<td>Sparse Linear Method with ElasticNet</td>
+</tr>
+<tr>
+<td>RecBole.ADMMSLIM</td>
+<td>Linear</td>
+<td>Implicit</td>
+<td>ADMM SLIM for Top-N Recommendation</td>
+</tr>
+<tr>
+<td>RecBole.NCEPLRec</td>
+<td>Linear</td>
+<td>Implicit</td>
+<td>Neighborhood-based Collaborative Filtering with Pairwise Learning</td>
+</tr>
+<tr>
+<td>RecBole.SimpleX</td>
+<td>Linear</td>
+<td>Implicit</td>
+<td>Simple and Effective Collaborative Filtering</td>
+</tr>
+</tbody>
+</table>
+<h2 id="using-algorithms-in-experiments">Using Algorithms in Experiments</h2>
+<p>Reference algorithms using the format <code>&lt;Runner&gt;.&lt;Algorithm&gt;</code> in your experiment plan:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.plan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExperimentPlan</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.algos</span><span class="w"> </span><span class="kn">import</span> <span class="n">LensKit</span><span class="p">,</span> <span class="n">RecBole</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Create experiment plan</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">plan</span> <span class="o">=</span> <span class="n">ExperimentPlan</span><span class="p">(</span><span class="s2">&quot;Algorithm-Comparison&quot;</span><span class="p">)</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Add LensKit algorithm</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">plan</span><span class="o">.</span><span class="n">add_algorithm</span><span class="p">(</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">LensKit</span><span class="o">.</span><span class="n">ItemKNNScorer</span><span class="p">,</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="p">{</span><span class="s2">&quot;max_nbrs&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">&quot;min_nbrs&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">)</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># Add RecBole algorithm</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="n">plan</span><span class="o">.</span><span class="n">add_algorithm</span><span class="p">(</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="n">RecBole</span><span class="o">.</span><span class="n">LightGCN</span><span class="p">,</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="p">{</span><span class="s2">&quot;embedding_size&quot;</span><span class="p">:</span> <span class="mi">64</span><span class="p">,</span> <span class="s2">&quot;n_layers&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>See the <a href="../conf_algo/">Algorithm Configuration</a> guide for detailed information on configuring algorithms and hyperparameters.</p>
+<!-- ## Algorithm Selection Guidelines
+
+**For Explicit Feedback (ratings)**:
+- Baseline: `LensKit.PopScorer`, `RecBole.Pop`
+- Traditional: `LensKit.BiasedMFScorer`, `LensKit.FunkSVDScorer`
+- Deep Learning: `RecBole.DMF`
+- Graph-based: `RecBole.GCMC`
+
+**For Implicit Feedback (clicks, views)**:
+- Baseline: `RecBole.Pop`, `RecBole.Random`
+- Neighborhood: `LensKit.ItemKNNScorer`, `RecBole.ItemKNN`
+- Matrix Factorization: `LensKit.ImplicitMFScorer`, `RecBole.BPR`
+- Linear: `RecBole.EASE`, `RecBole.SLIMElastic`
+- Deep Learning: `RecBole.NeuMF`, `RecBole.MultiVAE`
+- Graph-based: `RecBole.LightGCN`, `RecBole.NGCF`
+
+**Performance Considerations**:
+- Fast training: Neighborhood methods, linear methods (`EASE`, `SLIM`)
+- Best accuracy: Graph neural networks (`LightGCN`, `NGCF`), deep learning methods
+- Large datasets: Linear methods, graph-based methods with mini-batching
+- Cold-start scenarios: Popularity-based methods, content-aware algorithms -->
 
 
 
 
 
 
-
-
-
-  
-  
 
 
 

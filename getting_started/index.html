@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="http://omnirec.recommender-systems.com/getting_started/">
+        <link rel="canonical" href="https://omnirec.recommender-systems.com/getting_started/">
       
       
         <link rel="prev" href="..">
       
       
-        <link rel="next" href="../feature_overview/">
+        <link rel="next" href="../loading_datasets/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -448,7 +448,7 @@
         <li class="md-nav__item">
   <a href="#loading-datasets" class="md-nav__link">
     <span class="md-ellipsis">
-      Loading datasets
+      Loading Datasets
     </span>
   </a>
   
@@ -463,33 +463,55 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#configuring-experiments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuring Experiments
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-up-evaluation-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting Up Evaluation Metrics
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-experiments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running Experiments
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checkpointing-and-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checkpointing and Results
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Complete Example
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../feature_overview/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Feature Overview
-    
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -594,12 +616,58 @@
   
   
     <li class="md-nav__item">
+      <a href="../algorithms_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Algorithms Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../evaluator/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     Evaluator
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../checkpointing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Checkpointing and Results
     
   </span>
   
@@ -658,39 +726,131 @@
 <h1 id="getting-started">Getting Started</h1>
 <p>In this guide we will present how to install OmniRec and to design and implement your first experiments with it.</p>
 <h2 id="installation">Installation</h2>
-<!-- TODO: Fill in python version and install command -->
-<p>First you need to setup a python environment at least python &lt;\version&gt; and install the OmniRec libary by running &lt;\command&gt;.</p>
-<h2 id="loading-datasets">Loading datasets</h2>
-<p>Central part of the OmniRec library is the <a href="../API_references/#omnirec.RecSysDataSet"><code>RecSysDataSet</code></a> class. It loads the data in an object of this class by calling the static <a href="../API_references/#omnirec.RecSysDataSet.use_dataloader"><code>use_dataloader()</code></a> function that return a <a href="../API_references/#omnirec.RecSysDataSet"><code>RecSysDataSet</code></a> object. If provided a registered data set name <a href="../API_references/#omnirec.RecSysDataSet.use_dataloader"><code>use_dataloader()</code></a> downloads the data set, removes duplicates and normalizes the identifiers:</p>
-<p><div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">OmniRec</span><span class="w"> </span><span class="kn">import</span> <span class="n">RedSysDataSet</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">data</span> <span class="o">=</span> <span class="n">RecSysDataSet</span><span class="o">.</span><span class="n">use_dataloader</span><span class="p">(</span><span class="n">data_set_name</span><span class="o">=</span><span class="s2">&quot;MovieLens100K&quot;</span><span class="p">)</span>
+<p>First you need to setup a Python environment with at least Python 3.12 and install the OmniRec library by running:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>omnirec
 </span></code></pre></div>
-We provide a more detailed documentation <a href="../loading_datasets/">here</a>.</p>
+<h2 id="loading-datasets">Loading Datasets</h2>
+<p>Central part of the OmniRec library is the <a href="../API_references/#omnirec.RecSysDataSet"><code>RecSysDataSet</code></a> class. You can load data by calling the static <a href="../API_references/#omnirec.RecSysDataSet"><code>use_dataloader()</code></a> function that returns a <a href="../API_references/#omnirec.RecSysDataSet"><code>RecSysDataSet</code></a> object. If provided a registered dataset name, <a href="../API_references/#omnirec.RecSysDataSet"><code>use_dataloader()</code></a> downloads the dataset, removes duplicates and normalizes the identifiers:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec</span><span class="w"> </span><span class="kn">import</span> <span class="n">RecSysDataSet</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># Load the MovieLens 100K dataset</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">RecSysDataSet</span><span class="o">.</span><span class="n">use_dataloader</span><span class="p">(</span><span class="s2">&quot;MovieLens100K&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>We provide a more detailed documentation <a href="../loading_datasets/">here</a>.</p>
 <h2 id="preprocessing-datasets">Preprocessing Datasets</h2>
 <p>We can now apply the desired preprocessing steps to the data. The easiest way is to define a preprocessing pipeline:</p>
-<!-- TODO: Change imports according to final project structure -->
-
-<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.core_pruning</span><span class="w"> </span><span class="kn">import</span> <span class="n">CorePruning</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.feedback_conversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">MakeImplicit</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.pipe</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.split</span><span class="w"> </span><span class="kn">import</span> <span class="n">UseCrossValidation</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">[</span><span class="n">FoldedData</span><span class="p">](</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">Subsample</span><span class="p">(</span><span class="n">sample_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">),</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">MakeImplicit</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">CorePruning</span><span class="p">(</span><span class="n">core</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="n">UserCrossValidation</span><span class="p">(</span><span class="n">num_folds</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">validation_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">),</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">)</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">data</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.core_pruning</span><span class="w"> </span><span class="kn">import</span> <span class="n">CorePruning</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.feedback_conversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">MakeImplicit</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.pipe</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.split</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserHoldout</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># Create a preprocessing pipeline</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">MakeImplicit</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>           <span class="c1"># Convert to implicit feedback (ratings &gt;= 3)</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">CorePruning</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>            <span class="c1"># Keep only 5-core users and items</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">UserHoldout</span><span class="p">(</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span>    <span class="c1"># Split into train/val/test sets</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">)</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1"># Apply all preprocessing steps</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 </span></code></pre></div>
-<!-- TODO: Add links to API reference when avaliable -->
-
-<p>The <code>pipe.process()</code> function interatively executes the preprocessing steps. </p>
+<p>The <code>pipe.process()</code> function iteratively executes the preprocessing steps. </p>
 <p>Alternatively, this can be done step by step by creating a single preprocessing step and calling <code>process()</code> on it:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">step</span> <span class="o">=</span> <span class="n">Subsample</span><span class="p">(</span><span class="n">sample_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">data</span> <span class="o">=</span> <span class="n">step</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.subsample</span><span class="w"> </span><span class="kn">import</span> <span class="n">Subsample</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Sample 10% of the interactions</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">step</span> <span class="o">=</span> <span class="n">Subsample</span><span class="p">(</span><span class="n">sample_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">step</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 </span></code></pre></div>
 <p>More details about the available preprocessing steps can be found <a href="../preprocessing/">here</a>.</p>
+<h2 id="configuring-experiments">Configuring Experiments</h2>
+<p>To run experiments, you need to create an <code>ExperimentPlan</code> that specifies which algorithms to run and their hyperparameters:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.plan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExperimentPlan</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.algos</span><span class="w"> </span><span class="kn">import</span> <span class="n">LensKit</span><span class="p">,</span> <span class="n">RecBole</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Create a new experiment plan</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">plan</span> <span class="o">=</span> <span class="n">ExperimentPlan</span><span class="p">(</span><span class="n">plan_name</span><span class="o">=</span><span class="s2">&quot;My First Experiment&quot;</span><span class="p">)</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># Add algorithms with configurations</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1"># For LensKit ItemKNN with different neighborhood sizes</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">plan</span><span class="o">.</span><span class="n">add_algorithm</span><span class="p">(</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="n">LensKit</span><span class="o">.</span><span class="n">ItemKNNScorer</span><span class="p">,</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="p">{</span><span class="s2">&quot;max_nbrs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="s2">&quot;min_nbrs&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;feedback&quot;</span><span class="p">:</span> <span class="s2">&quot;implicit&quot;</span><span class="p">}</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="p">)</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="c1"># Add RecBole BPR algorithm with default parameters</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="n">plan</span><span class="o">.</span><span class="n">add_algorithm</span><span class="p">(</span><span class="n">RecBole</span><span class="o">.</span><span class="n">BPR</span><span class="p">)</span>
+</span></code></pre></div>
+<p>When you provide a list of values for a hyperparameter (like <code>[10, 20, 30]</code> for <code>max_nbrs</code>), the framework will run separate experiments for each value.</p>
+<h2 id="setting-up-evaluation-metrics">Setting Up Evaluation Metrics</h2>
+<p>Define which metrics to compute on the test set:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDCG</span><span class="p">,</span> <span class="n">HR</span><span class="p">,</span> <span class="n">Recall</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.evaluation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># Create evaluator with multiple metrics at different k values</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="n">NDCG</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]),</span>      <span class="c1"># Normalized Discounted Cumulative Gain</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="n">HR</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]),</span>        <span class="c1"># Hit Rate</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="n">Recall</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>     <span class="c1"># Recall</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="p">)</span>
+</span></code></pre></div>
+<h2 id="running-experiments">Running Experiments</h2>
+<p>Now we can run the experiments using the <code>run_omnirec</code> function:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.util.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_omnirec</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="c1"># Run all experiments</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="n">run_omnirec</span><span class="p">(</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="n">datasets</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="n">plan</span><span class="o">=</span><span class="n">plan</span><span class="p">,</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="n">evaluator</span><span class="o">=</span><span class="n">evaluator</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>The <code>run_omnirec</code> function will:</p>
+<ol>
+<li>Set up isolated Python environments for each algorithm framework</li>
+<li>Train each algorithm configuration on the training data</li>
+<li>Generate predictions on the test data</li>
+<li>Compute all specified metrics</li>
+<li>Save checkpoints to allow resuming interrupted experiments</li>
+</ol>
+<p>After experiments complete, the results will be printed to the console and can also be accessed through the checkpoint files.</p>
+<h2 id="checkpointing-and-results">Checkpointing and Results</h2>
+<p>OmniRec automatically saves experiment progress and results to the checkpoint directory. If an experiment is interrupted, simply run it again—the <code>run_omnirec</code> function will automatically resume from the last completed phase.</p>
+<p>For detailed information about checkpoint structure, resuming experiments, and result formats, see the <a href="../checkpointing/">Checkpointing and Results</a> documentation.</p>
+<h2 id="complete-example">Complete Example</h2>
+<p>Here's a complete example that puts it all together:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec</span><span class="w"> </span><span class="kn">import</span> <span class="n">RecSysDataSet</span><span class="p">,</span> <span class="n">NDCG</span><span class="p">,</span> <span class="n">HR</span><span class="p">,</span> <span class="n">Recall</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.pipe</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipe</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.feedback_conversion</span><span class="w"> </span><span class="kn">import</span> <span class="n">MakeImplicit</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.core_pruning</span><span class="w"> </span><span class="kn">import</span> <span class="n">CorePruning</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.split</span><span class="w"> </span><span class="kn">import</span> <span class="n">UserHoldout</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.plan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExperimentPlan</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.algos</span><span class="w"> </span><span class="kn">import</span> <span class="n">LensKit</span><span class="p">,</span> <span class="n">RecBole</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.evaluation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.util.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_omnirec</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="c1"># Load and preprocess dataset</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">RecSysDataSet</span><span class="o">.</span><span class="n">use_dataloader</span><span class="p">(</span><span class="s2">&quot;MovieLens100K&quot;</span><span class="p">)</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>    <span class="n">MakeImplicit</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>    <span class="n">CorePruning</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>    <span class="n">UserHoldout</span><span class="p">(</span><span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="p">)</span>
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>
+</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="c1"># Configure experiments</span>
+</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="n">plan</span> <span class="o">=</span> <span class="n">ExperimentPlan</span><span class="p">(</span><span class="n">plan_name</span><span class="o">=</span><span class="s2">&quot;MovieLens Comparison&quot;</span><span class="p">)</span>
+</span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a><span class="n">plan</span><span class="o">.</span><span class="n">add_algorithm</span><span class="p">(</span><span class="n">LensKit</span><span class="o">.</span><span class="n">ItemKNNScorer</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;max_nbrs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="s2">&quot;feedback&quot;</span><span class="p">:</span> <span class="s2">&quot;implicit&quot;</span><span class="p">})</span>
+</span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a><span class="n">plan</span><span class="o">.</span><span class="n">add_algorithm</span><span class="p">(</span><span class="n">RecBole</span><span class="o">.</span><span class="n">BPR</span><span class="p">)</span>
+</span><span id="__span-7-25"><a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>
+</span><span id="__span-7-26"><a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a><span class="c1"># Set up evaluation</span>
+</span><span id="__span-7-27"><a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a><span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">NDCG</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">HR</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</span><span id="__span-7-28"><a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a>
+</span><span id="__span-7-29"><a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a><span class="c1"># Run experiments</span>
+</span><span id="__span-7-30"><a id="__codelineno-7-30" name="__codelineno-7-30" href="#__codelineno-7-30"></a><span class="n">run_omnirec</span><span class="p">(</span><span class="n">datasets</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">plan</span><span class="o">=</span><span class="n">plan</span><span class="p">,</span> <span class="n">evaluator</span><span class="o">=</span><span class="n">evaluator</span><span class="p">)</span>
+</span></code></pre></div>
+<p>This example loads MovieLens 100K, preprocesses it, runs ItemKNN and BPR algorithms, evaluates them using NDCG, Hit Rate, and Recall metrics, and displays the results in formatted tables.</p>
 
 
 
