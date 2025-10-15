@@ -79,6 +79,13 @@ class RecPack(Runner):
         train = pd.read_csv(self.train_file)
         val = pd.read_csv(self.val_file)
         test = pd.read_csv(self.test_file)
+
+        for df in (train, val, test):
+            if "rating" in df.columns:
+                raise ValueError(
+                    'RecPack only supports implicit feedback. Convert the dataset first to implicit by using preprocessor "MakeImplicit"'
+                )
+
         user_max = max(
             train["user"].max(),
             val["user"].max(),
