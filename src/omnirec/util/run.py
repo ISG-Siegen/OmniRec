@@ -1,5 +1,7 @@
 from typing import Iterable, TypeVar
 
+from rich.console import Console
+
 from omnirec.data_variants import DataVariant
 from omnirec.recsys_data_set import RecSysDataSet
 from omnirec.runner.coordinator import Coordinator
@@ -23,3 +25,7 @@ def run_omnirec(
     """
     c = Coordinator()
     c.run(datasets, plan, evaluator)
+
+    for table in evaluator.get_tables():
+        console = Console()
+        console.print(table)
