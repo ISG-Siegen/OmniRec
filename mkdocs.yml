@@ -2,7 +2,9 @@ site_name: OmniRec Docs
 site_url: https://omnirec.recommender-systems.com
 
 nav:
-  - Home: index.md
+  - Home: 
+      - Overview: index.md
+      - About Us: about_us.md
   - User Guide:
       - Getting Started: getting_started.md
       - Loading Datasets: loading_datasets.md
