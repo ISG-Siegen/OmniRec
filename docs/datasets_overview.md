@@ -29,8 +29,71 @@ The framework includes many built-in datasets. Use the exact name with the [`use
 | Amazon2014DigitalMusic      | Digital Music       | Explicit   | Amazon/SNAP    |
 | Amazon2014MusicalInstruments| Instruments         | Explicit   | Amazon/SNAP    |
 | Amazon2014AmazonInstantVideo| Video Streaming     | Explicit   | Amazon/SNAP    |
-| MovieLens100K               | Movies              | Explicit   | GroupLens      |
-| HetrecLastFM                | Music               | Implicit   | HetRec         |
+| Amazon2018AmazonFashion    | Fashion             | Explicit   | Amazon         |
+| Amazon2018AllBeauty        | Beauty              | Explicit   | Amazon         |
+| Amazon2018Appliances       | Home Appliances     | Explicit   | Amazon         |
+| Amazon2018ArtsCraftsAndSewing | Arts & Crafts    | Explicit   | Amazon         |
+| Amazon2018Automotive       | Automotive          | Explicit   | Amazon         |
+| Amazon2018Books            | Books               | Explicit   | Amazon         |
+| Amazon2018CdsAndVinyl      | Music               | Explicit   | Amazon         |
+| Amazon2018CellPhonesAndAccessories | Phones       | Explicit   | Amazon         |
+| Amazon2018ClothingShoesAndJewelry | Fashion      | Explicit   | Amazon         |
+| Amazon2018DigitalMusic     | Digital Music       | Explicit   | Amazon         |
+| Amazon2018Electronics      | Electronics         | Explicit   | Amazon         |
+| Amazon2018GiftCards        | Gift Cards          | Explicit   | Amazon         |
+| Amazon2018GroceryAndGourmetFood | Grocery        | Explicit   | Amazon         |
+| Amazon2018HomeAndKitchen   | Home & Kitchen      | Explicit   | Amazon         |
+| Amazon2018IndustrialAndScientific | Industrial    | Explicit   | Amazon         |
+| Amazon2018KindleStore      | eBooks              | Explicit   | Amazon         |
+| Amazon2018LuxuryBeauty     | Luxury Beauty       | Explicit   | Amazon         |
+| Amazon2018MagazineSubscriptions | Magazines      | Explicit   | Amazon         |
+| Amazon2018MoviesAndTv      | Movies & TV         | Explicit   | Amazon         |
+| Amazon2018MusicalInstruments | Instruments       | Explicit   | Amazon         |
+| Amazon2018OfficeProducts   | Office              | Explicit   | Amazon         |
+| Amazon2018PatioLawnAndGarden | Garden           | Explicit   | Amazon         |
+| Amazon2018PetSupplies      | Pets                | Explicit   | Amazon         |
+| Amazon2018PrimePantry      | Prime Pantry        | Explicit   | Amazon         |
+| Amazon2018Software         | Software            | Explicit   | Amazon         |
+| Amazon2018SportsAndOutdoors | Sports             | Explicit   | Amazon         |
+| Amazon2018ToolsAndHomeImprovement | Tools        | Explicit   | Amazon         |
+| Amazon2018ToysAndGames     | Toys & Games        | Explicit   | Amazon         |
+| Amazon2018VideoGames       | Video Games         | Explicit   | Amazon         |
+| Amazon2023AllBeauty | Beauty | Explicit | Amazon |
+| Amazon2023AmazonFashion | Fashion | Explicit | Amazon |
+| Amazon2023Appliances | Home Appliances | Explicit | Amazon |
+| Amazon2023ArtsCraftsAndSewing | Arts & Crafts | Explicit | Amazon |
+| Amazon2023Automotive | Automotive | Explicit | Amazon |
+| Amazon2023BabyProducts | Baby | Explicit | Amazon |
+| Amazon2023BeautyAndPersonalCare | Beauty & Personal Care | Explicit | Amazon |
+| Amazon2023Books | Books | Explicit | Amazon |
+| Amazon2023CdsAndVinyl | Music | Explicit | Amazon |
+| Amazon2023CellPhonesAndAccessories | Phones | Explicit | Amazon |
+| Amazon2023ClothingShoesAndJewelry | Fashion | Explicit | Amazon |
+| Amazon2023DigitalMusic | Digital Music | Explicit | Amazon |
+| Amazon2023Electronics | Electronics | Explicit | Amazon |
+| Amazon2023GiftCards | Gift Cards | Explicit | Amazon |
+| Amazon2023GroceryAndGourmetFood | Grocery | Explicit | Amazon |
+| Amazon2023HandmadeProducts | Handmade | Explicit | Amazon |
+| Amazon2023HealthAndHousehold | Health & Household | Explicit | Amazon |
+| Amazon2023HealthAndPersonalCare | Health & Personal Care | Explicit | Amazon |
+| Amazon2023HomeAndKitchen | Home & Kitchen | Explicit | Amazon |
+| Amazon2023IndustrialAndScientific | Industrial | Explicit | Amazon |
+| Amazon2023KindleStore | eBooks | Explicit | Amazon |
+| Amazon2023MagazineSubscriptions | Magazines | Explicit | Amazon |
+| Amazon2023MoviesAndTv | Movies & TV | Explicit | Amazon |
+| Amazon2023MusicalInstruments | Instruments | Explicit | Amazon |
+| Amazon2023OfficeProducts | Office | Explicit | Amazon |
+| Amazon2023PatioLawnAndGarden | Garden | Explicit | Amazon |
+| Amazon2023PetSupplies | Pets | Explicit | Amazon |
+| Amazon2023Software | Software | Explicit | Amazon |
+| Amazon2023SportsAndOutdoors | Sports | Explicit | Amazon |
+| Amazon2023SubscriptionBoxes | Subscription Boxes | Explicit | Amazon |
+| Amazon2023ToolsAndHomeImprovement | Tools | Explicit | Amazon |
+| Amazon2023ToysAndGames | Toys & Games | Explicit | Amazon |
+| Amazon2023VideoGames | Video Games | Explicit | Amazon |
+| Amazon2023Unknown | Unknown | Explicit | Amazon |
+| MovieLens100K | Movies | Explicit | GroupLens |
+| HetrecLastFM | Music | Implicit | HetRec |
 
 
 ## Listing Available Datasets

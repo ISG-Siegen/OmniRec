@@ -15,6 +15,66 @@ LensKit provides traditional collaborative filtering algorithms optimized for re
 | LensKit.BiasedMFScorer | Matrix Factorization  | Explicit   | Biased matrix factorization                    |
 | LensKit.FunkSVDScorer | Matrix Factorization   | Explicit   | FunkSVD matrix factorization                   |
 
+## RecPack Algorithms
+
+RecPack provides efficient implementations of collaborative filtering algorithms with a focus on scalability and performance.
+
+| Algorithm Name        | Type                    | Feedback   | Description                                    |
+|-----------------------|-------------------------|------------|------------------------------------------------|
+| RecPack.SVD           | Matrix Factorization    | Explicit   | Singular Value Decomposition                    |
+| RecPack.NMF           | Matrix Factorization    | Explicit   | Non-negative Matrix Factorization               |
+| RecPack.ItemKNN       | Neighborhood            | Both       | Item-based k-nearest neighbors                 |
+
+## Elliot Algorithms
+
+Elliot provides a comprehensive framework for reproducible recommender systems evaluation with implementations of state-of-the-art algorithms.
+
+### Baseline and Neighborhood Methods
+
+| Algorithm Name       | Type                    | Feedback   | Description                                    |
+|----------------------|-------------------------|------------|------------------------------------------------|
+| Elliot.MostPop       | Baseline                | Both       | Most popular items baseline                     |
+| Elliot.ItemKNN       | Neighborhood            | Both       | Item-based k-nearest neighbors                 |
+| Elliot.UserKNN       | Neighborhood            | Both       | User-based k-nearest neighbors                 |
+| Elliot.SlopeOne      | Slope One               | Explicit   | Slope One collaborative filtering              |
+
+### Matrix Factorization and Factorization Machines
+
+| Algorithm Name       | Type                    | Feedback   | Description                                    |
+|----------------------|-------------------------|------------|------------------------------------------------|
+| Elliot.AMF           | Matrix Factorization    | Explicit   | Alternating Matrix Factorization                |
+| Elliot.BPRMF         | Matrix Factorization    | Implicit   | Bayesian Personalized Ranking Matrix Factorization |
+| Elliot.BPRMF_batch   | Matrix Factorization    | Implicit   | BPRMF with batch processing                     |
+| Elliot.FM            | Factorization Machine   | Explicit   | Factorization Machine                           |
+| Elliot.FunkSVD       | Matrix Factorization    | Explicit   | FunkSVD matrix factorization                   |
+| Elliot.NonNegMF      | Matrix Factorization    | Explicit   | Non-negative Matrix Factorization               |
+| Elliot.PureSVD       | Matrix Factorization    | Explicit   | Pure SVD                                       |
+| Elliot.SVDpp         | Matrix Factorization    | Explicit   | SVD++                                          |
+| Elliot.WRMF          | Matrix Factorization    | Implicit   | Weighted Regularized Matrix Factorization       |
+| Elliot.ConvMF        | Matrix Factorization    | Explicit   | Convolutional Matrix Factorization              |
+| Elliot.DeepFM        | Deep Learning           | Explicit   | Deep Factorization Machine                      |
+| Elliot.DMF           | Matrix Factorization    | Explicit   | Deep Matrix Factorization                       |
+| Elliot.GMF           | Matrix Factorization    | Explicit   | Generalized Matrix Factorization                |
+| Elliot.NeuMF         | Deep Learning           | Implicit   | Neural Matrix Factorization                     |
+
+### Autoencoder-Based Methods
+
+| Algorithm Name       | Type                    | Feedback   | Description                                    |
+|----------------------|-------------------------|------------|------------------------------------------------|
+| Elliot.MultiDAE      | Deep Learning           | Implicit   | Multi-layer Denoising Autoencoder              |
+| Elliot.MultiVAE      | Deep Learning           | Implicit   | Multi-layer Variational Autoencoder            |
+| Elliot.ItemAutoRec   | Deep Learning           | Explicit   | Item-based Autoencoder                          |
+| Elliot.UserAutoRec   | Deep Learning           | Explicit   | User-based Autoencoder                          |
+
+### Graph-Based Methods
+
+| Algorithm Name       | Type                    | Feedback   | Description                                    |
+|----------------------|-------------------------|------------|------------------------------------------------|
+| Elliot.LightGCN      | Graph Neural Network    | Implicit   | Light Graph Convolutional Network               |
+| Elliot.NGCF          | Graph Neural Network    | Implicit   | Neural Graph Collaborative Filtering            |
+
+## Using Algorithms in Experiments
+
 ## RecBole Algorithms
 
 RecBole provides a comprehensive collection of modern recommendation algorithms including deep learning and graph-based methods.
