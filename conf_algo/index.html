@@ -774,6 +774,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../slurm_integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SLURM Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -821,9 +844,9 @@
 
 <h1 id="algorithm-configuration">Algorithm Configuration</h1>
 <p>This section explains how to configure algorithms and hyperparameters for recommendation experiments. The experiment planning system provides a flexible approach to define algorithm configurations and automatically generate all hyperparameter combinations.</p>
-<p>The <code>ExperimentPlan</code> class manages algorithm configurations and hyperparameter grids. It expands every combination you define, automating the execution of multiple algorithm variants with different hyperparameter settings.</p>
+<p>The <a href="../API_references/#omnirec.runner.plan.ExperimentPlan"><code>ExperimentPlan</code></a> class manages algorithm configurations and hyperparameter grids. It expands every combination you define, automating the execution of multiple algorithm variants with different hyperparameter settings.</p>
 <h2 id="experimentplan">ExperimentPlan</h2>
-<p>The <code>ExperimentPlan</code> class serves as the central configuration for all algorithms in your experiments. Create a plan by optionally providing a name, then add algorithms with their hyperparameters:</p>
+<p>The <a href="../API_references/#omnirec.runner.plan.ExperimentPlan"><code>ExperimentPlan</code></a> class serves as the central configuration for all algorithms in your experiments. Create a plan by optionally providing a name, then add algorithms with their hyperparameters:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.plan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExperimentPlan</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Create an experiment plan with optional name</span>
@@ -839,7 +862,7 @@
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">recbole_algo</span> <span class="o">=</span> <span class="n">RecBole</span><span class="o">.</span><span class="n">LightGCN</span>          <span class="c1"># &quot;RecBole.LightGCN&quot;</span>
 </span></code></pre></div>
 <h3 id="adding-algorithms">Adding Algorithms</h3>
-<p>Add algorithms to the plan using the <code>add_algorithm</code> method. Provide the algorithm identifier and a dictionary of hyperparameters:</p>
+<p>Add algorithms to the plan using the <a href="../API_references/#omnirec.runner.plan.ExperimentPlan.add_algorithm"><code>add_algorithm</code></a> method. Provide the algorithm identifier and a dictionary of hyperparameters:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.algos</span><span class="w"> </span><span class="kn">import</span> <span class="n">LensKit</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Add algorithm with hyperparameters</span>
@@ -904,9 +927,9 @@
 </span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>    <span class="p">}</span>
 </span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="p">)</span>
 </span></code></pre></div>
-<p>Each call to <code>add_algorithm</code> appends a new algorithm configuration. Avoid using the same algorithm identifier multiple times unless you intend to overwrite the previous configuration.</p>
+<p>Each call to <a href="../API_references/#omnirec.runner.plan.ExperimentPlan.add_algorithm"><code>add_algorithm</code></a> appends a new algorithm configuration. Avoid using the same algorithm identifier multiple times unless you intend to overwrite the previous configuration.</p>
 <h3 id="updating-algorithms">Updating Algorithms</h3>
-<p>Modify existing algorithm configurations using the <code>update_algorithm</code> method:</p>
+<p>Modify existing algorithm configurations using the <a href="../API_references/#omnirec.runner.plan.ExperimentPlan.update_algorithm"><code>update_algorithm</code></a> method:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Update previously added algorithm</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">plan</span><span class="o">.</span><span class="n">update_algorithm</span><span class="p">(</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">LensKit</span><span class="o">.</span><span class="n">ItemKNNScorer</span><span class="p">,</span>
@@ -918,7 +941,7 @@
 </span></code></pre></div>
 <p>The update merges with the existing configuration, adding new parameters and updating existing ones.</p>
 <h2 id="running-experiments">Running Experiments</h2>
-<p>Pass the configured plan to <code>run_omnirec</code> alongside your dataset and evaluator to execute all algorithm configurations:</p>
+<p>Pass the configured plan to <a href="../API_references/#omnirec.util.run.run_omnirec"><code>run_omnirec</code></a> alongside your dataset and evaluator to execute all algorithm configurations:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec</span><span class="w"> </span><span class="kn">import</span> <span class="n">RecSysDataSet</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.evaluation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.metrics.ranking</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDCG</span><span class="p">,</span> <span class="n">Recall</span>

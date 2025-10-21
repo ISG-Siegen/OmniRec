@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://omnirec.recommender-systems.com/checkpointing/">
+        <link rel="canonical" href="https://omnirec.recommender-systems.com/slurm_integration/">
       
       
-        <link rel="prev" href="../evaluator/">
+        <link rel="prev" href="../checkpointing/">
       
       
-        <link rel="next" href="../slurm_integration/">
+        <link rel="next" href="../API_references/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Checkpointing and Results - OmniRec Docs</title>
+        <title>SLURM Integration - OmniRec Docs</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#checkpointing-and-results" class="md-skip">
+        <a href="#slurm-integration" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Checkpointing and Results
+              SLURM Integration
             
           </span>
         </div>
@@ -620,6 +620,29 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../checkpointing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Checkpointing and Results
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -637,7 +660,7 @@
   
   
   <span class="md-ellipsis">
-    Checkpointing and Results
+    SLURM Integration
     
   </span>
   
@@ -650,7 +673,7 @@
   
   
   <span class="md-ellipsis">
-    Checkpointing and Results
+    SLURM Integration
     
   </span>
   
@@ -673,62 +696,38 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#checkpoint-directory-structure" class="md-nav__link">
+  <a href="#enabling-slurm-integration" class="md-nav__link">
     <span class="md-ellipsis">
-      Checkpoint Directory Structure
+      Enabling SLURM Integration
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#resuming-experiments" class="md-nav__link">
+  <a href="#slurm-script-template" class="md-nav__link">
     <span class="md-ellipsis">
-      Resuming Experiments
+      SLURM Script Template
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#result-format" class="md-nav__link">
+  <a href="#template-variables" class="md-nav__link">
     <span class="md-ellipsis">
-      Result Format
+      Template Variables
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#caching-and-deduplication" class="md-nav__link">
+  <a href="#how-it-works" class="md-nav__link">
     <span class="md-ellipsis">
-      Caching and Deduplication
+      How It Works
     </span>
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#log-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      Log Files
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Log Files">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#debugging" class="md-nav__link">
-    <span class="md-ellipsis">
-      Debugging
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -736,29 +735,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../slurm_integration/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    SLURM Integration
-    
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -809,133 +785,63 @@
 
 
 
-<h1 id="checkpointing-and-results">Checkpointing and Results</h1>
-<p>OmniRec automatically saves experiment progress and results to enable fault tolerance and result persistence.</p>
-<h2 id="checkpoint-directory-structure">Checkpoint Directory Structure</h2>
-<p>The checkpoint directory organizes experiments hierarchically:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>checkpoints/
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── progress.json                                    # Global progress tracker
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── out.log                                          # Runner stdout logs
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── err.log                                          # Runner stderr logs
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>└── {dataset-name}-{hash}/                          # Per dataset
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    └── {algorithm-name}-{hash}/                    # Per algorithm configuration
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        ├── predictions.json                        # Model predictions
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        ├── fold_0/                                 # For cross-validation
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        │   └── predictions.json
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        ├── fold_1/
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        │   └── predictions.json
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        └── ...
+<h1 id="slurm-integration">SLURM Integration</h1>
+<p>If you want to use a HPC cluster with SLURM to run your experiments, you can leverage the built-in SLURM integration of the framework. This allows you to distribute the execution of different algorithm configurations across multiple compute nodes managed by SLURM.</p>
+<h2 id="enabling-slurm-integration">Enabling SLURM Integration</h2>
+<p>To enable SLURM integration, pass the path to a SLURM script to the <a href="../API_references/#omnirec.util.run.run_omnirec"><code>run_omnirec()</code></a> function using the <code>slurm_script</code> parameter:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.util.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_omnirec</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Define SLURM configuration</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">slurm_script</span> <span class="o">=</span> <span class="s2">&quot;path/to/slurm_script.slurm&quot;</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># Run experiments with SLURM integration</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">run_omnirec</span><span class="p">(</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">datasets</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">plan</span><span class="o">=</span><span class="n">plan</span><span class="p">,</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">evaluator</span><span class="o">=</span><span class="n">evaluator</span><span class="p">,</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="n">slurm_script</span><span class="o">=</span><span class="n">slurm_script</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">)</span>
 </span></code></pre></div>
-<p><strong>Key files:</strong></p>
-<ul>
-<li><strong><code>progress.json</code></strong>: Tracks experiment phases (Fit, Predict, Eval, Done) for each configuration. Enables resuming interrupted experiments.</li>
-<li><strong><code>predictions.json</code></strong>: Contains model predictions with columns: <code>user</code>, <code>item</code>, <code>score</code>, <code>rank</code>.</li>
-<li><strong><code>out.log</code> / <code>err.log</code></strong>: Runner process output for debugging.</li>
-</ul>
-<p><strong>Hash-Based Organization</strong></p>
-<p>The <a href="../API_references/#omnirec.runner.coordinator.Coordinator"><code>Coordinator</code></a> generates unique hashes for datasets and configurations:</p>
-<ul>
-<li><strong>Dataset hash</strong>: Based on the number of interactions, ensuring identical datasets share the same checkpoint directory</li>
-<li><strong>Configuration hash</strong>: Based on algorithm name and hyperparameters, ensuring identical configurations are deduplicated</li>
-</ul>
-<p>This hash-based system enables efficient caching and prevents redundant computation.</p>
-<h2 id="resuming-experiments">Resuming Experiments</h2>
-<p>If an experiment is interrupted, simply run it again with the same configuration:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.util.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_omnirec</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># First run - interrupted during training</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">run_omnirec</span><span class="p">(</span><span class="n">datasets</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">plan</span><span class="o">=</span><span class="n">plan</span><span class="p">,</span> <span class="n">evaluator</span><span class="o">=</span><span class="n">evaluator</span><span class="p">)</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># Second run - automatically resumes from last checkpoint</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">run_omnirec</span><span class="p">(</span><span class="n">datasets</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">plan</span><span class="o">=</span><span class="n">plan</span><span class="p">,</span> <span class="n">evaluator</span><span class="o">=</span><span class="n">evaluator</span><span class="p">)</span>
+<h2 id="slurm-script-template">SLURM Script Template</h2>
+<p>The SLURM script defines the resource requirements and execution environment for each job. Here's a template:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="ch">#!/bin/bash</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1">#SBATCH --nodes=1</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1">#SBATCH --cpus-per-task=1</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">#SBATCH --partition=medium</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1">#SBATCH --output=${log_path}/%x_%j.out</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1">#SBATCH --error=${log_path}/%x_%j.out</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1">#SBATCH --job-name=${job_name}</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="si">${</span><span class="nv">runner</span><span class="si">}</span>
 </span></code></pre></div>
-<p>The framework automatically:
-1. Loads the progress tracker from <code>progress.json</code>
-2. Skips completed phases (Fit, Predict, Eval)
-3. Continues from the last incomplete phase
-4. Reuses existing predictions instead of retraining</p>
-<p><strong>Progress Phases</strong></p>
-<p>Each experiment goes through four phases:</p>
+<h2 id="template-variables">Template Variables</h2>
+<p>The framework provides several variables that are automatically replaced when submitting jobs:</p>
+<p><strong><code>${runner}</code></strong> ✅ <em>Required</em></p>
+<ul>
+<li>The command to execute the OmniRec runner for a specific algorithm configuration</li>
+<li>Automatically filled by the framework</li>
+<li><strong>Must</strong> be included in your script</li>
+</ul>
+<p><strong><code>${log_path}</code></strong> ⬜ <em>Optional</em></p>
+<ul>
+<li>Path where log files should be stored</li>
+<li>Useful for organizing SLURM output and error logs</li>
+</ul>
+<p><strong><code>${job_name}</code></strong> ⬜ <em>Optional</em></p>
+<ul>
+<li>Name of the SLURM job</li>
+<li>Typically reflects the algorithm and configuration being run</li>
+</ul>
+<p>Configure other SLURM directives (e.g., <code>--nodes</code>, <code>--cpus-per-task</code>, <code>--partition</code>, <code>--mem</code>) based on your cluster configuration and experiment requirements.</p>
+<h2 id="how-it-works">How It Works</h2>
+<p>When you run <a href="../API_references/#omnirec.util.run.run_omnirec"><code>run_omnirec()</code></a> with the <code>slurm_script</code> parameter, the framework will:</p>
 <ol>
-<li><strong>Fit</strong>: Train the model on training data</li>
-<li><strong>Predict</strong>: Generate predictions on test data</li>
-<li><strong>Eval</strong>: Compute metrics on predictions</li>
-<li><strong>Done</strong>: Experiment complete</li>
+<li>Generate a separate SLURM job for each algorithm configuration in your <a href="../API_references/#omnirec.runner.plan.ExperimentPlan"><code>ExperimentPlan</code></a></li>
+<li>Replace template variables (<code>${runner}</code>, <code>${log_path}</code>, <code>${job_name}</code>) with appropriate values</li>
+<li>Submit each job to the SLURM scheduler using <code>sbatch</code></li>
+<li>Allow distributed execution across your HPC cluster's compute nodes</li>
 </ol>
-<p>The <code>progress.json</code> file tracks the current phase for each experiment configuration. If interrupted, the next run resumes from the last incomplete phase.</p>
-<p><strong>Cross-Validation Support</strong></p>
-<p>For cross-validation experiments (FoldedData), progress is tracked per fold:</p>
-<ul>
-<li>Each fold goes through all phases independently</li>
-<li>The progress tracker maintains the current fold number</li>
-<li>Interrupted experiments resume from the incomplete fold</li>
-</ul>
-<h2 id="result-format">Result Format</h2>
-<p>Results are displayed in formatted tables showing:</p>
-<ul>
-<li><strong>Algorithm</strong>: The algorithm name and configuration hash</li>
-<li><strong>Fold</strong>: Cross-validation fold number (if applicable, hidden if single split)</li>
-<li><strong>Metrics</strong>: All computed metrics at specified k values (e.g., NDCG@10, HR@20)</li>
-</ul>
-<p><strong>Example Output</strong></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>MovieLens100K-a3f8e2c1: Evaluation Results
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┓
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>┃ Algorithm               ┃ NDCG@10 ┃ NDCG@20 ┃ HR@10  ┃
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━┩
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│ LensKit.ItemKNN-b7d4a9  │ 0.3245  │ 0.3891  │ 0.6142 │
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│ RecBole.BPR-c8e5f1a3    │ 0.3156  │ 0.3802  │ 0.5987 │
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>└────────────────────────────┴─────────┴─────────┴─────────┘
-</span></code></pre></div>
-<p>For cross-validation results with multiple folds:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>MovieLens100K-a3f8e2c1: Evaluation Results
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>┏━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━┓
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>┃ Algorithm              ┃ Fold ┃ NDCG@10  ┃ HR@10 ┃
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>┡━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━┩
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│ LensKit.ItemKNN-b7d4a9 │ 0   │ 0.3201   │ 0.6089  │
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│                        │ 1   │ 0.3289   │ 0.6195  │
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│                        │ 2   │ 0.3245   │ 0.6142  │
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>└──────────────────────────┴──────┴───────────┴─────────┘
-</span></code></pre></div>
-<h2 id="caching-and-deduplication">Caching and Deduplication</h2>
-<p>Experiments are cached based on dataset and configuration hashes. If you run the same experiment multiple times:</p>
-<ul>
-<li>The coordinator detects identical configurations via hash comparison</li>
-<li>Skips redundant computation (all phases marked as Done)</li>
-<li>Reuses cached predictions and results</li>
-</ul>
-<p>This ensures efficient experimentation and prevents accidental duplication of expensive training runs.</p>
-<p><strong>When Caching Triggers</strong></p>
-<p>Caching activates when:
-- Same dataset (same data and number of interactions)
-- Same algorithm and hyperparameters
-- Same preprocessing pipeline</p>
-<p>Even with different variable names or execution contexts, identical experiments are recognized and deduplicated.</p>
-<h2 id="log-files">Log Files</h2>
-<p><strong>stdout (out.log)</strong></p>
-<p>Contains standard output from runner processes, including:</p>
-<ul>
-<li>Algorithm initialization messages</li>
-<li>Training progress</li>
-<li>Model information</li>
-<li>Framework-specific logs</li>
-</ul>
-<p><strong>stderr (err.log)</strong></p>
-<p>Contains error output from runner processes, including:</p>
-<ul>
-<li>Warning messages</li>
-<li>Error traces</li>
-<li>Framework warnings</li>
-<li>Debugging information</li>
-</ul>
-<p>Both log files are appended to across multiple experiment runs, providing a complete history of runner activity.</p>
-<h3 id="debugging">Debugging</h3>
-<p>If experiments fail:</p>
-<ol>
-<li>Check <code>err.log</code> for error messages</li>
-<li>Review <code>out.log</code> for algorithm output</li>
-<li>Examine <code>progress.json</code> to see which phase failed</li>
-<li>Verify dataset preprocessing and splitting</li>
-</ol>
+<p>This enables efficient parallel execution of multiple algorithm configurations, significantly reducing total experiment time on HPC clusters.</p>
 
 
 

@@ -756,6 +756,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../slurm_integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SLURM Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -804,8 +827,8 @@
 <h1 id="loading-datasets">Loading Datasets</h1>
 <p>This section explains how to load and save datasets, what datasets are available and how to register and implement your own data loader.</p>
 <h2 id="recsysdataset-class">RecSysDataSet Class</h2>
-<p>The core of the framework's data model is the <code>RecSysDataSet</code> class. This generic class provides a unified interface for handling different types of recommendation system datasets.</p>
-<p>The <code>RecSysDataSet</code> can contain one of three different variants of data:</p>
+<p>The core of the framework's data model is the <a href="../API_references/#omnirec.recsys_data_set.RecSysDataSet"><code>RecSysDataSet</code></a> class. This generic class provides a unified interface for handling different types of recommendation system datasets.</p>
+<p>The <a href="../API_references/#omnirec.recsys_data_set.RecSysDataSet"><code>RecSysDataSet</code></a> can contain one of three different variants of data:</p>
 <ul>
 <li><strong>RawData</strong>: Contains a single pandas DataFrame with all interactions</li>
 <li><strong>SplitData</strong>: Contains train, validation, and test DataFrames </li>
@@ -820,7 +843,7 @@
 <li><code>timestamp</code>: Unix timestamp of the interaction</li>
 </ul>
 <h2 id="using-built-in-data-loaders">Using Built-in Data Loaders</h2>
-<p>The recommended way to load datasets is using the <code>use_dataloader</code> method with registered data loaders:</p>
+<p>The recommended way to load datasets is using the <a href="../API_references/#omnirec.recsys_data_set.RecSysDataSet.use_dataloader"><code>use_dataloader</code></a> method with registered data loaders:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec</span><span class="w"> </span><span class="kn">import</span> <span class="n">RecSysDataSet</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Load MovieLens 100K dataset</span>
@@ -856,7 +879,7 @@
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">max_rating</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">max_rating</span><span class="p">()</span>
 </span></code></pre></div>
 <h3 id="saving-and-loading-datasets">Saving and Loading Datasets</h3>
-<p>Save any <code>RecSysDataSet</code> object to a compressed <code>.rsds</code> file with the <code>save()</code> function:</p>
+<p>Save any <a href="../API_references/#omnirec.recsys_data_set.RecSysDataSet"><code>RecSysDataSet</code></a> object to a compressed <code>.rsds</code> file with the <a href="../API_references/#omnirec.recsys_data_set.RecSysDataSet.save"><code>save()</code></a> function:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Save to file (extension .rsds will be added automatically)</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">dataset</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;my_dataset&quot;</span><span class="p">)</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
@@ -867,7 +890,7 @@
 - All data variants (Raw, Split, or Folded)
 - Metadata about the dataset
 - Version information for compatibility</p>
-<p>You can load previously saved datasets with the <code>load()</code> function:</p>
+<p>You can load previously saved datasets with the <a href="../API_references/#omnirec.recsys_data_set.RecSysDataSet.load"><code>load()</code></a> function:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Load from .rsds file</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">RecSysDataSet</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;my_dataset.rsds&quot;</span><span class="p">)</span>
 </span></code></pre></div>
@@ -896,7 +919,7 @@
 </span></code></pre></div>
 <h2 id="loading-custom-datasets">Loading Custom Datasets</h2>
 <p><strong>Creating Custom Data Loaders</strong></p>
-<p>To implement a custom data loader, create a class that inherits from <code>Loader</code> and implement the <code>info()</code> and <code>load()</code> function:</p>
+<p>To implement a custom data loader, create a class that inherits from <a href="../API_references/#omnirec.data_loaders.base.Loader"><code>Loader</code></a> and implement the <a href="../API_references/#omnirec.data_loaders.base.Loader.info"><code>info()</code></a> and <a href="../API_references/#omnirec.data_loaders.base.Loader.load"><code>load()</code></a> function:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 </span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.data_loaders.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Loader</span><span class="p">,</span> <span class="n">DatasetInfo</span>
@@ -925,12 +948,12 @@
 </span><span id="__span-7-26"><a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">RecSysDataSet</span><span class="o">.</span><span class="n">use_dataloader</span><span class="p">(</span><span class="s2">&quot;MyDataset&quot;</span><span class="p">)</span>
 </span></code></pre></div>
 <p><strong>Loader Registration</strong></p>
-<p>You can register loaders under multiple names:</p>
+<p>You can register loaders under multiple names using <a href="../API_references/#omnirec.data_loaders.registry.register_dataloader"><code>register_dataloader()</code></a>:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Register under multiple names</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">register_dataloader</span><span class="p">([</span><span class="s2">&quot;Dataset1&quot;</span><span class="p">,</span> <span class="s2">&quot;Dataset2&quot;</span><span class="p">,</span> <span class="s2">&quot;AliasName&quot;</span><span class="p">],</span> <span class="n">MyCustomLoader</span><span class="p">)</span>
 </span></code></pre></div>
 <p><strong>DatasetInfo</strong></p>
-<p>The <code>DatasetInfo</code> class provides metadata about your dataset:</p>
+<p>The <a href="../API_references/#omnirec.data_loaders.base.DatasetInfo"><code>DatasetInfo</code></a> class provides metadata about your dataset:</p>
 <ul>
 <li><code>download_urls</code>: URL(s) to download the dataset (string or list of strings)</li>
 <li><code>checksum</code>: Optional SHA256 checksum for integrity verification</li>

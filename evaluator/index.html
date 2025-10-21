@@ -717,6 +717,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../slurm_integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SLURM Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -764,9 +787,9 @@
 
 <h1 id="evaluation-metrics">Evaluation Metrics</h1>
 <p>This section explains how to configure and use metrics to evaluate recommendation algorithms. The evaluation system provides a flexible approach to compute various metrics after model predictions, supporting both explicit and implicit feedback scenarios.</p>
-<p>The <code>Evaluator</code> class manages metric computation across all algorithm runs. It automatically loads predictions and applies the specified metrics, supporting both holdout and cross-validation splits.</p>
+<p>The <a href="../API_references/#omnirec.runner.evaluation.Evaluator"><code>Evaluator</code></a> class manages metric computation across all algorithm runs. It automatically loads predictions and applies the specified metrics, supporting both holdout and cross-validation splits.</p>
 <h2 id="evaluator-class">Evaluator Class</h2>
-<p>The <code>Evaluator</code> class coordinates metric calculation across experiments. Create an evaluator by passing one or more metric instances, then provide it to <code>run_omnirec</code> to automatically evaluate all algorithm runs:</p>
+<p>The <a href="../API_references/#omnirec.runner.evaluation.Evaluator"><code>Evaluator</code></a> class coordinates metric calculation across experiments. Create an evaluator by passing one or more metric instances, then provide it to <a href="../API_references/#omnirec.util.run.run_omnirec"><code>run_omnirec</code></a> to automatically evaluate all algorithm runs:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.evaluation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.metrics.ranking</span><span class="w"> </span><span class="kn">import</span> <span class="n">NDCG</span><span class="p">,</span> <span class="n">HR</span><span class="p">,</span> <span class="n">Recall</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
@@ -777,7 +800,7 @@
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">Recall</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">)</span>
 </span></code></pre></div>
-<p>The evaluator can combine multiple metrics of the same type in a single evaluation run. Choose metrics appropriate for your feedback type: use prediction metrics (RMSE, MAE) for explicit ratings, and ranking metrics (NDCG, HR, Recall) for implicit feedback or top-k recommendations.</p>
+<p>The evaluator can combine multiple metrics of the same type in a single evaluation run. Choose metrics appropriate for your feedback type: use prediction metrics (<a href="../API_references/#omnirec.metrics.prediction.RMSE"><code>RMSE</code></a>, <a href="../API_references/#omnirec.metrics.prediction.MAE"><code>MAE</code></a>) for explicit ratings, and ranking metrics (<a href="../API_references/#omnirec.metrics.ranking.NDCG"><code>NDCG</code></a>, <a href="../API_references/#omnirec.metrics.ranking.HR"><code>HR</code></a>, <a href="../API_references/#omnirec.metrics.ranking.Recall"><code>Recall</code></a>) for implicit feedback or top-k recommendations.</p>
 <h2 id="available-metrics">Available Metrics</h2>
 <p><strong>Prediction Metrics</strong> - For explicit feedback scenarios where ratings are predicted:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.metrics.prediction</span><span class="w"> </span><span class="kn">import</span> <span class="n">RMSE</span><span class="p">,</span> <span class="n">MAE</span>
@@ -801,9 +824,9 @@
 </span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># Recall at k=[10, 20]</span>
 </span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">recall</span> <span class="o">=</span> <span class="n">Recall</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>
 </span></code></pre></div>
-<p>Ranking metrics evaluate the quality of top-k recommendation lists. Specify cutoff values (k) to measure performance at different list lengths. For example, <code>NDCG([5, 10, 20])</code> computes NDCG@5, NDCG@10, and NDCG@20.</p>
+<p>Ranking metrics evaluate the quality of top-k recommendation lists. Specify cutoff values (k) to measure performance at different list lengths. For example, <a href="../API_references/#omnirec.metrics.ranking.NDCG"><code>NDCG([5, 10, 20])</code></a> computes NDCG@5, NDCG@10, and NDCG@20.</p>
 <h2 id="running-experiments-with-evaluation">Running Experiments with Evaluation</h2>
-<p>Provide the evaluator when launching experiments with <code>run_omnirec</code>. The framework automatically applies all metrics after each algorithm completes:</p>
+<p>Provide the evaluator when launching experiments with <a href="../API_references/#omnirec.util.run.run_omnirec"><code>run_omnirec</code></a>. The framework automatically applies all metrics after each algorithm completes:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec</span><span class="w"> </span><span class="kn">import</span> <span class="n">RecSysDataSet</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.plan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExperimentPlan</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.evaluation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
@@ -835,7 +858,7 @@
 <p>All metric computations happen automatically without additional code. Ensure your metrics match your data type: ranking metrics (NDCG, HR, Recall) for implicit feedback, and prediction metrics (RMSE, MAE) for explicit feedback.</p>
 <p>Additionally, metric results are logged during execution and stored in checkpoint directories alongside model predictions.</p>
 <h2 id="custom-metrics">Custom Metrics</h2>
-<p>To implement custom evaluation metrics, create a subclass of <code>omnirec.metrics.base.Metric</code> and implement the <code>calculate</code> method:</p>
+<p>To implement custom evaluation metrics, create a subclass of <a href="../API_references/#omnirec.metrics.base.Metric"><code>omnirec.metrics.base.Metric</code></a> and implement the <a href="../API_references/#omnirec.metrics.base.Metric.calculate"><code>calculate</code></a> method:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.metrics.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Metric</span><span class="p">,</span> <span class="n">MetricResult</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>

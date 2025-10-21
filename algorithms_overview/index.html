@@ -636,6 +636,75 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#recpack-algorithms" class="md-nav__link">
+    <span class="md-ellipsis">
+      RecPack Algorithms
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#elliot-algorithms" class="md-nav__link">
+    <span class="md-ellipsis">
+      Elliot Algorithms
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Elliot Algorithms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#baseline-and-neighborhood-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Baseline and Neighborhood Methods
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matrix-factorization-and-factorization-machines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Matrix Factorization and Factorization Machines
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autoencoder-based-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autoencoder-Based Methods
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#graph-based-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Graph-Based Methods
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-algorithms-in-experiments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Algorithms in Experiments
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#recbole-algorithms" class="md-nav__link">
     <span class="md-ellipsis">
       RecBole Algorithms
@@ -646,7 +715,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#baseline-and-neighborhood-methods" class="md-nav__link">
+  <a href="#baseline-and-neighborhood-methods_1" class="md-nav__link">
     <span class="md-ellipsis">
       Baseline and Neighborhood Methods
     </span>
@@ -673,7 +742,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#graph-based-methods" class="md-nav__link">
+  <a href="#graph-based-methods_1" class="md-nav__link">
     <span class="md-ellipsis">
       Graph-Based Methods
     </span>
@@ -696,7 +765,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#using-algorithms-in-experiments" class="md-nav__link">
+  <a href="#using-algorithms-in-experiments_1" class="md-nav__link">
     <span class="md-ellipsis">
       Using Algorithms in Experiments
     </span>
@@ -759,6 +828,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../slurm_integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SLURM Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -805,7 +897,7 @@
 
 
 <h1 id="algorithm-overview">Algorithm Overview</h1>
-<p>The framework integrates algorithms from multiple recommendation system libraries through unified runner interfaces. Use the algorithm identifiers with the <code>ExperimentPlan</code> to configure experiments. Here is the comprehensive list of all available algorithms:</p>
+<p>The framework integrates algorithms from multiple recommendation system libraries through unified runner interfaces. Use the algorithm identifiers with the <a href="../API_references/#omnirec.runner.plan.ExperimentPlan"><code>ExperimentPlan</code></a> to configure experiments. Here is the comprehensive list of all available algorithms:</p>
 <h2 id="lenskit-algorithms">LensKit Algorithms</h2>
 <p>LensKit provides traditional collaborative filtering algorithms optimized for research reproducibility.</p>
 <table>
@@ -856,9 +948,240 @@
 </tr>
 </tbody>
 </table>
+<h2 id="recpack-algorithms">RecPack Algorithms</h2>
+<p>RecPack provides efficient implementations of collaborative filtering algorithms with a focus on scalability and performance.</p>
+<table>
+<thead>
+<tr>
+<th>Algorithm Name</th>
+<th>Type</th>
+<th>Feedback</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RecPack.SVD</td>
+<td>Matrix Factorization</td>
+<td>Explicit</td>
+<td>Singular Value Decomposition</td>
+</tr>
+<tr>
+<td>RecPack.NMF</td>
+<td>Matrix Factorization</td>
+<td>Explicit</td>
+<td>Non-negative Matrix Factorization</td>
+</tr>
+<tr>
+<td>RecPack.ItemKNN</td>
+<td>Neighborhood</td>
+<td>Both</td>
+<td>Item-based k-nearest neighbors</td>
+</tr>
+</tbody>
+</table>
+<h2 id="elliot-algorithms">Elliot Algorithms</h2>
+<p>Elliot provides a comprehensive framework for reproducible recommender systems evaluation with implementations of state-of-the-art algorithms.</p>
+<h3 id="baseline-and-neighborhood-methods">Baseline and Neighborhood Methods</h3>
+<table>
+<thead>
+<tr>
+<th>Algorithm Name</th>
+<th>Type</th>
+<th>Feedback</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Elliot.MostPop</td>
+<td>Baseline</td>
+<td>Both</td>
+<td>Most popular items baseline</td>
+</tr>
+<tr>
+<td>Elliot.ItemKNN</td>
+<td>Neighborhood</td>
+<td>Both</td>
+<td>Item-based k-nearest neighbors</td>
+</tr>
+<tr>
+<td>Elliot.UserKNN</td>
+<td>Neighborhood</td>
+<td>Both</td>
+<td>User-based k-nearest neighbors</td>
+</tr>
+<tr>
+<td>Elliot.SlopeOne</td>
+<td>Slope One</td>
+<td>Explicit</td>
+<td>Slope One collaborative filtering</td>
+</tr>
+</tbody>
+</table>
+<h3 id="matrix-factorization-and-factorization-machines">Matrix Factorization and Factorization Machines</h3>
+<table>
+<thead>
+<tr>
+<th>Algorithm Name</th>
+<th>Type</th>
+<th>Feedback</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Elliot.AMF</td>
+<td>Matrix Factorization</td>
+<td>Explicit</td>
+<td>Alternating Matrix Factorization</td>
+</tr>
+<tr>
+<td>Elliot.BPRMF</td>
+<td>Matrix Factorization</td>
+<td>Implicit</td>
+<td>Bayesian Personalized Ranking Matrix Factorization</td>
+</tr>
+<tr>
+<td>Elliot.BPRMF_batch</td>
+<td>Matrix Factorization</td>
+<td>Implicit</td>
+<td>BPRMF with batch processing</td>
+</tr>
+<tr>
+<td>Elliot.FM</td>
+<td>Factorization Machine</td>
+<td>Explicit</td>
+<td>Factorization Machine</td>
+</tr>
+<tr>
+<td>Elliot.FunkSVD</td>
+<td>Matrix Factorization</td>
+<td>Explicit</td>
+<td>FunkSVD matrix factorization</td>
+</tr>
+<tr>
+<td>Elliot.NonNegMF</td>
+<td>Matrix Factorization</td>
+<td>Explicit</td>
+<td>Non-negative Matrix Factorization</td>
+</tr>
+<tr>
+<td>Elliot.PureSVD</td>
+<td>Matrix Factorization</td>
+<td>Explicit</td>
+<td>Pure SVD</td>
+</tr>
+<tr>
+<td>Elliot.SVDpp</td>
+<td>Matrix Factorization</td>
+<td>Explicit</td>
+<td>SVD++</td>
+</tr>
+<tr>
+<td>Elliot.WRMF</td>
+<td>Matrix Factorization</td>
+<td>Implicit</td>
+<td>Weighted Regularized Matrix Factorization</td>
+</tr>
+<tr>
+<td>Elliot.ConvMF</td>
+<td>Matrix Factorization</td>
+<td>Explicit</td>
+<td>Convolutional Matrix Factorization</td>
+</tr>
+<tr>
+<td>Elliot.DeepFM</td>
+<td>Deep Learning</td>
+<td>Explicit</td>
+<td>Deep Factorization Machine</td>
+</tr>
+<tr>
+<td>Elliot.DMF</td>
+<td>Matrix Factorization</td>
+<td>Explicit</td>
+<td>Deep Matrix Factorization</td>
+</tr>
+<tr>
+<td>Elliot.GMF</td>
+<td>Matrix Factorization</td>
+<td>Explicit</td>
+<td>Generalized Matrix Factorization</td>
+</tr>
+<tr>
+<td>Elliot.NeuMF</td>
+<td>Deep Learning</td>
+<td>Implicit</td>
+<td>Neural Matrix Factorization</td>
+</tr>
+</tbody>
+</table>
+<h3 id="autoencoder-based-methods">Autoencoder-Based Methods</h3>
+<table>
+<thead>
+<tr>
+<th>Algorithm Name</th>
+<th>Type</th>
+<th>Feedback</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Elliot.MultiDAE</td>
+<td>Deep Learning</td>
+<td>Implicit</td>
+<td>Multi-layer Denoising Autoencoder</td>
+</tr>
+<tr>
+<td>Elliot.MultiVAE</td>
+<td>Deep Learning</td>
+<td>Implicit</td>
+<td>Multi-layer Variational Autoencoder</td>
+</tr>
+<tr>
+<td>Elliot.ItemAutoRec</td>
+<td>Deep Learning</td>
+<td>Explicit</td>
+<td>Item-based Autoencoder</td>
+</tr>
+<tr>
+<td>Elliot.UserAutoRec</td>
+<td>Deep Learning</td>
+<td>Explicit</td>
+<td>User-based Autoencoder</td>
+</tr>
+</tbody>
+</table>
+<h3 id="graph-based-methods">Graph-Based Methods</h3>
+<table>
+<thead>
+<tr>
+<th>Algorithm Name</th>
+<th>Type</th>
+<th>Feedback</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Elliot.LightGCN</td>
+<td>Graph Neural Network</td>
+<td>Implicit</td>
+<td>Light Graph Convolutional Network</td>
+</tr>
+<tr>
+<td>Elliot.NGCF</td>
+<td>Graph Neural Network</td>
+<td>Implicit</td>
+<td>Neural Graph Collaborative Filtering</td>
+</tr>
+</tbody>
+</table>
+<h2 id="using-algorithms-in-experiments">Using Algorithms in Experiments</h2>
 <h2 id="recbole-algorithms">RecBole Algorithms</h2>
 <p>RecBole provides a comprehensive collection of modern recommendation algorithms including deep learning and graph-based methods.</p>
-<h3 id="baseline-and-neighborhood-methods">Baseline and Neighborhood Methods</h3>
+<h3 id="baseline-and-neighborhood-methods_1">Baseline and Neighborhood Methods</h3>
 <table>
 <thead>
 <tr>
@@ -1005,7 +1328,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="graph-based-methods">Graph-Based Methods</h3>
+<h3 id="graph-based-methods_1">Graph-Based Methods</h3>
 <table>
 <thead>
 <tr>
@@ -1109,7 +1432,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="using-algorithms-in-experiments">Using Algorithms in Experiments</h2>
+<h2 id="using-algorithms-in-experiments_1">Using Algorithms in Experiments</h2>
 <p>Reference algorithms using the format <code>&lt;Runner&gt;.&lt;Algorithm&gt;</code> in your experiment plan:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.plan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExperimentPlan</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.algos</span><span class="w"> </span><span class="kn">import</span> <span class="n">LensKit</span><span class="p">,</span> <span class="n">RecBole</span>

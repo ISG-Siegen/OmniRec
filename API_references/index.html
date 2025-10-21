@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://omnirec.recommender-systems.com/API_references/">
       
       
-        <link rel="prev" href="../checkpointing/">
+        <link rel="prev" href="../slurm_integration/">
       
       
       
@@ -632,6 +632,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../slurm_integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SLURM Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -753,6 +776,81 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#data-loaders" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Loaders
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Loaders">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#omnirec.data_loaders.base.Loader" class="md-nav__link">
+    <span class="md-ellipsis">
+      Loader
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Loader">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#omnirec.data_loaders.base.Loader.info" class="md-nav__link">
+    <span class="md-ellipsis">
+      info
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#omnirec.data_loaders.base.Loader.load" class="md-nav__link">
+    <span class="md-ellipsis">
+      load
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#omnirec.data_loaders.base.DatasetInfo" class="md-nav__link">
+    <span class="md-ellipsis">
+      DatasetInfo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#omnirec.data_loaders.registry.register_dataloader" class="md-nav__link">
+    <span class="md-ellipsis">
+      register_dataloader
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#omnirec.data_loaders.registry.list_datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      list_datasets
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#preprocessing-pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       Preprocessing Pipeline
@@ -761,6 +859,30 @@
   
     <nav class="md-nav" aria-label="Preprocessing Pipeline">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#omnirec.preprocess.base.Preprocessor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preprocessor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Preprocessor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#omnirec.preprocess.base.Preprocessor.process" class="md-nav__link">
+    <span class="md-ellipsis">
+      process
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#omnirec.preprocess.subsample.Subsample" class="md-nav__link">
@@ -853,6 +975,48 @@
   <a href="#omnirec.runner.evaluation.Evaluator" class="md-nav__link">
     <span class="md-ellipsis">
       Evaluator
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metric-base-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Metric Base Classes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#omnirec.metrics.base.Metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      Metric
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Metric">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#omnirec.metrics.base.Metric.calculate" class="md-nav__link">
+    <span class="md-ellipsis">
+      calculate
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#omnirec.metrics.base.MetricResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      MetricResult
     </span>
   </a>
   
@@ -1104,6 +1268,39 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#utility-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Utility Functions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Utility Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#omnirec.util.util.set_random_state" class="md-nav__link">
+    <span class="md-ellipsis">
+      set_random_state
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#omnirec.util.util.get_random_state" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_random_state
+    </span>
+  </a>
   
 </li>
         
@@ -1812,8 +2009,685 @@ Canonicalization means duplicates are dropped, identifiers are normalized and th
 
     </div>
 
+</div><h2 id="data-loaders">Data Loaders</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="omnirec.data_loaders.base.Loader" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>omnirec.data_loaders.base.Loader</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="abc.ABC">ABC</span></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="omnirec.data_loaders.base.Loader.info" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">info</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetInfo</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Provide metadata information about the dataset identified by <code>name</code>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>name</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The name under which the loader was registered. Different names may return different DatasetInfo
+implementations depending on the dataset. This is useful when multiple
+datasets share the same loading logic but have, for example, different
+download URLs or checksums.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>DatasetInfo</code></td>            <td>
+                  <code><a class="autorefs autorefs-internal" title="              omnirec.data_loaders.base.DatasetInfo(download_urls: Optional[str | list[str]] = None, checksum: Optional[str] = None)
+
+  
+      dataclass
+   (omnirec.data_loaders.base.DatasetInfo)" href="#omnirec.data_loaders.base.DatasetInfo">DatasetInfo</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Metadata including download URLs and optional checksum for verification.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\omnirec\data_loaders\base.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-41">41</a></span>
+<span class="normal"><a href="#__codelineno-0-42">42</a></span>
+<span class="normal"><a href="#__codelineno-0-43">43</a></span>
+<span class="normal"><a href="#__codelineno-0-44">44</a></span>
+<span class="normal"><a href="#__codelineno-0-45">45</a></span>
+<span class="normal"><a href="#__codelineno-0-46">46</a></span>
+<span class="normal"><a href="#__codelineno-0-47">47</a></span>
+<span class="normal"><a href="#__codelineno-0-48">48</a></span>
+<span class="normal"><a href="#__codelineno-0-49">49</a></span>
+<span class="normal"><a href="#__codelineno-0-50">50</a></span>
+<span class="normal"><a href="#__codelineno-0-51">51</a></span>
+<span class="normal"><a href="#__codelineno-0-52">52</a></span>
+<span class="normal"><a href="#__codelineno-0-53">53</a></span>
+<span class="normal"><a href="#__codelineno-0-54">54</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="nd">@staticmethod</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="nd">@abstractmethod</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="k">def</span><span class="w"> </span><span class="nf">info</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetInfo</span><span class="p">:</span>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Provide metadata information about the dataset identified by `name`.</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a><span class="sd">        name (str): The name under which the loader was registered. Different names may return different DatasetInfo</span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a><span class="sd">            implementations depending on the dataset. This is useful when multiple</span>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="sd">            datasets share the same loading logic but have, for example, different</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="sd">            download URLs or checksums.</span>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a><span class="sd">    Returns:</span>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a><span class="sd">        DatasetInfo: Metadata including download URLs and optional checksum for verification.</span>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="omnirec.data_loaders.base.Loader.load" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">load</span><span class="p">(</span><span class="n">source_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Loads dataset from the given directory into a <code>pd.DataFrame</code>.
+The DataFrame should have the standard columns:
+- user
+- item
+- rating
+- timestamp</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>source_dir</code>
+            </td>
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The directory that contains the downloaded dataset files.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>name</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The name under which the loader was registered. This allows selecting between different
+datasets that share the same loading logic but differ in structure or
+file naming.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="pandas.DataFrame">DataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>pd.DataFrame: Loaded dataset as a pd.DataFrame with expected columns.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\omnirec\data_loaders\base.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-56">56</a></span>
+<span class="normal"><a href="#__codelineno-0-57">57</a></span>
+<span class="normal"><a href="#__codelineno-0-58">58</a></span>
+<span class="normal"><a href="#__codelineno-0-59">59</a></span>
+<span class="normal"><a href="#__codelineno-0-60">60</a></span>
+<span class="normal"><a href="#__codelineno-0-61">61</a></span>
+<span class="normal"><a href="#__codelineno-0-62">62</a></span>
+<span class="normal"><a href="#__codelineno-0-63">63</a></span>
+<span class="normal"><a href="#__codelineno-0-64">64</a></span>
+<span class="normal"><a href="#__codelineno-0-65">65</a></span>
+<span class="normal"><a href="#__codelineno-0-66">66</a></span>
+<span class="normal"><a href="#__codelineno-0-67">67</a></span>
+<span class="normal"><a href="#__codelineno-0-68">68</a></span>
+<span class="normal"><a href="#__codelineno-0-69">69</a></span>
+<span class="normal"><a href="#__codelineno-0-70">70</a></span>
+<span class="normal"><a href="#__codelineno-0-71">71</a></span>
+<span class="normal"><a href="#__codelineno-0-72">72</a></span>
+<span class="normal"><a href="#__codelineno-0-73">73</a></span>
+<span class="normal"><a href="#__codelineno-0-74">74</a></span>
+<span class="normal"><a href="#__codelineno-0-75">75</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a><span class="nd">@staticmethod</span>
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a><span class="nd">@abstractmethod</span>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">source_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a><span class="sd">    Loads dataset from the given directory into a `pd.DataFrame`.</span>
+</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a><span class="sd">    The DataFrame should have the standard columns:</span>
+</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62"></a><span class="sd">    - user</span>
+</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63"></a><span class="sd">    - item</span>
+</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64"></a><span class="sd">    - rating</span>
+</span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65"></a><span class="sd">    - timestamp</span>
+</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66"></a>
+</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68"></a><span class="sd">        source_dir (Path): The directory that contains the downloaded dataset files.</span>
+</span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69"></a><span class="sd">        name (str): The name under which the loader was registered. This allows selecting between different</span>
+</span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70"></a><span class="sd">            datasets that share the same loading logic but differ in structure or</span>
+</span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71"></a><span class="sd">            file naming.</span>
+</span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72"></a>
+</span><span id="__span-0-73"><a id="__codelineno-0-73" name="__codelineno-0-73"></a><span class="sd">    Returns:</span>
+</span><span id="__span-0-74"><a id="__codelineno-0-74" name="__codelineno-0-74"></a><span class="sd">        pd.DataFrame: Loaded dataset as a pd.DataFrame with expected columns.</span>
+</span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="omnirec.data_loaders.base.DatasetInfo" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>              <code class="highlight language-python"><span class="n">omnirec</span><span class="o">.</span><span class="n">data_loaders</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">DatasetInfo</span><span class="p">(</span><span class="n">download_urls</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">checksum</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+        <p>Metadata about a dataset.</p>
+<p>Attributes</p>
+<hr />
+
+
+<details class="download_urls-" open>
+  <summary>Optional[Union[str, List[str]]]</summary>
+  <p>URL or list of URLs to download the dataset.
+If a list is provided, URLs are tried in order until one succeeds
+(skipping on checksum mismatch or HTTP errors).</p>
+</details>
+
+<details class="checksum-" open>
+  <summary>Optional[str]</summary>
+  <p>Optional SHA256 checksum to verify the downloaded file's integrity.
+If provided, the downloaded file will be hashed using SHA256 and compared
+to this value. Use e.g. <code>hashlib.sha256()</code> to compute the checksum in python:</p>
+</details>        <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>import hashlib
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>hasher = hashlib.sha256()
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>with open(&quot;ml-100k.zip&quot;, &quot;rb&quot;) as f:
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    for chunk in iter(lambda: f.read(8192), b&quot;&quot;):
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        hasher.update(chunk)
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>print(hasher.hexdigest())
+</span></code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="omnirec.data_loaders.registry.register_dataloader" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">omnirec</span><span class="o">.</span><span class="n">data_loaders</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">register_dataloader</span><span class="p">(</span><span class="n">names</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">Loader</span><span class="p">])</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Register a data loader class under one or multiple names.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>names</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span> | <span title="list">list</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name(s) to register the loader under.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>cls</code>
+            </td>
+            <td>
+                  <code><span title="type">type</span>[<a class="autorefs autorefs-internal" title="            omnirec.data_loaders.base.Loader" href="#omnirec.data_loaders.base.Loader">Loader</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Loader class to register. Must inherit from the common <code>Loader</code> base class.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\omnirec\data_loaders\registry.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-32">32</a></span>
+<span class="normal"><a href="#__codelineno-0-33">33</a></span>
+<span class="normal"><a href="#__codelineno-0-34">34</a></span>
+<span class="normal"><a href="#__codelineno-0-35">35</a></span>
+<span class="normal"><a href="#__codelineno-0-36">36</a></span>
+<span class="normal"><a href="#__codelineno-0-37">37</a></span>
+<span class="normal"><a href="#__codelineno-0-38">38</a></span>
+<span class="normal"><a href="#__codelineno-0-39">39</a></span>
+<span class="normal"><a href="#__codelineno-0-40">40</a></span>
+<span class="normal"><a href="#__codelineno-0-41">41</a></span>
+<span class="normal"><a href="#__codelineno-0-42">42</a></span>
+<span class="normal"><a href="#__codelineno-0-43">43</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="k">def</span><span class="w"> </span><span class="nf">register_dataloader</span><span class="p">(</span><span class="n">names</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">Loader</span><span class="p">]):</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Register a data loader class under one or multiple names.</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="sd">        names (str | list[str]): Name(s) to register the loader under.</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="sd">        cls (type[Loader]): Loader class to register. Must inherit from the common `Loader` base class.</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a>        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a>            <span class="n">_add_loader</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a>    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a>        <span class="n">_add_loader</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="omnirec.data_loaders.registry.list_datasets" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">omnirec</span><span class="o">.</span><span class="n">data_loaders</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">list_datasets</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+        <p>List all registered dataset names.</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="list">list</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>list[str]: A list of all registered dataset names.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\omnirec\data_loaders\registry.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-46">46</a></span>
+<span class="normal"><a href="#__codelineno-0-47">47</a></span>
+<span class="normal"><a href="#__codelineno-0-48">48</a></span>
+<span class="normal"><a href="#__codelineno-0-49">49</a></span>
+<span class="normal"><a href="#__codelineno-0-50">50</a></span>
+<span class="normal"><a href="#__codelineno-0-51">51</a></span>
+<span class="normal"><a href="#__codelineno-0-52">52</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="k">def</span><span class="w"> </span><span class="nf">list_datasets</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;List all registered dataset names.</span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="sd">    Returns:</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="sd">        list[str]: A list of all registered dataset names.</span>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">_DATA_LOADERS</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
 </div><h2 id="preprocessing-pipeline">Preprocessing Pipeline</h2>
 
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="omnirec.preprocess.base.Preprocessor" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>              <code class="highlight language-python"><span class="n">omnirec</span><span class="o">.</span><span class="n">preprocess</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Preprocessor</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="abc.ABC">ABC</span></code>, <code><span title="typing.Generic">Generic</span>[<span title="omnirec.preprocess.base.T">T</span>, <span title="omnirec.preprocess.base.U">U</span>]</code></p>
+
+
+
+
+
+
+
+
+
+                  <details class="quote">
+                    <summary>Source code in <code>src\omnirec\preprocess\base.py</code></summary>
+                    <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a>    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span></code></pre></div></td></tr></table></div>
+                  </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="omnirec.preprocess.base.Preprocessor.process" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">process</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">U</span><span class="p">]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Processes the dataset and returns a new dataset variant.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>dataset</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="              omnirec.recsys_data_set.RecSysDataSet(data: Optional[T] = None, meta: _DatasetMeta = _DatasetMeta()) (omnirec.recsys_data_set.RecSysDataSet)" href="#omnirec.recsys_data_set.RecSysDataSet">RecSysDataSet</a>[<span title="omnirec.preprocess.base.T">T</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The dataset to process.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="              omnirec.recsys_data_set.RecSysDataSet(data: Optional[T] = None, meta: _DatasetMeta = _DatasetMeta()) (omnirec.recsys_data_set.RecSysDataSet)" href="#omnirec.recsys_data_set.RecSysDataSet">RecSysDataSet</a>[<span title="omnirec.preprocess.base.U">U</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>RecSysDataSet[U]: The processed dataset.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\omnirec\preprocess\base.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span>
+<span class="normal"><a href="#__codelineno-0-26">26</a></span>
+<span class="normal"><a href="#__codelineno-0-27">27</a></span>
+<span class="normal"><a href="#__codelineno-0-28">28</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="nd">@abstractmethod</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">U</span><span class="p">]:</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Processes the dataset and returns a new dataset variant.</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="sd">        Args:</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="sd">            dataset (RecSysDataSet[T]): The dataset to process.</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="sd">        Returns:</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="sd">            RecSysDataSet[U]: The processed dataset.</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a>    <span class="k">pass</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
 
 <div class="doc doc-object doc-class">
 
@@ -1827,7 +2701,7 @@ Canonicalization means duplicates are dropped, identifiers are normalized and th
 
     <div class="doc doc-contents first">
             <p class="doc doc-class-bases">
-              Bases: <code><span title="omnirec.preprocess.base.Preprocessor">Preprocessor</span>[<span title="omnirec.recsys_data_set.RawData">RawData</span>, <span title="omnirec.recsys_data_set.RawData">RawData</span>]</code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="              omnirec.preprocess.base.Preprocessor() (omnirec.preprocess.base.Preprocessor)" href="#omnirec.preprocess.base.Preprocessor">Preprocessor</a>[<span title="omnirec.recsys_data_set.RawData">RawData</span>, <span title="omnirec.recsys_data_set.RawData">RawData</span>]</code></p>
 
 
         <p>Subsamples the dataset to a specified size.</p>
@@ -1929,7 +2803,7 @@ Canonicalization means duplicates are dropped, identifiers are normalized and th
 
     <div class="doc doc-contents first">
             <p class="doc doc-class-bases">
-              Bases: <code><span title="omnirec.preprocess.base.Preprocessor">Preprocessor</span>[<span title="omnirec.recsys_data_set.RawData">RawData</span>, <span title="omnirec.recsys_data_set.RawData">RawData</span>]</code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="              omnirec.preprocess.base.Preprocessor() (omnirec.preprocess.base.Preprocessor)" href="#omnirec.preprocess.base.Preprocessor">Preprocessor</a>[<span title="omnirec.recsys_data_set.RawData">RawData</span>, <span title="omnirec.recsys_data_set.RawData">RawData</span>]</code></p>
 
 
         <p>Prune the dataset to the specified core.
@@ -2028,7 +2902,7 @@ Core pruning with a threshold of e.g. 5 means that only users and items with at 
 
     <div class="doc doc-contents first">
             <p class="doc doc-class-bases">
-              Bases: <code><span title="omnirec.preprocess.base.Preprocessor">Preprocessor</span>[<span title="omnirec.recsys_data_set.RawData">RawData</span>, <span title="omnirec.recsys_data_set.RawData">RawData</span>]</code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="              omnirec.preprocess.base.Preprocessor() (omnirec.preprocess.base.Preprocessor)" href="#omnirec.preprocess.base.Preprocessor">Preprocessor</a>[<span title="omnirec.recsys_data_set.RawData">RawData</span>, <span title="omnirec.recsys_data_set.RawData">RawData</span>]</code></p>
 
 
         <p>Converts explicit feedback to implicit feedback using the specified threshold.</p>
@@ -2727,7 +3601,7 @@ results across experiments. Use <code>get_tables()</code> to retrieve formatted 
                 <code>*metrics</code>
             </td>
             <td>
-                  <code><span title="omnirec.metrics.base.Metric">Metric</span></code>
+                  <code><a class="autorefs autorefs-internal" title="            omnirec.metrics.base.Metric" href="#omnirec.metrics.base.Metric">Metric</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -2781,6 +3655,131 @@ k values (e.g., <code>NDCG([5, 10, 20])</code>).</p>
 </span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_results</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 </span></code></pre></div></td></tr></table></div>
                   </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h3 id="metric-base-classes">Metric Base Classes</h3>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="omnirec.metrics.base.Metric" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <code>omnirec.metrics.base.Metric</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="abc.ABC">ABC</span></code></p>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="omnirec.metrics.base.Metric.calculate" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <code class="highlight language-python"><span class="n">omnirec</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">Metric</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">predictions</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">test</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MetricResult</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents first">
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\omnirec\metrics\base.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="nd">@abstractmethod</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="k">def</span><span class="w"> </span><span class="nf">calculate</span><span class="p">(</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a>    <span class="bp">self</span><span class="p">,</span> <span class="n">predictions</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">test</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MetricResult</span><span class="p">:</span> <span class="o">...</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="omnirec.metrics.base.MetricResult" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>              <code class="highlight language-python"><span class="n">omnirec</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">MetricResult</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+        <p>Represents the result of a metric calculation. It holds the name as str and either a single float result or a dictionary of results for multiple k values.</p>
+
+
+
+
+
+
+
+
 
 
 
@@ -2982,7 +3981,11 @@ It can be a single integer or a list of integers, in which case the metric will 
       <tbody>
           <tr class="doc-section-item">
 <td><code>MetricResult</code></td>            <td>
-                  <code><span title="omnirec.metrics.base.MetricResult">MetricResult</span></code>
+                  <code><a class="autorefs autorefs-internal" title="              omnirec.metrics.base.MetricResult(name: str, result: float | dict[int, float])
+
+  
+      dataclass
+   (omnirec.metrics.base.MetricResult)" href="#omnirec.metrics.base.MetricResult">MetricResult</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3273,7 +4276,11 @@ It can be a single integer or a list of integers, in which case the metric will 
       <tbody>
           <tr class="doc-section-item">
 <td><code>MetricResult</code></td>            <td>
-                  <code><span title="omnirec.metrics.base.MetricResult">MetricResult</span></code>
+                  <code><a class="autorefs autorefs-internal" title="              omnirec.metrics.base.MetricResult(name: str, result: float | dict[int, float])
+
+  
+      dataclass
+   (omnirec.metrics.base.MetricResult)" href="#omnirec.metrics.base.MetricResult">MetricResult</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3539,7 +4546,11 @@ It can be a single integer or a list of integers, in which case the metric will 
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="omnirec.metrics.base.MetricResult">MetricResult</span></code>
+                  <code><a class="autorefs autorefs-internal" title="              omnirec.metrics.base.MetricResult(name: str, result: float | dict[int, float])
+
+  
+      dataclass
+   (omnirec.metrics.base.MetricResult)" href="#omnirec.metrics.base.MetricResult">MetricResult</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3739,7 +4750,11 @@ It can be a single integer or a list of integers, in which case the metric will 
       <tbody>
           <tr class="doc-section-item">
 <td><code>MetricResult</code></td>            <td>
-                  <code><span title="omnirec.metrics.base.MetricResult">MetricResult</span></code>
+                  <code><a class="autorefs autorefs-internal" title="              omnirec.metrics.base.MetricResult(name: str, result: float | dict[int, float])
+
+  
+      dataclass
+   (omnirec.metrics.base.MetricResult)" href="#omnirec.metrics.base.MetricResult">MetricResult</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3918,7 +4933,11 @@ It can be a single integer or a list of integers, in which case the metric will 
       <tbody>
           <tr class="doc-section-item">
 <td><code>MetricResult</code></td>            <td>
-                  <code><span title="omnirec.metrics.base.MetricResult">MetricResult</span></code>
+                  <code><a class="autorefs autorefs-internal" title="              omnirec.metrics.base.MetricResult(name: str, result: float | dict[int, float])
+
+  
+      dataclass
+   (omnirec.metrics.base.MetricResult)" href="#omnirec.metrics.base.MetricResult">MetricResult</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -4293,7 +5312,7 @@ It can be a single integer or a list of integers, in which case the metric will 
 
 
 <h3 id="omnirec.util.run.run_omnirec" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">omnirec</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">run_omnirec</span><span class="p">(</span><span class="n">datasets</span><span class="p">:</span> <span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">T</span><span class="p">]],</span> <span class="n">plan</span><span class="p">:</span> <span class="n">ExperimentPlan</span><span class="p">,</span> <span class="n">evaluator</span><span class="p">:</span> <span class="n">Evaluator</span><span class="p">)</span></code>
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">omnirec</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">run_omnirec</span><span class="p">(</span><span class="n">datasets</span><span class="p">:</span> <span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">T</span><span class="p">]],</span> <span class="n">plan</span><span class="p">:</span> <span class="n">ExperimentPlan</span><span class="p">,</span> <span class="n">evaluator</span><span class="p">:</span> <span class="n">Evaluator</span><span class="p">,</span> <span class="n">slurm_script</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PathLike</span> <span class="o">|</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
 
 </h3>
 
@@ -4362,14 +5381,30 @@ It can be a single integer or a list of integers, in which case the metric will 
                 <em>required</em>
             </td>
           </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>slurm_script</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="os.PathLike">PathLike</span> | <span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to a SLURM script used to schedule experiments
+on an HPC cluster. If not provided, the experiments are run locally in normal mode.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
       </tbody>
     </table>
 
 
             <details class="quote">
               <summary>Source code in <code>src\omnirec\util\run.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-14">14</a></span>
-<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-15">15</a></span>
 <span class="normal"><a href="#__codelineno-0-16">16</a></span>
 <span class="normal"><a href="#__codelineno-0-17">17</a></span>
 <span class="normal"><a href="#__codelineno-0-18">18</a></span>
@@ -4385,24 +5420,39 @@ It can be a single integer or a list of integers, in which case the metric will 
 <span class="normal"><a href="#__codelineno-0-28">28</a></span>
 <span class="normal"><a href="#__codelineno-0-29">29</a></span>
 <span class="normal"><a href="#__codelineno-0-30">30</a></span>
-<span class="normal"><a href="#__codelineno-0-31">31</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="k">def</span><span class="w"> </span><span class="nf">run_omnirec</span><span class="p">(</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a>    <span class="n">datasets</span><span class="p">:</span> <span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">T</span><span class="p">]],</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a>    <span class="n">plan</span><span class="p">:</span> <span class="n">ExperimentPlan</span><span class="p">,</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a>    <span class="n">evaluator</span><span class="p">:</span> <span class="n">Evaluator</span><span class="p">,</span>  <span class="c1"># TODO: Make optional</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="p">):</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the OmniRec framework with the specified datasets, experiment plan, and evaluator.</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="sd">    Args:</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="sd">        datasets (RecSysDataSet[T] | Iterable[RecSysDataSet[T]]): The dataset(s) to use for the experiment.</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="sd">        plan (ExperimentPlan): The experiment plan to follow.</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="sd">        evaluator (Evaluator): The evaluator to use for the experiment.</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a>    <span class="n">c</span> <span class="o">=</span> <span class="n">Coordinator</span><span class="p">()</span>
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>    <span class="n">c</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">evaluator</span><span class="p">)</span>
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a>
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a>    <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_tables</span><span class="p">():</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a>        <span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">()</span>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a>        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+<span class="normal"><a href="#__codelineno-0-31">31</a></span>
+<span class="normal"><a href="#__codelineno-0-32">32</a></span>
+<span class="normal"><a href="#__codelineno-0-33">33</a></span>
+<span class="normal"><a href="#__codelineno-0-34">34</a></span>
+<span class="normal"><a href="#__codelineno-0-35">35</a></span>
+<span class="normal"><a href="#__codelineno-0-36">36</a></span>
+<span class="normal"><a href="#__codelineno-0-37">37</a></span>
+<span class="normal"><a href="#__codelineno-0-38">38</a></span>
+<span class="normal"><a href="#__codelineno-0-39">39</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="k">def</span><span class="w"> </span><span class="nf">run_omnirec</span><span class="p">(</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a>    <span class="n">datasets</span><span class="p">:</span> <span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">|</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">RecSysDataSet</span><span class="p">[</span><span class="n">T</span><span class="p">]],</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a>    <span class="n">plan</span><span class="p">:</span> <span class="n">ExperimentPlan</span><span class="p">,</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a>    <span class="n">evaluator</span><span class="p">:</span> <span class="n">Evaluator</span><span class="p">,</span>  <span class="c1"># TODO: Make optional</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a>    <span class="n">slurm_script</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PathLike</span> <span class="o">|</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="p">):</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the OmniRec framework with the specified datasets, experiment plan, and evaluator.</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="sd">        datasets (RecSysDataSet[T] | Iterable[RecSysDataSet[T]]): The dataset(s) to use for the experiment.</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="sd">        plan (ExperimentPlan): The experiment plan to follow.</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="sd">        evaluator (Evaluator): The evaluator to use for the experiment.</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="sd">        slurm_script (Optional[PathLike | str]): Path to a SLURM script used to schedule experiments</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="sd">            on an HPC cluster. If not provided, the experiments are run locally in normal mode.</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a>    <span class="k">if</span> <span class="n">slurm_script</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a>        <span class="c1"># TODO:</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a>    <span class="n">c</span> <span class="o">=</span> <span class="n">Coordinator</span><span class="p">()</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a>    <span class="n">c</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">evaluator</span><span class="p">)</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a>    <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_tables</span><span class="p">():</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a>        <span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">()</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -5051,6 +6101,133 @@ Use <code>evaluator.get_tables()</code> to retrieve formatted result tables.</p>
 
   </div>
 
+    </div>
+
+</div><h2 id="utility-functions">Utility Functions</h2>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="omnirec.util.util.set_random_state" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">omnirec</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">set_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Set the global random state for reproducibility.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>random_state</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The random state seed.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\omnirec\util\util.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-66">66</a></span>
+<span class="normal"><a href="#__codelineno-0-67">67</a></span>
+<span class="normal"><a href="#__codelineno-0-68">68</a></span>
+<span class="normal"><a href="#__codelineno-0-69">69</a></span>
+<span class="normal"><a href="#__codelineno-0-70">70</a></span>
+<span class="normal"><a href="#__codelineno-0-71">71</a></span>
+<span class="normal"><a href="#__codelineno-0-72">72</a></span>
+<span class="normal"><a href="#__codelineno-0-73">73</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66"></a><span class="k">def</span><span class="w"> </span><span class="nf">set_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the global random state for reproducibility.</span>
+</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68"></a>
+</span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69"></a><span class="sd">    Args:</span>
+</span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70"></a><span class="sd">        random_state (int): The random state seed.</span>
+</span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72"></a>    <span class="k">global</span> <span class="n">_RANDOM_STATE</span>
+</span><span id="__span-0-73"><a id="__codelineno-0-73" name="__codelineno-0-73"></a>    <span class="n">_RANDOM_STATE</span> <span class="o">=</span> <span class="n">random_state</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="omnirec.util.util.get_random_state" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <code class="highlight language-python"><span class="n">omnirec</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">get_random_state</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Get the global random state for reproducibility.</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>int</code></td>            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The current random state seed.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src\omnirec\util\util.py</code></summary>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-76">76</a></span>
+<span class="normal"><a href="#__codelineno-0-77">77</a></span>
+<span class="normal"><a href="#__codelineno-0-78">78</a></span>
+<span class="normal"><a href="#__codelineno-0-79">79</a></span>
+<span class="normal"><a href="#__codelineno-0-80">80</a></span>
+<span class="normal"><a href="#__codelineno-0-81">81</a></span>
+<span class="normal"><a href="#__codelineno-0-82">82</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-76"><a id="__codelineno-0-76" name="__codelineno-0-76"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_random_state</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="__span-0-77"><a id="__codelineno-0-77" name="__codelineno-0-77"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the global random state for reproducibility.</span>
+</span><span id="__span-0-78"><a id="__codelineno-0-78" name="__codelineno-0-78"></a>
+</span><span id="__span-0-79"><a id="__codelineno-0-79" name="__codelineno-0-79"></a><span class="sd">    Returns:</span>
+</span><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80"></a><span class="sd">        int: The current random state seed.</span>
+</span><span id="__span-0-81"><a id="__codelineno-0-81" name="__codelineno-0-81"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82"></a>    <span class="k">return</span> <span class="n">_RANDOM_STATE</span>
+</span></code></pre></div></td></tr></table></div>
+            </details>
     </div>
 
 </div>
