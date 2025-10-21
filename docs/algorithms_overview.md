@@ -1,6 +1,6 @@
 # Algorithm Overview
 
-The framework integrates algorithms from multiple recommendation system libraries through unified runner interfaces. Use the algorithm identifiers with the `ExperimentPlan` to configure experiments. Here is the comprehensive list of all available algorithms:
+The framework integrates algorithms from multiple recommendation system libraries through unified runner interfaces. Use the algorithm identifiers with the [`ExperimentPlan`](API_references.md#omnirec.runner.plan.ExperimentPlan) to configure experiments. Here is the comprehensive list of all available algorithms:
 
 ## LensKit Algorithms
 

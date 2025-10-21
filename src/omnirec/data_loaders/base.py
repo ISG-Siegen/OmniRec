@@ -12,11 +12,13 @@ class DatasetInfo:
     Metadata about a dataset.
 
     Attributes
-    ----------
+    __________
+    
     download_urls : Optional[Union[str, List[str]]]
         URL or list of URLs to download the dataset.
         If a list is provided, URLs are tried in order until one succeeds
         (skipping on checksum mismatch or HTTP errors).
+
     checksum : Optional[str]
         Optional SHA256 checksum to verify the downloaded file's integrity.
         If provided, the downloaded file will be hashed using SHA256 and compared

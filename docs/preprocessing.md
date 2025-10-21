@@ -2,11 +2,11 @@
 
 This section explains how to preprocess datasets using the framework's preprocessing pipeline. The preprocessing system provides a modular approach to transform datasets through various operations like subsampling, feedback conversion, core pruning, and data splitting.
 
-All preprocessing operations inherit from the `Preprocessor` base class, which defines a common interface for processing datasets. Each preprocessor takes a `RecSysDataSet` as input and returns a transformed dataset, potentially of a different data variant.
+All preprocessing operations inherit from the [`Preprocessor`](API_references.md#omnirec.preprocess.base.Preprocessor) base class, which defines a common interface for processing datasets. Each preprocessor takes a [`RecSysDataSet`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) as input and returns a transformed dataset, potentially of a different data variant.
 
 ## Pipe Class
 
-The `Pipe` class allows you to chain multiple preprocessing steps together into a single preprocessing pipeline:
+The [`Pipe`](API_references.md#omnirec.preprocess.pipe.Pipe) class allows you to chain multiple preprocessing steps together into a single preprocessing pipeline:
 
 ```python
 from omnirec.preprocess import Pipe, Subsample, MakeImplicit, CorePruning
@@ -125,11 +125,70 @@ dataset = random_cv.process(dataset)
 
 The preprocessing operations transform datasets between different data variants:
 
-- `Subsample`, `MakeImplicit`, `CorePruning`: RawData → RawData
-- `UserHoldout`, `RandomHoldout`: RawData → SplitData  
-- `UserCrossValidation`, `RandomCrossValidation`: RawData → FoldedData
+- [`Subsample`](API_references.md#omnirec.preprocess.subsample.Subsample), [`MakeImplicit`](API_references.md#omnirec.preprocess.feedback_conversion.MakeImplicit), [`CorePruning`](API_references.md#omnirec.preprocess.core_pruning.CorePruning): RawData → RawData
+- [`UserHoldout`](API_references.md#omnirec.preprocess.split.UserHoldout), [`RandomHoldout`](API_references.md#omnirec.preprocess.split.RandomHoldout): RawData → SplitData  
+- [`UserCrossValidation`](API_references.md#omnirec.preprocess.split.UserCrossValidation), [`RandomCrossValidation`](API_references.md#omnirec.preprocess.split.RandomCrossValidation): RawData → FoldedData
 
 **Random State** - All operations that involve randomness (sampling, splitting) use a consistent random state for reproducibility.
+
+## Custom Preprocessing Steps
+
+You can create custom preprocessing steps by inheriting from the [`Preprocessor`](API_references.md#omnirec.preprocess.base.Preprocessor) base class and implementing the [`process()`](API_references.md#omnirec.preprocess.base.Preprocessor.process) method.
+
+**Implementation**
+
+Custom preprocessors must:
+1. Inherit from [`Preprocessor[T, U]`](API_references.md#omnirec.preprocess.base.Preprocessor) where `T` is the input data variant and `U` is the output data variant
+2. Call `super().__init__()` in the constructor
+3. Implement the [`process()`](API_references.md#omnirec.preprocess.base.Preprocessor.process) method that transforms a `RecSysDataSet[T]` to `RecSysDataSet[U]`
+
+**Available Data Variants:**
+- `RawData`: Single DataFrame with all interactions
+- `SplitData`: Separate train, validation, and test DataFrames
+- `FoldedData`: Multiple folds for cross-validation
+
+**Example:**
+
+```python
+from omnirec.preprocess.base import Preprocessor
+from omnirec.recsys_data_set import RawData, RecSysDataSet
+
+class CustomPreprocessor(Preprocessor[RawData, RawData]):
+    def __init__(self, param1: int, param2: float) -> None:
+        """Your custom preprocessing step.
+        
+        Args:
+            param1: Description of parameter 1
+            param2: Description of parameter 2
+        """
+        super().__init__()
+        self.param1 = param1
+        self.param2 = param2
+    
+    def process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
+        # Log what you're doing
+        self.logger.info(f"Applying custom preprocessing with params: {self.param1}, {self.param2}")
+        
+        # Transform the data
+        # For RawData: modify dataset._data.df directly
+        # For SplitData: access dataset._data.train, dataset._data.val, dataset._data.test
+        dataset._data.df = dataset._data.df[...]  # Your transformation logic
+        
+        # Return the dataset
+        return dataset
+```
+
+Custom preprocessors can be used directly or within a [`Pipe`](API_references.md#omnirec.preprocess.pipe.Pipe):
+
+```python
+from omnirec.preprocess import Pipe, CorePruning
+
+pipeline = Pipe(
+    CustomPreprocessor(10, 0.5),
+    CorePruning(5)
+)
+dataset = pipeline.process(dataset)
+```
 
 ## Complete Example
 

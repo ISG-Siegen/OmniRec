@@ -43,7 +43,7 @@ def register_dataloader(names: str | list[str], cls: type[Loader]):
         _add_loader(names, cls)
 
 
-def list_datasets():
+def list_datasets() -> list[str]:
     """List all registered dataset names.
 
     Returns:

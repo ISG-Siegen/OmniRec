@@ -2,11 +2,11 @@
 
 This section explains how to configure algorithms and hyperparameters for recommendation experiments. The experiment planning system provides a flexible approach to define algorithm configurations and automatically generate all hyperparameter combinations.
 
-The `ExperimentPlan` class manages algorithm configurations and hyperparameter grids. It expands every combination you define, automating the execution of multiple algorithm variants with different hyperparameter settings.
+The [`ExperimentPlan`](API_references.md#omnirec.runner.plan.ExperimentPlan) class manages algorithm configurations and hyperparameter grids. It expands every combination you define, automating the execution of multiple algorithm variants with different hyperparameter settings.
 
 ## ExperimentPlan
 
-The `ExperimentPlan` class serves as the central configuration for all algorithms in your experiments. Create a plan by optionally providing a name, then add algorithms with their hyperparameters:
+The [`ExperimentPlan`](API_references.md#omnirec.runner.plan.ExperimentPlan) class serves as the central configuration for all algorithms in your experiments. Create a plan by optionally providing a name, then add algorithms with their hyperparameters:
 
 ```python
 from omnirec.runner.plan import ExperimentPlan
@@ -32,7 +32,7 @@ recbole_algo = RecBole.LightGCN          # "RecBole.LightGCN"
 
 ### Adding Algorithms
 
-Add algorithms to the plan using the `add_algorithm` method. Provide the algorithm identifier and a dictionary of hyperparameters:
+Add algorithms to the plan using the [`add_algorithm`](API_references.md#omnirec.runner.plan.ExperimentPlan.add_algorithm) method. Provide the algorithm identifier and a dictionary of hyperparameters:
 
 ```python
 from omnirec.runner.algos import LensKit
@@ -111,11 +111,11 @@ plan.add_algorithm(
 )
 ```
 
-Each call to `add_algorithm` appends a new algorithm configuration. Avoid using the same algorithm identifier multiple times unless you intend to overwrite the previous configuration.
+Each call to [`add_algorithm`](API_references.md#omnirec.runner.plan.ExperimentPlan.add_algorithm) appends a new algorithm configuration. Avoid using the same algorithm identifier multiple times unless you intend to overwrite the previous configuration.
 
 ### Updating Algorithms
 
-Modify existing algorithm configurations using the `update_algorithm` method:
+Modify existing algorithm configurations using the [`update_algorithm`](API_references.md#omnirec.runner.plan.ExperimentPlan.update_algorithm) method:
 
 ```python
 # Update previously added algorithm
@@ -132,7 +132,7 @@ The update merges with the existing configuration, adding new parameters and upd
 
 ## Running Experiments
 
-Pass the configured plan to `run_omnirec` alongside your dataset and evaluator to execute all algorithm configurations:
+Pass the configured plan to [`run_omnirec`](API_references.md#omnirec.util.run.run_omnirec) alongside your dataset and evaluator to execute all algorithm configurations:
 
 ```python
 from omnirec import RecSysDataSet

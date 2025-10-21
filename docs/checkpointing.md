@@ -29,7 +29,7 @@ checkpoints/
 
 **Hash-Based Organization**
 
-The coordinator generates unique hashes for datasets and configurations:
+The [`Coordinator`](API_references.md#omnirec.runner.coordinator.Coordinator) generates unique hashes for datasets and configurations:
 
 - **Dataset hash**: Based on the number of interactions, ensuring identical datasets share the same checkpoint directory
 - **Configuration hash**: Based on algorithm name and hyperparameters, ensuring identical configurations are deduplicated

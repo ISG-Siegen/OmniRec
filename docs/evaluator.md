@@ -2,11 +2,11 @@
 
 This section explains how to configure and use metrics to evaluate recommendation algorithms. The evaluation system provides a flexible approach to compute various metrics after model predictions, supporting both explicit and implicit feedback scenarios.
 
-The `Evaluator` class manages metric computation across all algorithm runs. It automatically loads predictions and applies the specified metrics, supporting both holdout and cross-validation splits.
+The [`Evaluator`](API_references.md#omnirec.runner.evaluation.Evaluator) class manages metric computation across all algorithm runs. It automatically loads predictions and applies the specified metrics, supporting both holdout and cross-validation splits.
 
 ## Evaluator Class
 
-The `Evaluator` class coordinates metric calculation across experiments. Create an evaluator by passing one or more metric instances, then provide it to `run_omnirec` to automatically evaluate all algorithm runs:
+The [`Evaluator`](API_references.md#omnirec.runner.evaluation.Evaluator) class coordinates metric calculation across experiments. Create an evaluator by passing one or more metric instances, then provide it to [`run_omnirec`](API_references.md#omnirec.util.run.run_omnirec) to automatically evaluate all algorithm runs:
 
 ```python
 from omnirec.runner.evaluation import Evaluator
@@ -20,7 +20,7 @@ evaluator = Evaluator(
 )
 ```
 
-The evaluator can combine multiple metrics of the same type in a single evaluation run. Choose metrics appropriate for your feedback type: use prediction metrics (RMSE, MAE) for explicit ratings, and ranking metrics (NDCG, HR, Recall) for implicit feedback or top-k recommendations.
+The evaluator can combine multiple metrics of the same type in a single evaluation run. Choose metrics appropriate for your feedback type: use prediction metrics ([`RMSE`](API_references.md#omnirec.metrics.prediction.RMSE), [`MAE`](API_references.md#omnirec.metrics.prediction.MAE)) for explicit ratings, and ranking metrics ([`NDCG`](API_references.md#omnirec.metrics.ranking.NDCG), [`HR`](API_references.md#omnirec.metrics.ranking.HR), [`Recall`](API_references.md#omnirec.metrics.ranking.Recall)) for implicit feedback or top-k recommendations.
 
 ## Available Metrics
 
@@ -53,11 +53,11 @@ hr = HR([5, 10])
 recall = Recall([10, 20])
 ```
 
-Ranking metrics evaluate the quality of top-k recommendation lists. Specify cutoff values (k) to measure performance at different list lengths. For example, `NDCG([5, 10, 20])` computes NDCG@5, NDCG@10, and NDCG@20.
+Ranking metrics evaluate the quality of top-k recommendation lists. Specify cutoff values (k) to measure performance at different list lengths. For example, [`NDCG([5, 10, 20])`](API_references.md#omnirec.metrics.ranking.NDCG) computes NDCG@5, NDCG@10, and NDCG@20.
 
 ## Running Experiments with Evaluation
 
-Provide the evaluator when launching experiments with `run_omnirec`. The framework automatically applies all metrics after each algorithm completes:
+Provide the evaluator when launching experiments with [`run_omnirec`](API_references.md#omnirec.util.run.run_omnirec). The framework automatically applies all metrics after each algorithm completes:
 
 ```python
 from omnirec import RecSysDataSet
@@ -95,7 +95,7 @@ Additionally, metric results are logged during execution and stored in checkpoin
 
 ## Custom Metrics
 
-To implement custom evaluation metrics, create a subclass of `omnirec.metrics.base.Metric` and implement the `calculate` method:
+To implement custom evaluation metrics, create a subclass of [`omnirec.metrics.base.Metric`](API_references.md#omnirec.metrics.base.Metric) and implement the [`calculate`](API_references.md#omnirec.metrics.base.Metric.calculate) method:
 
 ```python
 from omnirec.metrics.base import Metric, MetricResult

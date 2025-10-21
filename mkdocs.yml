@@ -14,6 +14,7 @@ nav:
       - Algorithms Overview: algorithms_overview.md
       - Evaluator: evaluator.md
       - Checkpointing and Results: checkpointing.md
+      - SLURM Integration: slurm_integration.md
   - API Reference: API_references.md
 
 theme: 
