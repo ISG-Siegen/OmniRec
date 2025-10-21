@@ -1,4 +1,5 @@
-from typing import Iterable, TypeVar
+from os import PathLike
+from typing import Iterable, Optional, TypeVar
 
 from rich.console import Console
 
@@ -15,6 +16,7 @@ def run_omnirec(
     datasets: RecSysDataSet[T] | Iterable[RecSysDataSet[T]],
     plan: ExperimentPlan,
     evaluator: Evaluator,  # TODO: Make optional
+    slurm_script: Optional[PathLike | str] = None
 ):
     """Run the OmniRec framework with the specified datasets, experiment plan, and evaluator.
 
@@ -22,7 +24,13 @@ def run_omnirec(
         datasets (RecSysDataSet[T] | Iterable[RecSysDataSet[T]]): The dataset(s) to use for the experiment.
         plan (ExperimentPlan): The experiment plan to follow.
         evaluator (Evaluator): The evaluator to use for the experiment.
+        slurm_script (Optional[PathLike | str]): Path to a SLURM script used to schedule experiments
+            on an HPC cluster. If not provided, the experiments are run locally in normal mode.
     """
+    if slurm_script is not None:
+        # TODO:
+        raise NotImplementedError()
+
     c = Coordinator()
     c.run(datasets, plan, evaluator)
 
