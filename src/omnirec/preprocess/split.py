@@ -187,3 +187,48 @@ class RandomCrossValidation(DataSplit[RawData, FoldedData]):
             }
 
         return dataset.replace_data(FoldedData.from_split_dict(data_splits))
+
+
+class TimeBasedHoldout(DataSplit[RawData, SplitData]):
+    def __init__(
+        self,
+        validation: float | int | pd.Timestamp,
+        test: float | int | pd.Timestamp,
+    ) -> None:
+        # TODO: ADD METHOD DOCS
+        super().__init__(0)
+
+        if type(validation) is not type(test):
+            self.logger.critical("Validation and test size must be the same type")
+            sys.exit(1)
+
+        self._valid_size = validation
+        self._test_size = test
+
+    def process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[SplitData]:
+        df = dataset._data.df
+        df = df.sort_values("timestamp").reset_index(drop=True)
+        n = len(df)
+
+        if isinstance(self._valid_size, float) and isinstance(self._test_size, float):
+            test_num = int(n * self._test_size)
+            test_cutoff = n - test_num
+            val_cutoff = n - test_num - int(n * self._valid_size)
+        elif isinstance(self._valid_size, int) and isinstance(self._test_size, int):
+            test_cutoff = n - self._test_size
+            val_cutoff = n - self._test_size - self._valid_size
+        elif isinstance(self._valid_size, pd.Timestamp) and isinstance(
+            self._test_size, pd.Timestamp
+        ):
+            test_cutoff = df[df["timestamp"] >= self._test_size.timestamp()].index[0]
+            val_cutoff = df[df["timestamp"] >= self._valid_size.timestamp()].index[0]
+        else:
+            raise ValueError(
+                f"Unknown validation or test size type. Got {type(self._valid_size)=}, {type(self._test_size)=}"
+            )
+
+        train = df.iloc[:val_cutoff]
+        val = df.iloc[val_cutoff:test_cutoff]
+        test = df.iloc[test_cutoff:]
+
+        return dataset.replace_data(SplitData(train, val, test))

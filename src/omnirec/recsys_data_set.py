@@ -15,7 +15,7 @@ from omnirec.data_loaders import registry
 from omnirec.data_loaders.datasets import DataSet
 from omnirec.data_variants import DataVariant, FoldedData, RawData, SplitData
 from omnirec.util import util
-from omnirec.util.util import _DATA_DIR, series_to_unix_seconds
+from omnirec.util.util import _DATA_DIR
 
 logger = util._root_logger.getChild("data")
 
