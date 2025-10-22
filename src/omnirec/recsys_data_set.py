@@ -13,7 +13,6 @@ import pandas as pd
 
 from omnirec.data_loaders import registry
 from omnirec.data_loaders.datasets import DataSet
-from omnirec.data_loaders.datasets import DataSet
 from omnirec.data_variants import DataVariant, FoldedData, RawData, SplitData
 from omnirec.util import util
 from omnirec.util.util import _DATA_DIR
@@ -110,7 +109,12 @@ class RecSysDataSet(Generic[T]):
         return dataset
 
     # TODO: Expose drop dup and norm id params to public API somehow
-    def _canonicalize(self, drop_duplicates=True, normalize_identifiers=True) -> None:
+    def _canonicalize(
+        self,
+        drop_duplicates=True,
+        normalize_identifiers=True,
+        normalize_timestamps=True,
+    ) -> None:
         # HACK: We might implement it for the other data variants if needed
         if not isinstance(self._data, RawData):
             logger.error("Cannot canonicalize non raw data, aborting!")
@@ -122,6 +126,8 @@ class RecSysDataSet(Generic[T]):
             self._drop_duplicates()
         if normalize_identifiers:
             self._normalize_identifiers()
+        if normalize_timestamps:
+            self._normalize_timestamps()
         # self.check_and_order_columns() # TODO: Ask Lukas about the complex checking logic in the OG. Why the ordering, since columns are named?
         # self.check_and_convert_data_types() # TODO: Check back with Lukas, this might be the wrong place to do that, since after writing/loading from csv dtypes are different again: Result: Do that in adapters! Be careful, str may work, but lib may do it as category.
         stop_time = time()
@@ -153,6 +159,20 @@ class RecSysDataSet(Generic[T]):
             }
             self._data.df[col] = self._data.df[col].map(unique_ids)
         logger.info("Done.")
+
+    def _normalize_timestamps(self) -> None:
+        # HACK: We might implement it for the other data variants if needed
+        if not isinstance(self._data, RawData):
+            logger.error("Cannot normalize identifiers on non raw data, aborting!")
+            return
+        logger.info("Normalizing timestamps...")
+        if "timestamp" in self._data.df.columns:
+            self._data.df["timestamp"] = (
+                pd.to_datetime(
+                    self._data.df["timestamp"], errors="coerce", utc=True
+                ).view("int64")
+                // 10**9
+            )
 
     def replace_data(self, new_data: R) -> "RecSysDataSet[R]":
         new = cast(RecSysDataSet[R], copy.copy(self))
