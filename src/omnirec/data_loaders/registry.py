@@ -99,13 +99,27 @@ def _run_loader(
     else:
         urls: list[str] = []
 
+    if info.license_or_registration:
+        if raw_dir is None:
+            logger.critical(
+                f'The dataset "{name}" cannot be auto-downloaded because it either requires registration or has licensing restrictions.\n'
+                'Please download all files manually, place them in a directory and provide the path to that directory using the "raw_dir" parameter.\n'
+                f"You can download the files from the following link(s):"
+            )
+            for u in urls:
+                logger.critical(f"- {u}")
+            sys.exit(1)
+
     success = False
 
-    if not raw_dir:
+    if raw_dir is None:
         raw_dir = _DATA_DIR / "raw" / name
     raw_dir.mkdir(exist_ok=True, parents=True)
     for idx, u in enumerate(urls, 1):
-        save_pth = (raw_dir / Path(u).name).resolve()
+        if info.download_file_name is not None:
+            save_pth = (raw_dir / info.download_file_name).resolve()
+        else:
+            save_pth = (raw_dir / Path(u).name).resolve()
         if save_pth.exists() and not force_download:
             if verify_checksum(save_pth, info.checksum):
                 logger.info(f"Dataset {name} already exists, skipping download...")
@@ -126,7 +140,7 @@ def _run_loader(
             logger.warning(f"Invalid URL: {u}. Skipping...")
             continue
         try:
-            res = requests.get(u, stream=True)
+            res = requests.get(u, stream=True, verify=info.verify_tls)
         except Exception as e:
             logger.warning(f"Failed to make request to {u}: {e}. Skipping...")
             continue
@@ -139,7 +153,7 @@ def _run_loader(
         total_size = int(res.headers.get("content-length", 0))
         with (
             open(save_pth, "wb") as save_f,
-            tqdm(total=total_size, unit_scale=True) as bar,
+            tqdm(total=total_size, unit_scale=True, unit="B") as bar,
         ):
             for chunk in res.iter_content(
                 chunk_size=1024 * 1024

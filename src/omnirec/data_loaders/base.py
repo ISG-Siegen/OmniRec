@@ -23,6 +23,15 @@ class DatasetInfo:
         Optional SHA256 checksum to verify the downloaded file's integrity.
         If provided, the downloaded file will be hashed using SHA256 and compared
         to this value. Use e.g. `hashlib.sha256()` to compute the checksum in python:
+    download_file_name : Optional[str]
+        Optional custom file name to use when saving the downloaded dataset.
+        If not provided, the name will be inferred from the URL.
+    verify_tls : bool
+        Whether to verify TLS/SSL certificates when downloading.
+        Defaults is `True`.
+    license_or_registration : bool
+        Indicates if the dataset requires a license agreement or registration to access.
+        Default is `False`.
     ```
     import hashlib
     hasher = hashlib.sha256()
@@ -35,6 +44,9 @@ class DatasetInfo:
 
     download_urls: Optional[str | list[str]] = None
     checksum: Optional[str] = None
+    download_file_name: Optional[str] = None
+    verify_tls: bool = True
+    license_or_registration: bool = False
 
 
 class Loader(ABC):
