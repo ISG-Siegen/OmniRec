@@ -664,9 +664,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#matrix-factorization-and-factorization-machines" class="md-nav__link">
+  <a href="#matrix-factorization" class="md-nav__link">
     <span class="md-ellipsis">
-      Matrix Factorization and Factorization Machines
+      Matrix Factorization
     </span>
   </a>
   
@@ -696,15 +696,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#using-algorithms-in-experiments" class="md-nav__link">
-    <span class="md-ellipsis">
-      Using Algorithms in Experiments
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#recbole-algorithms" class="md-nav__link">
     <span class="md-ellipsis">
       RecBole Algorithms
@@ -724,7 +715,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#matrix-factorization" class="md-nav__link">
+  <a href="#matrix-factorization_1" class="md-nav__link">
     <span class="md-ellipsis">
       Matrix Factorization
     </span>
@@ -765,7 +756,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#using-algorithms-in-experiments_1" class="md-nav__link">
+  <a href="#using-algorithms-in-experiments" class="md-nav__link">
     <span class="md-ellipsis">
       Using Algorithms in Experiments
     </span>
@@ -1019,7 +1010,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="matrix-factorization-and-factorization-machines">Matrix Factorization and Factorization Machines</h3>
+<h3 id="matrix-factorization">Matrix Factorization</h3>
 <table>
 <thead>
 <tr>
@@ -1178,7 +1169,6 @@
 </tr>
 </tbody>
 </table>
-<h2 id="using-algorithms-in-experiments">Using Algorithms in Experiments</h2>
 <h2 id="recbole-algorithms">RecBole Algorithms</h2>
 <p>RecBole provides a comprehensive collection of modern recommendation algorithms including deep learning and graph-based methods.</p>
 <h3 id="baseline-and-neighborhood-methods_1">Baseline and Neighborhood Methods</h3>
@@ -1212,7 +1202,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="matrix-factorization">Matrix Factorization</h3>
+<h3 id="matrix-factorization_1">Matrix Factorization</h3>
 <table>
 <thead>
 <tr>
@@ -1432,7 +1422,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="using-algorithms-in-experiments_1">Using Algorithms in Experiments</h2>
+<h2 id="using-algorithms-in-experiments">Using Algorithms in Experiments</h2>
 <p>Reference algorithms using the format <code>&lt;Runner&gt;.&lt;Algorithm&gt;</code> in your experiment plan:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.plan</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExperimentPlan</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.runner.algos</span><span class="w"> </span><span class="kn">import</span> <span class="n">LensKit</span><span class="p">,</span> <span class="n">RecBole</span>
@@ -1453,27 +1443,6 @@
 </span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="p">)</span>
 </span></code></pre></div>
 <p>See the <a href="../conf_algo/">Algorithm Configuration</a> guide for detailed information on configuring algorithms and hyperparameters.</p>
-<!-- ## Algorithm Selection Guidelines
-
-**For Explicit Feedback (ratings)**:
-- Baseline: `LensKit.PopScorer`, `RecBole.Pop`
-- Traditional: `LensKit.BiasedMFScorer`, `LensKit.FunkSVDScorer`
-- Deep Learning: `RecBole.DMF`
-- Graph-based: `RecBole.GCMC`
-
-**For Implicit Feedback (clicks, views)**:
-- Baseline: `RecBole.Pop`, `RecBole.Random`
-- Neighborhood: `LensKit.ItemKNNScorer`, `RecBole.ItemKNN`
-- Matrix Factorization: `LensKit.ImplicitMFScorer`, `RecBole.BPR`
-- Linear: `RecBole.EASE`, `RecBole.SLIMElastic`
-- Deep Learning: `RecBole.NeuMF`, `RecBole.MultiVAE`
-- Graph-based: `RecBole.LightGCN`, `RecBole.NGCF`
-
-**Performance Considerations**:
-- Fast training: Neighborhood methods, linear methods (`EASE`, `SLIM`)
-- Best accuracy: Graph neural networks (`LightGCN`, `NGCF`), deep learning methods
-- Large datasets: Linear methods, graph-based methods with mini-batching
-- Cold-start scenarios: Popularity-based methods, content-aware algorithms -->
 
 
 

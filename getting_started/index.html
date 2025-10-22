@@ -844,7 +844,7 @@
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Load the MovieLens 100K dataset</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">dataset</span> <span class="o">=</span> <span class="n">RecSysDataSet</span><span class="o">.</span><span class="n">use_dataloader</span><span class="p">(</span><span class="n">DataSet</span><span class="o">.</span><span class="n">MovieLens100K</span><span class="p">)</span>
 </span></code></pre></div>
-<p>We provide a more detailed documentation in <a href="../loading_datasets/">Loading Datasets</a> and an overview of available datasets in <a href="../datasets_overview/">Datasets Overview</a>.</p>
+<p>We provide a more detailed documentation in <a href="../loading_datasets/">Loading Datasets</a> and a list of available datasets in <a href="../datasets_overview/">Datasets Overview</a>.</p>
 <h2 id="preprocessing-datasets">Preprocessing Datasets</h2>
 <p>We can now apply the desired preprocessing steps to the data. The easiest way is to define a preprocessing pipeline:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">omnirec.preprocess.core_pruning</span><span class="w"> </span><span class="kn">import</span> <span class="n">CorePruning</span>

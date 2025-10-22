@@ -965,11 +965,13 @@
 </span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="c1"># Run all algorithm configurations</span>
 </span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="n">run_omnirec</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">plan</span><span class="p">,</span> <span class="n">evaluator</span><span class="p">)</span>
 </span></code></pre></div>
-<p>The framework executes every algorithm configuration in the plan, automatically managing:
-- Model training and prediction
-- Checkpoint storage under <code>./checkpoints/&lt;dataset&gt;/&lt;algorithm&gt;/</code>
-- Metric evaluation via the evaluator
-- Progress tracking and logging</p>
+<p>The framework executes every algorithm configuration in the plan, automatically managing:</p>
+<ul>
+<li>Model training and prediction</li>
+<li>Checkpoint storage under <code>./checkpoints/&lt;dataset&gt;/&lt;algorithm&gt;/</code></li>
+<li>Metric evaluation via the evaluator</li>
+<li>Progress tracking and logging</li>
+</ul>
 <h3 id="multiple-datasets">Multiple Datasets</h3>
 <p>Run the same experiment plan across multiple datasets by passing a list of datasets:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Load multiple datasets</span>
