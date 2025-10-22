@@ -12,13 +12,14 @@ pip install omnirec
 
 ## Loading Datasets
 
-Central part of the OmniRec library is the [`RecSysDataSet`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) class. You can load data by calling the static [`use_dataloader()`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) function that returns a [`RecSysDataSet`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) object. If provided a registered dataset name, [`use_dataloader()`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) downloads the dataset, removes duplicates and normalizes the identifiers:
+Central part of the OmniRec library is the [`RecSysDataSet`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) class. You can load data by calling the static [`use_dataloader()`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) function that returns a [`RecSysDataSet`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) object. If provided a registered dataset name with DataSet.<dataset_name>, [`use_dataloader()`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) downloads the dataset, removes duplicates and normalizes the identifiers:
 
 ```python
 from omnirec import RecSysDataSet
+from omnirec.data_loaders.datasets import DataSet
 
 # Load the MovieLens 100K dataset
-dataset = RecSysDataSet.use_dataloader(MovieLens100K)
+dataset = RecSysDataSet.use_dataloader(DataSet.MovieLens100K)
 ```
 
 We provide a more detailed documentation in [Loading Datasets](loading_datasets.md) and an overview of available datasets in [Datasets Overview](datasets_overview.md).
@@ -154,7 +155,8 @@ Set the random state before running your experiments to ensure consistent result
 Here's a complete example that puts it all together:
 
 ```python
-from omnirec import RecSysDataSet, NDCG, HR, Recall
+from omnirec import RecSysDataSet
+from omnirec.data_loaders.datasets import DataSet
 from omnirec.preprocess.pipe import Pipe
 from omnirec.preprocess.feedback_conversion import MakeImplicit
 from omnirec.preprocess.core_pruning import CorePruning
@@ -165,7 +167,7 @@ from omnirec.runner.evaluation import Evaluator
 from omnirec.util.run import run_omnirec
 
 # Load and preprocess dataset
-dataset = RecSysDataSet.use_dataloader(MovieLens100K)
+dataset = RecSysDataSet.use_dataloader(DataSet.MovieLens100K)
 
 pipeline = Pipe(
     MakeImplicit(3),

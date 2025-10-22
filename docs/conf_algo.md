@@ -136,6 +136,7 @@ Pass the configured plan to [`run_omnirec`](API_references.md#omnirec.util.run.r
 
 ```python
 from omnirec import RecSysDataSet
+from omnirec.data_loaders.datasets import DataSet
 from omnirec.runner.evaluation import Evaluator
 from omnirec.metrics.ranking import NDCG, Recall
 from omnirec.preprocess.pipe import Pipe
@@ -144,7 +145,7 @@ from omnirec.preprocess.split import UserHoldout
 from omnirec.util.run import run_omnirec
 
 # Load and preprocess dataset to implicit feedback
-dataset = RecSysDataSet.use_dataloader("MovieLens100K")
+dataset = RecSysDataSet.use_dataloader(DataSet.MovieLens100K)
 pipeline = Pipe(
     MakeImplicit(3),           # Convert to implicit feedback
     UserHoldout(0.15, 0.15)    # Split data
@@ -171,8 +172,8 @@ Run the same experiment plan across multiple datasets by passing a list of datas
 ```python
 # Load multiple datasets
 datasets = [
-    RecSysDataSet.use_dataloader("MovieLens100K"),
-    RecSysDataSet.use_dataloader("HetrecLastFM"),
+    RecSysDataSet.use_dataloader(DataSet.MovieLens100K),
+    RecSysDataSet.use_dataloader(DataSet.HetrecLastFM),
 ]
 
 # Run all algorithms on all datasets
@@ -185,6 +186,7 @@ Each algorithm configuration in the plan is executed for every dataset. Results 
 
 ```python
 from omnirec import RecSysDataSet
+from omnirec.data_loaders.datasets import DataSet
 from omnirec.runner.plan import ExperimentPlan
 from omnirec.runner.algos import LensKit, RecBole
 from omnirec.runner.evaluation import Evaluator
@@ -196,7 +198,7 @@ from omnirec.preprocess.split import UserHoldout
 from omnirec.util.run import run_omnirec
 
 # Load dataset and preprocess to implicit feedback
-dataset = RecSysDataSet.use_dataloader("MovieLens100K")
+dataset = RecSysDataSet.use_dataloader(DataSet.MovieLens100K)
 pipeline = Pipe(
     MakeImplicit(3),           # Convert to implicit (ratings >= 3)
     CorePruning(5),            # Keep 5-core users and items

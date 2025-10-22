@@ -194,12 +194,13 @@ dataset = pipeline.process(dataset)
 
 ```python
 from omnirec import RecSysDataSet
+from omnirec.data_loaders.datasets import DataSet
 from omnirec.preprocess import (
     Pipe, Subsample, MakeImplicit, CorePruning, UserCrossValidation
 )
 
 # Load dataset
-dataset = RecSysDataSet.use_dataloader("MovieLens100K")
+dataset = RecSysDataSet.use_dataloader(DataSet.MovieLens100K)
 
 # Create and apply comprehensive preprocessing pipeline
 pipeline = Pipe(

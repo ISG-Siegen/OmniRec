@@ -61,6 +61,7 @@ Provide the evaluator when launching experiments with [`run_omnirec`](API_refere
 
 ```python
 from omnirec import RecSysDataSet
+from omnirec.data_loaders.datasets import DataSet
 from omnirec.runner.plan import ExperimentPlan
 from omnirec.runner.evaluation import Evaluator
 from omnirec.runner.algos import RecBole
@@ -71,7 +72,7 @@ from omnirec.preprocess.split import UserHoldout
 from omnirec.util.run import run_omnirec
 
 # Load dataset and convert to implicit feedback
-dataset = RecSysDataSet.use_dataloader("MovieLens100K")
+dataset = RecSysDataSet.use_dataloader(DataSet.MovieLens100K)
 pipeline = Pipe(
     MakeImplicit(3),           # Convert ratings >= 3 to implicit feedback
     UserHoldout(0.15, 0.15)    # Split data

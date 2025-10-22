@@ -26,20 +26,21 @@ The recommended way to load datasets is using the [`use_dataloader`](API_referen
 
 ```python
 from omnirec import RecSysDataSet
+from omnirec.data_loaders.datasets import DataSet
 
 # Load MovieLens 100K dataset
-dataset = RecSysDataSet.use_dataloader("MovieLens100K")
+dataset = RecSysDataSet.use_dataloader(DataSet.MovieLens100K)
 
 # Force re-download and re-canonicalization
 dataset = RecSysDataSet.use_dataloader(
-    "MovieLens100K", 
-    force_download=True, 
+    DataSet.MovieLens100K,
+    force_download=True,
     force_canonicalize=True
 )
 
 # Specify custom paths
 dataset = RecSysDataSet.use_dataloader(
-    "MovieLens100K",
+    DataSet.MovieLens100K,
     raw_dir="/path/to/raw/data",
     canon_path="/path/to/canonicalized/data.csv"
 )
