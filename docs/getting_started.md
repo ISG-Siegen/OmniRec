@@ -22,7 +22,7 @@ from omnirec.data_loaders.datasets import DataSet
 dataset = RecSysDataSet.use_dataloader(DataSet.MovieLens100K)
 ```
 
-We provide a more detailed documentation in [Loading Datasets](loading_datasets.md) and an overview of available datasets in [Datasets Overview](datasets_overview.md).
+We provide a more detailed documentation in [Loading Datasets](loading_datasets.md) and a list of available datasets in [Datasets Overview](datasets_overview.md).
 
 ## Preprocessing Datasets
 

@@ -41,9 +41,10 @@ dataset = subsample.process(dataset)
 ```
 
 **Parameters:**
+
 - `sample_size` (int | float): Number or fraction of interactions to sample
-  - `int`: Absolute number of interactions
-  - `float`: Fraction of dataset (0.0 to 1.0)
+    - `int`: Absolute number of interactions
+    - `float`: Fraction of dataset (0.0 to 1.0)
 
 **MakeImplicit** - Converts explicit feedback to implicit feedback by filtering interactions above a threshold:
 
@@ -60,9 +61,10 @@ dataset = make_implicit.process(dataset)
 ```
 
 **Parameters:**
+
 - `threshold` (int | float): Threshold for filtering interactions
-  - `int`: Direct rating threshold
-  - `float`: Fraction of maximum rating (0.0 to 1.0)
+    - `int`: Direct rating threshold
+    - `float`: Fraction of maximum rating (0.0 to 1.0)
 
 **CorePruning** - Removes users and items with fewer than a specified number of interactions:
 
@@ -75,11 +77,59 @@ dataset = core_pruning.process(dataset)
 ```
 
 **Parameters:**
+
 - `core` (int): Minimum number of interactions required for users and items
+
+### Filtering
+
+Apply filtering based on timestamps or ratings to the dataset:
+
+**TimeFilter** - Filters interactions based on timestamp range:
+
+```python
+import pandas as pd
+from omnirec.preprocess.filter import TimeFilter
+
+# Keep interactions from January 1998
+time_filter = TimeFilter(
+    start=pd.Timestamp(year=1998, month=1, day=1),
+    end=pd.Timestamp(year=1998, month=1, day=30),
+)
+dataset = time_filter.process(dataset)
+
+# Keep interactions after a specific date (no end date)
+time_filter = TimeFilter(start=pd.Timestamp(year=1998, month=3, day=1))
+dataset = time_filter.process(dataset)
+```
+
+**Parameters:**
+
+- `start` (Optional[pd.Timestamp]): Start timestamp for the filter (inclusive)
+- `end` (Optional[pd.Timestamp]): End timestamp for the filter (inclusive)
+
+**RatingFilter** - Filters interactions based on rating values:
+
+```python
+from omnirec.preprocess.filter import RatingFilter
+
+# Keep ratings between 1 and 3
+rating_filter = RatingFilter(lower=1, upper=3)
+dataset = rating_filter.process(dataset)
+
+# Keep ratings >= 4 (no upper bound)
+rating_filter = RatingFilter(lower=4)
+dataset = rating_filter.process(dataset)
+```
+
+**Parameters:**
+
+- `lower` (Optional[int | float]): Lower bound for rating values (inclusive)
+- `upper` (Optional[int | float]): Upper bound for rating values (inclusive)
 
 ## Data Splitting
 
-**Holdout Splits** - Create train/validation/test splits:
+### Holdout Splits 
+Create train/validation/test splits:
 
 ```python
 from omnirec.preprocess import UserHoldout, RandomHoldout
@@ -93,43 +143,94 @@ random_split = RandomHoldout(validation_size=0.15, test_size=0.15)
 dataset = random_split.process(dataset)
 ```
 
-**Parameters:**
-- `validation_size` (float | int): Size of validation set
-  - `float`: Proportion of dataset (0.0 to 1.0)
-  - `int`: Absolute number of interactions
-- `test_size` (float | int): Size of test set
-  - `float`: Proportion of dataset (0.0 to 1.0)
-  - `int`: Absolute number of interactions
+UserHoldout ensures that each user has interactions in all splits, while RandomHoldout randomly assigns interactions without user constraints.
 
-**Cross-Validation** - Create multiple folds for cross-validation:
+**Parameters:**
+
+- `validation_size` (float | int): Size of validation set
+    - `float`: Proportion of dataset (0.0 to 1.0)
+    - `int`: Absolute number of interactions
+- `test_size` (float | int): Size of test set
+    - `float`: Proportion of dataset (0.0 to 1.0)
+    - `int`: Absolute number of interactions
+
+### Cross-Validation
+Create multiple folds for cross-validation:
 
 ```python
 from omnirec.preprocess import UserCrossValidation, RandomCrossValidation
 
 # User-aware cross-validation (each user appears in all splits)
-user_cv = UserCrossValidation(num_folds=5, validation_size=0.1)
+user_cv = UserCrossValidation(num_folds=5, validation_size=0.2)
 dataset = user_cv.process(dataset)
 
 # Random cross-validation (no user constraints)
-random_cv = RandomCrossValidation(num_folds=5, validation_size=0.1)
+random_cv = RandomCrossValidation(num_folds=5, validation_size=0.2)
 dataset = random_cv.process(dataset)
 ```
 
+Cross-Validation creates multiple folds for evaluation, so different interactions are used for validation in each fold.
+UserCrossValidation ensures that each user has interactions in all splits, while RandomCrossValidation randomly assigns interactions without user constraints.
+
 **Parameters:**
+
 - `num_folds` (int): Number of cross-validation folds
 - `validation_size` (float | int): Size of validation set in each fold
-  - `float`: Proportion of training data (0.0 to 1.0)
-  - `int`: Absolute number of interactions
+    - `float`: Proportion of training data (0.0 to 1.0)
+    - `int`: Absolute number of interactions
+
+### Time-based Splits
+
+Create splits based on timestamps.
+
+**TimeBasedHoldout** - Splits the dataset chronologically into train, validation, and test sets:
+
+```python
+import pandas as pd
+from omnirec.preprocess.split import TimeBasedHoldout
+
+# Split using timestamp cutoffs
+time_split = TimeBasedHoldout(
+    validation=pd.Timestamp(year=1998, month=1, day=3),
+    test=pd.Timestamp(year=1998, month=3, day=12),
+)
+dataset = time_split.process(dataset)
+
+# Split using proportions (newest 15% for test, next 15% for validation)
+time_split = TimeBasedHoldout(validation=0.15, test=0.15)
+dataset = time_split.process(dataset)
+
+# Split using absolute counts (newest 1000 for test, next 500 for validation)
+time_split = TimeBasedHoldout(validation=500, test=1000)
+dataset = time_split.process(dataset)
+```
+
+The dataset is sorted by timestamp and split, with older interactions going to training and newer ones to validation/test.
+
+**Parameters:**
+
+- `validation` (float | int | pd.Timestamp): Validation set specification
+    - `float`: Proportion of newest interactions (0.0 to 1.0)
+    - `int`: Absolute number of newest interactions
+    - `pd.Timestamp`: Timestamp cutoff (interactions after this go to validation)
+- `test` (float | int | pd.Timestamp): Test set specification (same type as validation)
+    - `float`: Proportion of newest interactions (0.0 to 1.0)
+    - `int`: Absolute number of newest interactions
+    - `pd.Timestamp`: Timestamp cutoff (interactions after this go to test)
+
+**Note:** Both parameters must be of the same type. The dataset is sorted by timestamp, and interactions are split based on the specified criteria, with older interactions in training and newer ones in validation/test.
+
+## Random State
+All operations that involve randomness (sampling, splitting) use a consistent random state for reproducibility. See [Getting Started > Reproducibility](getting_started.md#reproducibility) for details how to handle random states.
 
 ## Data Variant Transformation
 
 The preprocessing operations transform datasets between different data variants:
 
-- [`Subsample`](API_references.md#omnirec.preprocess.subsample.Subsample), [`MakeImplicit`](API_references.md#omnirec.preprocess.feedback_conversion.MakeImplicit), [`CorePruning`](API_references.md#omnirec.preprocess.core_pruning.CorePruning): RawData → RawData
-- [`UserHoldout`](API_references.md#omnirec.preprocess.split.UserHoldout), [`RandomHoldout`](API_references.md#omnirec.preprocess.split.RandomHoldout): RawData → SplitData  
+- [`Subsample`](API_references.md#omnirec.preprocess.subsample.Subsample), [`MakeImplicit`](API_references.md#omnirec.preprocess.feedback_conversion.MakeImplicit), [`CorePruning`](API_references.md#omnirec.preprocess.core_pruning.CorePruning), [`TimeFilter`](API_references.md#omnirec.preprocess.filter.TimeFilter), [`RatingFilter`](API_references.md#omnirec.preprocess.filter.RatingFilter): RawData → RawData
+- [`UserHoldout`](API_references.md#omnirec.preprocess.split.UserHoldout), [`RandomHoldout`](API_references.md#omnirec.preprocess.split.RandomHoldout), [`TimeBasedHoldout`](API_references.md#omnirec.preprocess.split.TimeBasedHoldout): RawData → SplitData  
 - [`UserCrossValidation`](API_references.md#omnirec.preprocess.split.UserCrossValidation), [`RandomCrossValidation`](API_references.md#omnirec.preprocess.split.RandomCrossValidation): RawData → FoldedData
 
-**Random State** - All operations that involve randomness (sampling, splitting) use a consistent random state for reproducibility.
 
 ## Custom Preprocessing Steps
 
@@ -138,11 +239,13 @@ You can create custom preprocessing steps by inheriting from the [`Preprocessor`
 **Implementation**
 
 Custom preprocessors must:
+
 1. Inherit from [`Preprocessor[T, U]`](API_references.md#omnirec.preprocess.base.Preprocessor) where `T` is the input data variant and `U` is the output data variant
 2. Call `super().__init__()` in the constructor
 3. Implement the [`process()`](API_references.md#omnirec.preprocess.base.Preprocessor.process) method that transforms a `RecSysDataSet[T]` to `RecSysDataSet[U]`
 
 **Available Data Variants:**
+
 - `RawData`: Single DataFrame with all interactions
 - `SplitData`: Separate train, validation, and test DataFrames
 - `FoldedData`: Multiple folds for cross-validation

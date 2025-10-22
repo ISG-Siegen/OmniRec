@@ -195,7 +195,16 @@ class TimeBasedHoldout(DataSplit[RawData, SplitData]):
         validation: float | int | pd.Timestamp,
         test: float | int | pd.Timestamp,
     ) -> None:
-        # TODO: ADD METHOD DOCS
+        """Applies a time-based hold-out split on a dataset. Splits the dataset into a train, test and validation split based on the timestamp. Can either use proportions, absolute numbers or timestamps as cut-off criteria.
+
+        Args:
+            validation (float | int | pd.Timestamp): float: The proportion (between 0 and 1) of newest interactions in the dataset to include in the validation split.
+                                                    int: The absolute number of newest interactions to include in the validation split.
+                                                    pd.Timestamp: The timestamp to use as a cut-off for the validation split. Interactions after this timestamp (newer) are included in the validation split.
+            test (float | int | pd.Timestamp): float: The proportion (between 0 and 1) of newest interactions in the dataset to include in the test split.
+                                                int: The absolute number of newest interactions to include in the test split.
+                                                pd.Timestamp: The timestamp to use as a cut-off for the test split. Interactions after this timestamp (newer) are included in the test split.
+        """
         super().__init__(0)
 
         if type(validation) is not type(test):

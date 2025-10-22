@@ -160,6 +160,7 @@ run_omnirec(dataset, plan, evaluator)
 ```
 
 The framework executes every algorithm configuration in the plan, automatically managing:
+
 - Model training and prediction
 - Checkpoint storage under `./checkpoints/<dataset>/<algorithm>/`
 - Metric evaluation via the evaluator

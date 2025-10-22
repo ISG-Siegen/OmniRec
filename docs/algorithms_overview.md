@@ -38,7 +38,7 @@ Elliot provides a comprehensive framework for reproducible recommender systems e
 | Elliot.UserKNN       | Neighborhood            | Both       | User-based k-nearest neighbors                 |
 | Elliot.SlopeOne      | Slope One               | Explicit   | Slope One collaborative filtering              |
 
-### Matrix Factorization and Factorization Machines
+### Matrix Factorization
 
 | Algorithm Name       | Type                    | Feedback   | Description                                    |
 |----------------------|-------------------------|------------|------------------------------------------------|
@@ -72,8 +72,6 @@ Elliot provides a comprehensive framework for reproducible recommender systems e
 |----------------------|-------------------------|------------|------------------------------------------------|
 | Elliot.LightGCN      | Graph Neural Network    | Implicit   | Light Graph Convolutional Network               |
 | Elliot.NGCF          | Graph Neural Network    | Implicit   | Neural Graph Collaborative Filtering            |
-
-## Using Algorithms in Experiments
 
 ## RecBole Algorithms
 
@@ -161,24 +159,3 @@ plan.add_algorithm(
 
 See the [Algorithm Configuration](conf_algo.md) guide for detailed information on configuring algorithms and hyperparameters.
 
-<!-- ## Algorithm Selection Guidelines
-
-**For Explicit Feedback (ratings)**:
-- Baseline: `LensKit.PopScorer`, `RecBole.Pop`
-- Traditional: `LensKit.BiasedMFScorer`, `LensKit.FunkSVDScorer`
-- Deep Learning: `RecBole.DMF`
-- Graph-based: `RecBole.GCMC`
-
-**For Implicit Feedback (clicks, views)**:
-- Baseline: `RecBole.Pop`, `RecBole.Random`
-- Neighborhood: `LensKit.ItemKNNScorer`, `RecBole.ItemKNN`
-- Matrix Factorization: `LensKit.ImplicitMFScorer`, `RecBole.BPR`
-- Linear: `RecBole.EASE`, `RecBole.SLIMElastic`
-- Deep Learning: `RecBole.NeuMF`, `RecBole.MultiVAE`
-- Graph-based: `RecBole.LightGCN`, `RecBole.NGCF`
-
-**Performance Considerations**:
-- Fast training: Neighborhood methods, linear methods (`EASE`, `SLIM`)
-- Best accuracy: Graph neural networks (`LightGCN`, `NGCF`), deep learning methods
-- Large datasets: Linear methods, graph-based methods with mini-batching
-- Cold-start scenarios: Popularity-based methods, content-aware algorithms -->

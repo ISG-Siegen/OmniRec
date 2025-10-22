@@ -52,6 +52,20 @@
       show_root_heading: true
       show_root_toc_entry: false
 
+### Filtering
+
+::: omnirec.preprocess.filter.TimeFilter
+    options:
+      show_root_heading: true
+      show_root_toc_entry: false
+      heading_level: 4
+
+::: omnirec.preprocess.filter.RatingFilter
+    options:
+      show_root_heading: true
+      show_root_toc_entry: false
+      heading_level: 4
+
 ::: omnirec.preprocess.split.RandomCrossValidation
     options:
       show_root_heading: true
@@ -68,6 +82,11 @@
       show_root_toc_entry: false
 
 ::: omnirec.preprocess.split.UserHoldout
+    options:
+      show_root_heading: true
+      show_root_toc_entry: false
+
+::: omnirec.preprocess.split.TimeBasedHoldout
     options:
       show_root_heading: true
       show_root_toc_entry: false
