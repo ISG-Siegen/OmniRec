@@ -15,7 +15,7 @@ from omnirec.data_loaders import registry
 from omnirec.data_loaders.datasets import DataSet
 from omnirec.data_variants import DataVariant, FoldedData, RawData, SplitData
 from omnirec.util import util
-from omnirec.util.util import _DATA_DIR
+from omnirec.util.util import _DATA_DIR, series_to_unix_seconds
 
 logger = util._root_logger.getChild("data")
 
@@ -165,14 +165,22 @@ class RecSysDataSet(Generic[T]):
         if not isinstance(self._data, RawData):
             logger.error("Cannot normalize identifiers on non raw data, aborting!")
             return
-        logger.info("Normalizing timestamps...")
         if "timestamp" in self._data.df.columns:
-            self._data.df["timestamp"] = (
-                pd.to_datetime(
-                    self._data.df["timestamp"], errors="coerce", utc=True
-                ).view("int64")
-                // 10**9
-            )
+            logger.info("Normalizing timestamps...")
+            ts = self._data.df["timestamp"]
+            if pd.api.types.is_numeric_dtype(ts):
+                ts = (
+                    pd.to_datetime(ts, unit="s", errors="coerce", utc=True).view(
+                        "int64"
+                    )
+                    // 10**9
+                )
+            else:
+                ts = (
+                    pd.to_datetime(ts, errors="coerce", utc=True).view("int64") // 10**9
+                )
+            self._data.df["timestamp"] = ts
+            logger.info("Done.")
 
     def replace_data(self, new_data: R) -> "RecSysDataSet[R]":
         new = cast(RecSysDataSet[R], copy.copy(self))
