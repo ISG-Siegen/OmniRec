@@ -3,8 +3,10 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
+import torch
 from recbole.config import Config
 from recbole.data import create_dataset, data_preparation
+from recbole.data.interaction import Interaction
 from recbole.quick_start import load_data_and_model
 from recbole.trainer.trainer import Trainer
 from recbole.utils import ModelType, get_model, get_trainer, init_logger, init_seed
@@ -131,57 +133,95 @@ class RecBole(Runner):
         )
 
         self.train = pd.read_csv(self.train_file)
-        test = pd.read_csv(self.test_file)
+        self.test = pd.read_csv(self.test_file)
 
-        unique_train_users = self.train["user"].unique()
-        unique_test_users = test["user"].unique()
-        users_to_predict = np.intersect1d(unique_test_users, unique_train_users)
+        if "rating" in self.train.columns:
+            self.test["user"] = self.dataset.token2id(
+                self.dataset.uid_field, self.test["user"].astype(str).to_list()
+            )
+            self.test["item"] = self.dataset.token2id(
+                self.dataset.iid_field, self.test["item"].astype(str).to_list()
+            )
+            # self.test = self.test.dropna().astype({"user": int, "item": int})
 
-        self.uid_series = self.dataset.token2id(
-            self.dataset.uid_field, list(map(str, users_to_predict))
-        )
+            self.interactions = Interaction(
+                {
+                    self.dataset.uid_field: torch.tensor(
+                        self.test["user"].values, dtype=torch.long
+                    ),
+                    self.dataset.iid_field: torch.tensor(
+                        self.test["item"].values, dtype=torch.long
+                    ),
+                }
+            )
+        else:
+            unique_train_users = self.train["user"].unique()
+            unique_test_users = self.test["user"].unique()
+            users_to_predict = np.intersect1d(unique_test_users, unique_train_users)
 
-        self.top_k_score = []
-        self.top_k_iid_list = []
+            self.uid_series = self.dataset.token2id(
+                self.dataset.uid_field, list(map(str, users_to_predict))
+            )
+
+            self.top_k_score = []
+            self.top_k_iid_list = []
 
     def predict(self) -> dict[Any, Any]:
-        rows = []
-        for uid in self.uid_series:
-            uid_top_k_score, uid_top_k_iid_list = full_sort_topk(
-                np.array([uid]),
-                self.model,
-                self.test_data,
-                k=20,
-                device=self.config["device"],
+        if "rating" in self.train.columns:
+            self.model.eval()
+            preds: torch.Tensor = self.model.predict(self.interactions)
+
+            df_result = pd.DataFrame(
+                {
+                    "user": self.test["user"].values,
+                    "item": self.test["item"].values,
+                    "rating": preds.numpy(),
+                }
             )
-            # convert tensor to numpy array and then to list
-            items = uid_top_k_iid_list.cpu().numpy().tolist()[0]
-            scores = uid_top_k_score.cpu().numpy().tolist()[0]
+            df_result["item"] = self.dataset.id2token("item_id", df_result["item"])
+            df_result["user"] = self.dataset.id2token("user_id", df_result["user"])
+            df_result["item"] = df_result["item"].astype(int)
+            df_result["user"] = df_result["user"].astype(int)
+            return df_result.to_dict(orient="list")
 
-            for rank, (iid, score) in enumerate(zip(items, scores), start=1):
-                rows.append((uid, iid, rank, score))
+        else:
+            rows = []
+            for uid in self.uid_series:
+                uid_top_k_score, uid_top_k_iid_list = full_sort_topk(
+                    np.array([uid]),
+                    self.model,
+                    self.test_data,
+                    k=20,
+                    device=self.config["device"],
+                )
+                # convert tensor to numpy array and then to list
+                items = uid_top_k_iid_list.cpu().numpy().tolist()[0]
+                scores = uid_top_k_score.cpu().numpy().tolist()[0]
 
-        # TODO: Put stuff like this in post_predict
+                for rank, (iid, score) in enumerate(zip(items, scores), start=1):
+                    rows.append((uid, iid, rank, score))
 
-        predictions_df = pd.DataFrame(
-            rows,
-            columns=[
-                "user",
-                "item",
-                "rank",
-                "rating" if "rating" in self.train.columns else "score",
-            ],
-        )
-        print(predictions_df)
-        predictions_df["item"] = self.dataset.id2token(
-            "item_id", predictions_df["item"]
-        )
-        predictions_df["user"] = self.dataset.id2token(
-            "user_id", predictions_df["user"]
-        )
-        predictions_df["item"] = predictions_df["item"].astype(int)
-        predictions_df["user"] = predictions_df["user"].astype(int)
-        return predictions_df.to_dict(orient="list")
+            # TODO: Put stuff like this in post_predict
+
+            predictions_df = pd.DataFrame(
+                rows,
+                columns=[
+                    "user",
+                    "item",
+                    "rank",
+                    "rating" if "rating" in self.train.columns else "score",
+                ],
+            )
+
+            predictions_df["item"] = self.dataset.id2token(
+                "item_id", predictions_df["item"]
+            )
+            predictions_df["user"] = self.dataset.id2token(
+                "user_id", predictions_df["user"]
+            )
+            predictions_df["item"] = predictions_df["item"].astype(int)
+            predictions_df["user"] = predictions_df["user"].astype(int)
+            return predictions_df.to_dict(orient="list")
 
 
 if __name__ == "__main__":
