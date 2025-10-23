@@ -1,5 +1,8 @@
 # SLURM Integration
 
+!!! warning
+    The implementation of this feature is not yet finished and therefore currently unavailable. This section will be updated once the feature is complete.
+
 If you want to use a HPC cluster with SLURM to run your experiments, you can leverage the built-in SLURM integration of the framework. This allows you to distribute the execution of different algorithm configurations across multiple compute nodes managed by SLURM.
 
 ## Enabling SLURM Integration
