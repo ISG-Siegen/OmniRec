@@ -786,6 +786,10 @@
 
 
 <h1 id="slurm-integration">SLURM Integration</h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The implementation of this feature is not yet finished and therefore currently unavailable. This section will be updated once the feature is complete.</p>
+</div>
 <p>If you want to use a HPC cluster with SLURM to run your experiments, you can leverage the built-in SLURM integration of the framework. This allows you to distribute the execution of different algorithm configurations across multiple compute nodes managed by SLURM.</p>
 <h2 id="enabling-slurm-integration">Enabling SLURM Integration</h2>
 <p>To enable SLURM integration, pass the path to a SLURM script to the <a href="../API_references/#omnirec.util.run.run_omnirec"><code>run_omnirec()</code></a> function using the <code>slurm_script</code> parameter:</p>

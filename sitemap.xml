@@ -2,50 +2,50 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://omnirec.recommender-systems.com/</loc>
-         <lastmod>2025-10-22</lastmod>
+         <lastmod>2025-10-23</lastmod>
     </url>
     <url>
          <loc>https://omnirec.recommender-systems.com/API_references/</loc>
-         <lastmod>2025-10-22</lastmod>
+         <lastmod>2025-10-23</lastmod>
     </url>
     <url>
          <loc>https://omnirec.recommender-systems.com/about_us/</loc>
-         <lastmod>2025-10-22</lastmod>
+         <lastmod>2025-10-23</lastmod>
     </url>
     <url>
          <loc>https://omnirec.recommender-systems.com/algorithms_overview/</loc>
-         <lastmod>2025-10-22</lastmod>
+         <lastmod>2025-10-23</lastmod>
     </url>
     <url>
          <loc>https://omnirec.recommender-systems.com/checkpointing/</loc>
-         <lastmod>2025-10-22</lastmod>
+         <lastmod>2025-10-23</lastmod>
     </url>
     <url>
          <loc>https://omnirec.recommender-systems.com/conf_algo/</loc>
-         <lastmod>2025-10-22</lastmod>
+         <lastmod>2025-10-23</lastmod>
     </url>
     <url>
          <loc>https://omnirec.recommender-systems.com/datasets_overview/</loc>
-         <lastmod>2025-10-22</lastmod>
+         <lastmod>2025-10-23</lastmod>
     </url>
     <url>
          <loc>https://omnirec.recommender-systems.com/evaluator/</loc>
-         <lastmod>2025-10-22</lastmod>
+         <lastmod>2025-10-23</lastmod>
     </url>
     <url>
          <loc>https://omnirec.recommender-systems.com/getting_started/</loc>
-         <lastmod>2025-10-22</lastmod>
+         <lastmod>2025-10-23</lastmod>
     </url>
     <url>
          <loc>https://omnirec.recommender-systems.com/loading_datasets/</loc>
-         <lastmod>2025-10-22</lastmod>
+         <lastmod>2025-10-23</lastmod>
     </url>
     <url>
          <loc>https://omnirec.recommender-systems.com/preprocessing/</loc>
-         <lastmod>2025-10-22</lastmod>
+         <lastmod>2025-10-23</lastmod>
     </url>
     <url>
          <loc>https://omnirec.recommender-systems.com/slurm_integration/</loc>
-         <lastmod>2025-10-22</lastmod>
+         <lastmod>2025-10-23</lastmod>
     </url>
 </urlset>
