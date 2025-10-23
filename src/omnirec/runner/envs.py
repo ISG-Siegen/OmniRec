@@ -7,9 +7,7 @@ from subprocess import Popen
 from typing import Optional
 
 from omnirec.util import util
-from omnirec.util.util import _DATA_DIR
-
-_ENVS_DIR = _DATA_DIR / "envs"
+from omnirec.util.util import get_data_dir
 
 logger = util._root_logger.getChild("envs")
 
@@ -35,7 +33,7 @@ class Env:
         if path:
             self._path = Path(path)
         else:
-            self._path = _ENVS_DIR / name
+            self._path = get_data_dir() / "envs" / name
 
     def create(self):
         # TODO: Creating env shows up every time, this might be misleading

@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 from omnirec.data_loaders.base import Loader
 from omnirec.util import util
-from omnirec.util.util import _DATA_DIR, is_valid_url, verify_checksum
+from omnirec.util.util import get_data_dir, is_valid_url, verify_checksum
 
 logger = util._root_logger.getChild("registry")
 
@@ -113,7 +113,7 @@ def _run_loader(
     success = False
 
     if raw_dir is None:
-        raw_dir = _DATA_DIR / "raw" / name
+        raw_dir = get_data_dir() / "raw" / name
     raw_dir.mkdir(exist_ok=True, parents=True)
     for idx, u in enumerate(urls, 1):
         if info.download_file_name is not None:

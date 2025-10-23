@@ -15,7 +15,7 @@ from omnirec.data_loaders import registry
 from omnirec.data_loaders.datasets import DataSet
 from omnirec.data_variants import DataVariant, FoldedData, RawData, SplitData
 from omnirec.util import util
-from omnirec.util.util import _DATA_DIR
+from omnirec.util.util import get_data_dir
 
 logger = util._root_logger.getChild("data")
 
@@ -87,7 +87,7 @@ class RecSysDataSet(Generic[T]):
         if canon_path:
             dataset._meta.canon_pth = Path(canon_path)
         else:
-            canon_dir = _DATA_DIR / "canon"
+            canon_dir = get_data_dir() / "canon"
             canon_dir.mkdir(parents=True, exist_ok=True)
             dataset._meta.canon_pth = (canon_dir / data_set_name).with_suffix(".csv")
         if dataset._meta.canon_pth.exists() and not (

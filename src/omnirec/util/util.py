@@ -1,5 +1,6 @@
 import hashlib
 import logging
+import os
 from pathlib import Path
 from typing import TYPE_CHECKING
 from urllib.parse import urlparse
@@ -20,9 +21,17 @@ logging.basicConfig(
 
 _RANDOM_STATE = 42
 
-# TODO: Change path to a more accessible location
-_DATA_DIR = Path(__file__).parent.parent.parent / "data"
-_DATA_DIR.mkdir(exist_ok=True, parents=True)
+_DATA_DIR = Path(os.environ.get("OMNIREC_DATA_PATH", Path.home() / ".omnirec/data"))
+
+
+def set_data_dir(path: str | os.PathLike):
+    global _DATA_DIR
+    _DATA_DIR = Path(path)
+
+
+def get_data_dir() -> Path:
+    _DATA_DIR.mkdir(exist_ok=True, parents=True)
+    return _DATA_DIR
 
 
 def set_log_level(level: str):
