@@ -254,6 +254,9 @@ class Coordinator:
             sys.exit(1)
 
         self._evaluator = evaluator
+        self._results_path = self._checkpoint_dir / "results.json"
+        if self._results_path.exists():
+            self._evaluator.load_results(self._results_path)
 
         for current_algo, current_config_list in algorithm_configs:
             try:
@@ -360,7 +363,9 @@ class Coordinator:
                 else:
                     self.stop(logger.info)
                 # print(self._proc.returncode) # TODO: Handle bad return code?
-        return evaluator
+
+        self._evaluator.save_results(self._results_path)
+        return self._evaluator
 
     def start_runner(self, algorithm: str) -> tuple[str, str]:
         runner_name, algo_name = Coordinator.split_runner_algo(algorithm)

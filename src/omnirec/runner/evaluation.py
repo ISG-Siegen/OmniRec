@@ -1,4 +1,6 @@
+import json
 import sys
+from pathlib import Path
 from typing import Iterable, Optional
 
 import pandas as pd
@@ -123,3 +125,11 @@ class Evaluator:
             tables.append(table)
 
         return tables
+
+    def save_results(self, path: Path):
+        data = {k: v.to_dict("records") for k, v in self._results.items()}
+        path.write_text(json.dumps(data))
+
+    def load_results(self, path: Path):
+        js = json.loads(path.read_text())
+        self._results = {k: pd.DataFrame(v) for k, v in js.items()}
