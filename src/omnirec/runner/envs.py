@@ -28,7 +28,6 @@ class Env:
         if local_lib_pth.exists():
             self._packages = (str(local_lib_pth.resolve()),) + packages
         else:
-            # TODO: Change package name once we have a name
             self._packages = ("omnirec-runner",) + packages
         if path:
             self._path = Path(path)
@@ -38,11 +37,15 @@ class Env:
     def create(self):
         # TODO: Creating env shows up every time, this might be misleading
         logger.info(f"Creating env '{self._name}' at {self._path}")
-        proc = self._run(["uv", "venv", "-p", self._python_version, self._path])
+        proc = self._run(
+            ["uv", "venv", "-p", self._python_version, self._path.resolve()]
+        )
         self._handle_proc(proc)
 
         logger.info("Installing packages...")
-        proc = self._run(["uv", "pip", "install", "-p", self.py_path, *self._packages])
+        proc = self._run(
+            ["uv", "pip", "install", "-p", self.py_path.resolve(), *self._packages]
+        )
         self._handle_proc(proc)
 
         logger.info("Done.")

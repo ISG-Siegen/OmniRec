@@ -9,6 +9,7 @@ from pathlib import Path
 from threading import Event, Thread
 from typing import IO, Any, Iterable, Optional, TypeVar
 
+import omnirec_runner
 import pandas as pd
 import rpyc
 from omnirec_runner.runner import RunnerInfo, RunnerService
@@ -77,11 +78,7 @@ class Coordinator:
             self._tmp_dir_obj.cleanup()
 
     def _register_default_runners(self):
-        # HACK: This may cause issues once the packages are not in workspace but packaged
-        runner_dir = (
-            Path(__file__).parent.parent.parent.parent
-            / "packages/omnirec_runner/src/omnirec_runner"
-        )
+        runner_dir = Path(omnirec_runner.__file__).parent.resolve()
 
         # TODO: Add other runner:
         # TODO: Maybe move this to a config file or smth and dont hard code
