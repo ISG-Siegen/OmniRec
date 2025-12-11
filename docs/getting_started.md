@@ -164,6 +164,7 @@ from omnirec.preprocess.split import UserHoldout
 from omnirec.runner.plan import ExperimentPlan
 from omnirec.runner.algos import LensKit, RecBole
 from omnirec.runner.evaluation import Evaluator
+from omnirec import NDCG, HR
 from omnirec.util.run import run_omnirec
 
 # Load and preprocess dataset
