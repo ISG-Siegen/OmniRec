@@ -18,14 +18,13 @@ class Behance(Loader):
 
     @staticmethod
     def load(source_dir: Path, name: str) -> DataFrame:
-        raise NotImplementedError(
-            "Download file of behance seems to be corrupt currently."
-        )
         df = pd.read_csv(
             source_dir / "Behance_appreciate_1M.gz",
             header=None,
             sep=" ",
             names=["user", "item", "timestamp"],
+            # The file seems to be not compressed even though it has .gz suffix:
+            compression=None,
         )
 
         df["rating"] = 1
