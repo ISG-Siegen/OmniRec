@@ -38,13 +38,13 @@ class Env:
         # TODO: Creating env shows up every time, this might be misleading
         logger.info(f"Creating env '{self._name}' at {self._path}")
         proc = self._run(
-            ["uv", "venv", "-p", self._python_version, self._path.resolve()]
+            ["uv", "venv", "-p", self._python_version, self._path.absolute()]
         )
         self._handle_proc(proc)
 
         logger.info("Installing packages...")
         proc = self._run(
-            ["uv", "pip", "install", "-p", self.py_path.resolve(), *self._packages]
+            ["uv", "pip", "install", "-p", self.py_path.absolute(), *self._packages]
         )
         self._handle_proc(proc)
 
