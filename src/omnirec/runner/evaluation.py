@@ -69,6 +69,23 @@ class Evaluator:
         else:
             self._results[dataset] = pd.concat((old_df, new_df))
 
+    def get_results(self) -> dict[str, DataFrame]:
+        """Return evaluation results grouped by dataset.
+
+        Returns:
+            dict[str, DataFrame]:
+                Mapping of dataset identifiers to their result tables. Keys are dataset
+                names with a unique hash appended. Each value is a DataFrame containing
+                the columns:
+
+                - "algorithm": algorithm identifier (name with config hash appended)
+                - "fold": cross-validation fold index, or None if not using CV
+                - "name": metric name
+                - "k": cutoff for ranking metrics (e.g., NDCG@k), or None for non-ranking metrics (e.g., RMSE)
+                - "value": metric value
+        """
+        return self._results
+
     def get_tables(self) -> list[Table]:
         tables: list[Table] = []
 
