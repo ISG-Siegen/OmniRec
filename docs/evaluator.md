@@ -1,4 +1,4 @@
-# Evaluation Metrics
+# Evaluation
 
 This section explains how to configure and use metrics to evaluate recommendation algorithms. The evaluation system provides a flexible approach to compute various metrics after model predictions, supporting both explicit and implicit feedback scenarios.
 
@@ -93,6 +93,32 @@ run_omnirec(dataset, plan, evaluator)
 All metric computations happen automatically without additional code. Ensure your metrics match your data type: ranking metrics (NDCG, HR, Recall) for implicit feedback, and prediction metrics (RMSE, MAE) for explicit feedback.
 
 Additionally, metric results are logged during execution and stored in checkpoint directories alongside model predictions.
+
+## Accessing Evaluation Results
+
+After an experiment finishes, you can access all computed metrics programmatically using `Evaluator.get_results()`:
+
+```python
+results = evaluator.get_results()
+
+for dataset_id, df in results.items():
+    print(dataset_id)
+    print(df.head())
+```
+
+`get_results()` returns a dictionary mapping dataset identifiers (dataset name + hash) to pandas DataFrames containing the evaluation results.
+
+Each DataFrame has the following structure:
+
+| Column     | Description |
+|------------|-------------|
+| algorithm  | Algorithm identifier (name + config hash) |
+| fold       | Cross-validation fold index, or `None` if no CV was used |
+| name       | Metric name |
+| k          | Cutoff for ranking metrics (e.g. NDCG@k), or `None` for non-ranking metrics (e.g. RMSE) |
+| value      | Computed metric value |
+
+This format makes it easy to filter, aggregate, or export results for further analysis.
 
 ## Custom Metrics
 

@@ -12,7 +12,7 @@ nav:
       - Preprocessing Pipeline: preprocessing.md
       - Configure Algorithms: conf_algo.md
       - Algorithms Overview: algorithms_overview.md
-      - Evaluator: evaluator.md
+      - Evaluation: evaluator.md
       - Checkpointing and Results: checkpointing.md
       - SLURM Integration: slurm_integration.md
   - API Reference: API_references.md
