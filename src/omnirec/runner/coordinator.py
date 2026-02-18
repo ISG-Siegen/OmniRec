@@ -138,6 +138,7 @@ class Coordinator:
                 ],
                 "3.11",
                 [
+                    "setuptools<82",
                     "recbole==1.2.1",
                     "numpy==1.26.4",
                     "torch==2.5.1",
