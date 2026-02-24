@@ -9,10 +9,9 @@ from pathlib import Path
 from threading import Event, Thread
 from typing import IO, Any, Iterable, Optional, TypeVar
 
-import omnirec_runner
 import pandas as pd
 import rpyc
-from omnirec_runner.runner import RunnerInfo, RunnerService
+from omnirec_runner.runner import RunnerService
 
 from omnirec.data_variants import DataVariant, FoldedData, SplitData
 from omnirec.recsys_data_set import RecSysDataSet
@@ -20,14 +19,12 @@ from omnirec.runner.envs import Env
 from omnirec.runner.evaluation import Evaluator
 from omnirec.runner.plan import ExperimentPlan
 from omnirec.runner.progress import Phase, RunProgress
+from omnirec.runner.registry import _RUNNER_REGISTRY
 from omnirec.util import util
 from omnirec.util.cert import Side, ensure_certs, get_cert_pth, get_key_pth
 
 logger = util._root_logger.getChild("coordinator")
 runner_logger = util._root_logger.getChild("runner")
-
-
-_RUNNER_REGISTRY: dict[str, RunnerInfo] = {}
 
 
 # TODO (Python 3.12+): Replace TypeVar with inline generic syntax `class Box[T](...)`
@@ -70,138 +67,11 @@ class Coordinator:
         self._out_reader: Optional[OutputReader] = None
         self._err_reader: Optional[OutputReader] = None
 
-        self._register_default_runners()
         ensure_certs()
 
     def __del__(self):
         if self._tmp_dir_obj:
             self._tmp_dir_obj.cleanup()
-
-    def _register_default_runners(self):
-        runner_dir = Path(omnirec_runner.__file__).parent.resolve()
-
-        # TODO: Add other runner:
-        # TODO: Maybe move this to a config file or smth and dont hard code
-        self.register_runner(
-            "LensKit",
-            RunnerInfo(
-                runner_dir / "lenskit_runner.py",
-                [
-                    "PopScorer",
-                    "ItemKNNScorer",
-                    "UserKNNScorer",
-                    "ImplicitMFScorer",
-                    "BiasedMFScorer",
-                    "FunkSVDScorer",
-                ],
-                "3.11",
-                ["lenskit==2025.2.0", "binpickle", "numba"],
-            ),
-        )
-
-        self.register_runner(
-            "RecBole",
-            RunnerInfo(
-                runner_dir / "recbole_runner.py",
-                [
-                    "Pop",
-                    "ItemKNN",
-                    "BPR",
-                    "NeuMF",
-                    "ConvNCF",
-                    "DMF",
-                    "FISM",
-                    "NAIS",
-                    "SpectralCF",
-                    "GCMC",
-                    "NGCF",
-                    "LightGCN",
-                    "DGCF",
-                    "LINE",
-                    "MultiVAE",
-                    "MultiDAE",
-                    "MacridVAE",
-                    "CDAE",
-                    "ENMF",
-                    "NNCF",
-                    "RecVAE",
-                    "EASE",
-                    "SLIMElastic",
-                    "SGL",
-                    "ADMMSLIM",
-                    "NCEPLRec",
-                    "SimpleX",
-                    "NCL",
-                    "Random",
-                    "DiffRec",
-                    "LDiffRec",
-                ],
-                "3.11",
-                [
-                    "setuptools<82",
-                    "recbole==1.2.1",
-                    "numpy==1.26.4",
-                    "torch==2.5.1",
-                ],
-            ),
-        )
-
-        self.register_runner(
-            "RecPack",
-            RunnerInfo(
-                runner_dir / "recpack_runner.py",
-                ["SVD", "NMF", "ItemKNN"],
-                "3.12",
-                ["recpack==0.3.6"],
-            ),
-        )
-        self.register_runner(
-            "Elliot",
-            RunnerInfo(
-                runner_dir / "elliot_runner.py",
-                [
-                    "ItemKNN",
-                    "UserKNN",
-                    "AMF",
-                    "SlopeOne",
-                    "MultiDAE",
-                    "MultiVAE",
-                    "LightGCN",
-                    "NGCF",
-                    "MostPop",
-                    "BPRMF",
-                    "BPRMF_batch",
-                    "FM",
-                    "FunkSVD",
-                    "NonNegMF",
-                    "PureSVD",
-                    "SVDpp",
-                    "WRMF",
-                    "ConvMF",
-                    "DeepFM",
-                    "DMF",
-                    "GMF",
-                    "ItemAutoRec",
-                    "NeuMF",
-                    "UserAutoRec",
-                ],
-                "3.8",
-                [
-                    # patched elliot version
-                    "git+https://github.com/moritz-baumgart/elliot.git",
-                ],
-            ),
-        )
-
-    def register_runner(self, name: str, info: RunnerInfo):
-        if name in _RUNNER_REGISTRY:
-            logger.critical(
-                f"A runner with the name {name} is already registered. Choose a different one!"
-            )
-            sys.exit(1)
-
-        _RUNNER_REGISTRY[name] = info
-        logger.debug(f"Runner {name} registered")
 
     def run(
         self,
