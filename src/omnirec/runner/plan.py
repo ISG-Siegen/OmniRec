@@ -3,11 +3,12 @@ import sys
 from typing import Any, Optional, TypeAlias
 
 from omnirec.runner.algos import Algorithms
+from omnirec.runner.plan_components import PlanComponentBase
 from omnirec.util import util
 
 logger = util._root_logger.getChild("config")
 
-AlgorithmConfig: TypeAlias = dict[str, Any | list[Any]]
+AlgorithmConfig: TypeAlias = dict[str, Any | PlanComponentBase[Any]]
 
 
 class ExperimentPlan:
@@ -39,7 +40,7 @@ class ExperimentPlan:
 
             # Add algorithm with configuration to the plan
             plan.add_algorithm(Algorithms.ItemKNNScorer, lenskit_itemknn)
-            ```    
+            ```
         """
         if isinstance(algorithm, Algorithms):
             algorithm_name = algorithm.value
@@ -72,20 +73,23 @@ class ExperimentPlan:
         return self._config.get(algorithm_name, {})
 
     def _get_configs(self) -> list[tuple[str, list[dict[str, object]]]]:
-        return [
-            (
-                algorithm,
-                [
-                    dict(zip(config.keys(), v))
-                    for v in itertools.product(
-                        *map(
-                            lambda x: x if isinstance(x, list) else [x], config.values()
-                        )
-                    )
-                ],
-            )
-            for algorithm, config in self._config.items()
-        ]
+        results = []
+
+        for algorithm, config in self._config.items():
+            processed_config = {
+                k: v.get_values() if isinstance(v, PlanComponentBase) else [v]
+                for k, v in config.items()
+            }
+
+            keys = processed_config.keys()
+            combinations = [
+                dict(zip(keys, combo))
+                for combo in itertools.product(*processed_config.values())
+            ]
+
+            results.append((algorithm, combinations))
+
+        return results
 
     @property
     def plan_name(self):
