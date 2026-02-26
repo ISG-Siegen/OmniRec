@@ -605,7 +605,7 @@
   
   
   <span class="md-ellipsis">
-    Evaluator
+    Evaluation
     
   </span>
   
@@ -849,11 +849,13 @@
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># Second run - automatically resumes from last checkpoint</span>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">run_omnirec</span><span class="p">(</span><span class="n">datasets</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">plan</span><span class="o">=</span><span class="n">plan</span><span class="p">,</span> <span class="n">evaluator</span><span class="o">=</span><span class="n">evaluator</span><span class="p">)</span>
 </span></code></pre></div>
-<p>The framework automatically:
-1. Loads the progress tracker from <code>progress.json</code>
-2. Skips completed phases (Fit, Predict, Eval)
-3. Continues from the last incomplete phase
-4. Reuses existing predictions instead of retraining</p>
+<p>The framework automatically:</p>
+<ol>
+<li>Loads the progress tracker from <code>progress.json</code></li>
+<li>Skips completed phases (Fit, Predict, Eval)</li>
+<li>Continues from the last incomplete phase</li>
+<li>Reuses existing predictions instead of retraining</li>
+</ol>
 <p><strong>Progress Phases</strong></p>
 <p>Each experiment goes through four phases:</p>
 <ol>

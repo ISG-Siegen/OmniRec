@@ -722,7 +722,7 @@
   
   
   <span class="md-ellipsis">
-    Evaluator
+    Evaluation
     
   </span>
   
@@ -864,12 +864,14 @@
 </span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="n">canon_path</span><span class="o">=</span><span class="s2">&quot;/path/to/canonicalized/data.csv&quot;</span>
 </span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="p">)</span>
 </span></code></pre></div>
-<p>The data loading process includes:
-1. <strong>Download</strong>: Raw data is downloaded if not already present
-2. <strong>Canonicalization</strong>: Data is cleaned and standardized:
-   - Duplicate interactions are removed (keeping the latest)
-   - User and item identifiers are normalized to consecutive integers
-   - Data is saved in a standardized CSV format</p>
+<p>The data loading process includes:</p>
+<ol>
+<li><strong>Download</strong>: Raw data is downloaded if not already present</li>
+<li><strong>Canonicalization</strong>: Data is cleaned and standardized:</li>
+<li>Duplicate interactions are removed (keeping the latest)</li>
+<li>User and item identifiers are normalized to consecutive integers</li>
+<li>Data is saved in a standardized CSV format</li>
+</ol>
 <h3 id="dataset-statistics">Dataset Statistics</h3>
 <p>You can get basic statistics about loaded datasets:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Get number of interactions</span>
