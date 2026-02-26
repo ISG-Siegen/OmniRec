@@ -87,6 +87,25 @@ class Evaluator:
         return self._results
 
     def get_tables(self) -> list[Table]:
+        """Return evaluation results as formatted Rich tables, one per dataset.
+
+        Each table has one row per algorithm (and per fold when cross-validation is used)
+        and one column per metric+k combination (e.g. ``NDCG@10``). The tables are
+        automatically printed to the console by :func:`~omnirec.util.run.run_omnirec`
+        after all experiments complete, so you only need to call this method directly
+        if you want to redisplay results (e.g. after :meth:`load_results`).
+
+        Returns:
+            list[rich.table.Table]: One Rich ``Table`` per dataset.
+
+        Example:
+            ```python
+            from rich.console import Console
+            console = Console()
+            for table in evaluator.get_tables():
+                console.print(table)
+            ```
+        """
         tables: list[Table] = []
 
         for dataset, results_df in self._results.items():
@@ -144,9 +163,49 @@ class Evaluator:
         return tables
 
     def save_results(self, path: Path):
+        """Persist evaluation results to a JSON file.
+
+        Serialises the internal results dictionary to JSON so that results can be
+        reloaded later with :meth:`load_results` without re-running experiments.
+
+        Args:
+            path (Path): Destination file path. The file is created or overwritten.
+
+        Example:
+            ```python
+            from pathlib import Path
+            evaluator.save_results(Path("results/my_experiment.json"))
+            ```
+        """
         data = {k: v.to_dict("records") for k, v in self._results.items()}
         path.write_text(json.dumps(data))
 
     def load_results(self, path: Path):
+        """Load previously saved evaluation results from a JSON file.
+
+        Restores results that were written by :meth:`save_results`. After loading,
+        :meth:`get_results` and :meth:`get_tables` work as if the experiments had
+        just finished.
+
+        Args:
+            path (Path): Path to a JSON file previously written by :meth:`save_results`.
+
+        Example:
+            ```python
+            from pathlib import Path
+            from rich.console import Console
+
+            evaluator.load_results(Path("results/my_experiment.json"))
+
+            # Inspect raw DataFrames
+            for dataset_id, df in evaluator.get_results().items():
+                print(df)
+
+            # Or redisplay the formatted tables
+            console = Console()
+            for table in evaluator.get_tables():
+                console.print(table)
+            ```
+        """
         js = json.loads(path.read_text())
         self._results = {k: pd.DataFrame(v) for k, v in js.items()}

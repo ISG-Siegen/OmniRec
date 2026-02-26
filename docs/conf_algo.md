@@ -51,29 +51,36 @@ plan.add_algorithm(
 **Parameters:**
 
 - `algorithm` (str | Enum): Algorithm identifier in format `<Runner>.<Algorithm>`
-- `hyperparameters` (dict): Dictionary of hyperparameter names and values
-  - Single values: Parameter is fixed across all runs
-  - Lists: Parameter values for grid search (creates multiple runs)
+- `algorithm_config` (dict): Dictionary of hyperparameter names and values. Each value can be either a plain value or a plan component instance that controls how hyperparameter combinations are generated:
+  - Plain values: Parameter is fixed across all runs
+  - [`Grid(values)`](API_references.md#omnirec.runner.plan_components.Grid): Enumerate all provided values (exhaustive grid search)
+  - [`RandomChoice(choices, n)`](API_references.md#omnirec.runner.plan_components.RandomChoice): Randomly sample `n` items from a discrete list
+  - [`RandomRange(start, end, n)`](API_references.md#omnirec.runner.plan_components.RandomRange): Randomly sample `n` values from a numeric range (supports both `int` and `float`)
 
 
 **Hyperparameter Reference:**
 
 Hyperparameter names and default values are defined by each algorithm's original library implementation. The framework passes your hyperparameter dictionary directly to the underlying algorithm, so refer to the respective library documentation for available parameters and their expected formats.
 
-### Hyperparameter Grid Search
+### Hyperparameter Search Strategies
 
-Provide lists of values for any hyperparameter to automatically generate a grid search. The framework creates separate runs for every combination:
+Wrap hyperparameter values in a plan component subclass to control how combinations are generated. Import the strategies from `omnirec.runner.plan_components`:
+
+#### Grid Search
+
+[`Grid(values)`](API_references.md#omnirec.runner.plan_components.Grid) enumerates all provided values. The framework creates separate runs for every combination across all `Grid` parameters:
 
 ```python
 from omnirec.runner.algos import LensKit
+from omnirec.runner.plan_components import Grid
 
-# Grid search with multiple parameter values
+# Grid search over multiple parameter values
 plan.add_algorithm(
     LensKit.ItemKNNScorer,
     {
-        "max_nbrs": [20, 40],      # Two values
-        "min_nbrs": 5,             # Fixed value
-        "center": [True, False]    # Two values
+        "max_nbrs": Grid([20, 40]),      # Two values
+        "min_nbrs": 5,                   # Fixed value
+        "center": Grid([True, False])    # Two values
     }
 )
 ```
@@ -85,18 +92,53 @@ This configuration generates four separate runs (2 × 2 combinations):
 - `max_nbrs=40, min_nbrs=5, center=True`
 - `max_nbrs=40, min_nbrs=5, center=False`
 
+#### Random Search
+
+For large hyperparameter spaces, use random sampling instead of exhaustive grid search:
+
+[`RandomChoice(choices, n)`](API_references.md#omnirec.runner.plan_components.RandomChoice) randomly samples `n` items from a discrete list:
+
+```python
+from omnirec.runner.plan_components import RandomChoice
+
+plan.add_algorithm(
+    LensKit.ItemKNNScorer,
+    {
+        "max_nbrs": RandomChoice([10, 20, 40, 80, 160], n=3),  # Pick 3 at random
+        "min_nbrs": 5,
+    }
+)
+```
+
+[`RandomRange(start, end, n)`](API_references.md#omnirec.runner.plan_components.RandomRange) randomly samples `n` values from a continuous or integer range:
+
+```python
+from omnirec.runner.plan_components import RandomRange
+
+plan.add_algorithm(
+    RecBole.LightGCN,
+    {
+        "learning_rate": RandomRange(0.0001, 0.01, n=4),   # 4 random floats
+        "embedding_size": RandomRange(32, 128, n=3),        # 3 random ints
+    }
+)
+```
+
+The random seed is derived from the global OmniRec random state, ensuring reproducibility.
+
 ### Multiple Algorithms
 
 Combine multiple algorithms from different runners in the same experiment plan:
 
 ```python
 from omnirec.runner.algos import LensKit, RecBole
+from omnirec.runner.plan_components import Grid
 
 # Add LensKit algorithm
 plan.add_algorithm(
     LensKit.ItemKNNScorer,
     {
-        "max_nbrs": [20, 40],
+        "max_nbrs": Grid([20, 40]),
         "min_nbrs": 5,
     }
 )
@@ -105,7 +147,7 @@ plan.add_algorithm(
 plan.add_algorithm(
     RecBole.LightGCN,
     {
-        "learning_rate": [0.001, 0.005],
+        "learning_rate": Grid([0.001, 0.005]),
         "embedding_size": 64,
     }
 )
@@ -118,12 +160,14 @@ Each call to [`add_algorithm`](API_references.md#omnirec.runner.plan.ExperimentP
 Modify existing algorithm configurations using the [`update_algorithm`](API_references.md#omnirec.runner.plan.ExperimentPlan.update_algorithm) method:
 
 ```python
+from omnirec.runner.plan_components import Grid
+
 # Update previously added algorithm
 plan.update_algorithm(
     LensKit.ItemKNNScorer,
     {
-        "max_nbrs": [20, 40, 60],  # Add third value
-        "min_sim": 0.01            # Add new parameter
+        "max_nbrs": Grid([20, 40, 60]),  # Add third value
+        "min_sim": 0.01                  # Add new parameter (fixed)
     }
 )
 ```
@@ -190,6 +234,7 @@ from omnirec import RecSysDataSet
 from omnirec.data_loaders.datasets import DataSet
 from omnirec.runner.plan import ExperimentPlan
 from omnirec.runner.algos import LensKit, RecBole
+from omnirec.runner.plan_components import Grid
 from omnirec.runner.evaluation import Evaluator
 from omnirec.metrics.ranking import NDCG, Recall
 from omnirec.preprocess.pipe import Pipe
@@ -214,7 +259,7 @@ plan = ExperimentPlan("Comparison-Study")
 plan.add_algorithm(
     LensKit.ItemKNNScorer,
     {
-        "max_nbrs": [20, 40],
+        "max_nbrs": Grid([20, 40]),
         "min_nbrs": 5,
         "feedback": "implicit"  # Specify implicit feedback mode
     }
@@ -223,8 +268,8 @@ plan.add_algorithm(
 plan.add_algorithm(
     RecBole.LightGCN,
     {
-        "learning_rate": [0.001, 0.005],
-        "embedding_size": [32, 64],
+        "learning_rate": Grid([0.001, 0.005]),
+        "embedding_size": Grid([32, 64]),
         "n_layers": 3
     }
 )

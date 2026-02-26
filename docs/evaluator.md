@@ -92,11 +92,11 @@ run_omnirec(dataset, plan, evaluator)
 
 All metric computations happen automatically without additional code. Ensure your metrics match your data type: ranking metrics (NDCG, HR, Recall) for implicit feedback, and prediction metrics (RMSE, MAE) for explicit feedback.
 
-Additionally, metric results are logged during execution and stored in checkpoint directories alongside model predictions.
+After all experiments complete, `run_omnirec` automatically prints a formatted results table to the console — one table per dataset — using [`get_tables()`](API_references.md#omnirec.runner.evaluation.Evaluator.get_tables). No extra code is required to see the results.
 
 ## Accessing Evaluation Results
 
-After an experiment finishes, you can access all computed metrics programmatically using `Evaluator.get_results()`:
+After an experiment finishes, you can access all computed metrics programmatically using [`get_results()`](API_references.md#omnirec.runner.evaluation.Evaluator.get_results):
 
 ```python
 results = evaluator.get_results()
@@ -106,7 +106,7 @@ for dataset_id, df in results.items():
     print(df.head())
 ```
 
-`get_results()` returns a dictionary mapping dataset identifiers (dataset name + hash) to pandas DataFrames containing the evaluation results.
+[`get_results()`](API_references.md#omnirec.runner.evaluation.Evaluator.get_results) returns a dictionary mapping dataset identifiers (dataset name + hash) to pandas DataFrames containing the evaluation results.
 
 Each DataFrame has the following structure:
 
@@ -118,7 +118,62 @@ Each DataFrame has the following structure:
 | k          | Cutoff for ranking metrics (e.g. NDCG@k), or `None` for non-ranking metrics (e.g. RMSE) |
 | value      | Computed metric value |
 
+For example, running `ItemKNNScorer` and `BPR` with `NDCG([10, 20])` and `Recall([10, 20])` produces a DataFrame like:
+
+```
+                            algorithm  fold    name     k     value
+0   LensKit.ItemKNNScorer-3f2a1c8e    None    NDCG    10    0.1823
+1   LensKit.ItemKNNScorer-3f2a1c8e    None    NDCG    20    0.2104
+2   LensKit.ItemKNNScorer-3f2a1c8e    None  Recall    10    0.1541
+3   LensKit.ItemKNNScorer-3f2a1c8e    None  Recall    20    0.2367
+4           RecBole.BPR-7d4b9f21      None    NDCG    10    0.1654
+5           RecBole.BPR-7d4b9f21      None    NDCG    20    0.1978
+6           RecBole.BPR-7d4b9f21      None  Recall    10    0.1392
+7           RecBole.BPR-7d4b9f21      None  Recall    20    0.2214
+```
+
+When using cross-validation, the `fold` column contains the fold index (0-based) instead of `None`. Each metric+k combination produces one row per algorithm per fold, so you can group or aggregate across folds as needed:
+
+```python
+# Average metric values across folds
+for dataset_id, df in evaluator.get_results().items():
+    mean_df = df.groupby(["algorithm", "name", "k"])["value"].mean().reset_index()
+    print(mean_df)
+```
+
 This format makes it easy to filter, aggregate, or export results for further analysis.
+
+## Saving and Loading Results
+
+Use [`save_results()`](API_references.md#omnirec.runner.evaluation.Evaluator.save_results) to persist evaluation results to a JSON file after a run, and [`load_results()`](API_references.md#omnirec.runner.evaluation.Evaluator.load_results) to restore them later without re-running experiments:
+
+```python
+from pathlib import Path
+
+# Save after running experiments
+run_omnirec(dataset, plan, evaluator)
+evaluator.save_results(Path("results/my_experiment.json"))
+```
+
+```python
+from pathlib import Path
+from rich.console import Console
+
+# Reload in a later session
+evaluator = Evaluator(NDCG([10]), Recall([10]))
+evaluator.load_results(Path("results/my_experiment.json"))
+
+# Inspect raw DataFrames
+for dataset_id, df in evaluator.get_results().items():
+    print(df)
+
+# Or redisplay the formatted console tables
+console = Console()
+for table in evaluator.get_tables():
+    console.print(table)
+```
+
+[`get_tables()`](API_references.md#omnirec.runner.evaluation.Evaluator.get_tables) returns a list of [Rich](https://github.com/Textualize/rich) `Table` objects — one per dataset — with algorithms as rows and metric–k combinations (e.g. `NDCG@10`) as columns. This is the same output that `run_omnirec` prints automatically; calling it directly is useful when reloading saved results.
 
 ## Custom Metrics
 

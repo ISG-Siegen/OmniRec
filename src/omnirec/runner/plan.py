@@ -27,16 +27,36 @@ class ExperimentPlan:
 
         Args:
             algorithm (Algorithms | str): The algorithm to add.
-            algorithm_config (Optional[AlgorithmConfig], optional): The configuration for the algorithm. Algorithm config depends of the origin library of the algorithm. We refer to their documentation for details about the algorithm hyperparameters.
-            force (bool, optional): Whether to forcefully overwrite an existing algorithm config. Defaults to False.
+            algorithm_config (Optional[AlgorithmConfig], optional): The configuration for the
+                algorithm. Each value in the config dict can be either a plain value or a
+                `PlanComponentBase` instance that controls how hyperparameter combinations are
+                generated:
+
+                - `Grid(values)`: Enumerate all provided values (grid search).
+                - `RandomChoice(choices, n)`: Randomly sample `n` items from a discrete list.
+                - `RandomRange(start, end, n)`: Randomly sample `n` values from a numeric range.
+
+                Plain (non-`PlanComponentBase`) values are treated as fixed and used as-is in
+                every combination. Algorithm config keys depend on the origin library of the
+                algorithm; refer to its documentation for available hyperparameters.
+            force (bool, optional): Whether to forcefully overwrite an existing algorithm config.
+                Defaults to False.
 
         Example:
             ```Python
+            from omnirec.runner.plan import ExperimentPlan
+            from omnirec.runner.plan_components import Grid, RandomChoice, RandomRange
+
             # Create a new experiment plan
             plan = ExperimentPlan(plan_name="Example Plan")
 
-            # Define algorithm configuration based on the lenskit ItemKNNScorer parameters
-            lenskit_itemknn = {"max_nbrs": [10, 20], "min_nbrs": 5, "feedback": "implicit"}
+            # Define algorithm configuration based on the lenskit ItemKNNScorer parameters.
+            # Grid expands [10, 20] into separate combinations; min_nbrs and feedback are fixed.
+            lenskit_itemknn = {
+                "max_nbrs": Grid([10, 20]),
+                "min_nbrs": 5,
+                "feedback": "implicit",
+            }
 
             # Add algorithm with configuration to the plan
             plan.add_algorithm(Algorithms.ItemKNNScorer, lenskit_itemknn)

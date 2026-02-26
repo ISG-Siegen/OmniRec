@@ -47,6 +47,7 @@ dataset = RecSysDataSet.use_dataloader(
 ```
 
 The data loading process includes:
+
 1. **Download**: Raw data is downloaded if not already present
 2. **Canonicalization**: Data is cleaned and standardized:
    - Duplicate interactions are removed (keeping the latest)

@@ -51,6 +51,7 @@ run_omnirec(datasets=dataset, plan=plan, evaluator=evaluator)
 ```
 
 The framework automatically:
+
 1. Loads the progress tracker from `progress.json`
 2. Skips completed phases (Fit, Predict, Eval)
 3. Continues from the last incomplete phase

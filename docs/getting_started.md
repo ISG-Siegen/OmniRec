@@ -66,6 +66,7 @@ To run experiments, you need to create an [`ExperimentPlan`](API_references.md#o
 ```python
 from omnirec.runner.plan import ExperimentPlan
 from omnirec.runner.algos import LensKit, RecBole
+from omnirec.runner.plan_components import Grid
 
 # Create a new experiment plan
 plan = ExperimentPlan(plan_name="My First Experiment")
@@ -74,14 +75,14 @@ plan = ExperimentPlan(plan_name="My First Experiment")
 # For LensKit ItemKNN with different neighborhood sizes
 plan.add_algorithm(
     LensKit.ItemKNNScorer,
-    {"max_nbrs": [10, 20, 30], "min_nbrs": 5}
+    {"max_nbrs": Grid([10, 20, 30]), "min_nbrs": 5}
 )
 
 # Add RecBole BPR algorithm with default parameters
 plan.add_algorithm(RecBole.BPR)
 ```
 
-When you provide a list of values for a hyperparameter (like `[10, 20, 30]` for `max_nbrs`), the framework will run separate experiments for each value.
+When you wrap values in [`Grid`](API_references.md#omnirec.runner.plan_components.Grid) (like `Grid([10, 20, 30])` for `max_nbrs`), the framework will run separate experiments for each value. Plain values are used as-is in every run.
 
 You can find more information about the available algorithms and how to use them with OmniRec in the [Algorithms Overview](algorithms_overview.md) and [Configure Algorithms](conf_algo.md) documentation.
 
@@ -163,6 +164,7 @@ from omnirec.preprocess.core_pruning import CorePruning
 from omnirec.preprocess.split import UserHoldout
 from omnirec.runner.plan import ExperimentPlan
 from omnirec.runner.algos import LensKit, RecBole
+from omnirec.runner.plan_components import Grid
 from omnirec.runner.evaluation import Evaluator
 from omnirec import NDCG, HR
 from omnirec.util.run import run_omnirec
@@ -179,7 +181,7 @@ dataset = pipeline.process(dataset)
 
 # Configure experiments
 plan = ExperimentPlan(plan_name="MovieLens Comparison")
-plan.add_algorithm(LensKit.ItemKNNScorer, {"max_nbrs": [20, 30]})
+plan.add_algorithm(LensKit.ItemKNNScorer, {"max_nbrs": Grid([20, 30])})
 plan.add_algorithm(RecBole.BPR)
 
 # Set up evaluation
