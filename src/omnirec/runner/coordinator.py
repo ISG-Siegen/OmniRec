@@ -143,7 +143,7 @@ class Coordinator:
                 for current_dataset in datasets:
                     for current_config in current_config_list:
                         dataset_namehash = f"{current_dataset._meta.name}-{self.dataset_hash(current_dataset)[:8]}"
-                        config_namehash = f"{current_algo}-{self.config_hash(current_algo, current_config)[:8]}"
+                        config_namehash = f"{current_algo}-{self.config_hash(current_algo, current_config)[:8]}-{util.get_random_state()}"
                         current_checkpoint_dir = (
                             self._checkpoint_dir / dataset_namehash / config_namehash
                         )
