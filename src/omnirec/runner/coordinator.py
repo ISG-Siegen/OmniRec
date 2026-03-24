@@ -158,7 +158,8 @@ class Coordinator:
                         logger.debug(f"Using tmp dir: {current_tmp_dir}")
 
                         progress = RunProgress.load_or_create(
-                            self._checkpoint_dir, (dataset_namehash, config_namehash)
+                            self._checkpoint_dir,
+                            (dataset_namehash, config_namehash, current_config),
                         )
 
                         if isinstance(current_dataset._data, FoldedData):

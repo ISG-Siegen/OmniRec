@@ -20,6 +20,7 @@ class Phase(IntEnum):
 class _Job(BaseModel):
     next_phase: Phase = Phase.Fit
     next_fold: Optional[int] = None
+    config: dict[str, object]
 
 
 class _RunProgress(BaseModel):
@@ -36,7 +37,9 @@ class RunProgress:
 
     @classmethod
     def load_or_create(
-        cls, checkpoint_dir: Path, add_job: Optional[tuple[str, str]] = None
+        cls,
+        checkpoint_dir: Path,
+        add_job: Optional[tuple[str, str, dict[str, object]]] = None,
     ) -> Self:
         progress_path = checkpoint_dir / "progress.json"
         if progress_path.exists():
@@ -54,9 +57,14 @@ class RunProgress:
         c.save()
         return c
 
-    def add_job(self, dataset_namehash: str, config_namehash: str) -> None:
+    def add_job(
+        self,
+        dataset_namehash: str,
+        config_namehash: str,
+        config_dict: dict[str, object],
+    ) -> None:
         key = self.make_key(dataset_namehash, config_namehash)
-        self._progress.jobs.setdefault(key, _Job())
+        self._progress.jobs.setdefault(key, _Job(config=config_dict))
         self.save()
 
     def get_job(self, dataset_namehash: str, config_namehash: str) -> _Job:
