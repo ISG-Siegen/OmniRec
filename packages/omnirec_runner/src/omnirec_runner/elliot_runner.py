@@ -83,10 +83,6 @@ class Elliot(Runner):
                 self.max_rating - self.min_rating
             ) * ((recs_df["rating"] - pred_min) / (pred_max - pred_min))
 
-        recs_df.to_csv(
-            "D:/Users/baumg/Documents/Uni/ISG/RecSysLib_TEST/el_recs.csv", index=False
-        )
-
         return recs_df.to_dict(orient="list")
 
     def post_predict(self):
