@@ -35,6 +35,14 @@ def get_data_dir() -> Path:
 
 
 def set_log_level(level: str):
+    """Sets log level for OmniRec.
+
+    Args:
+        level (str): Log level to set. Valid options are CRITICAL, FATAL, ERROR,WARNING, INFO, DEBUG, NOTSET. Log level is case-insensitive.
+
+    Raises:
+        ValueError: If the provided log level is not valid.
+    """
     level = level.upper()
     if level in logging._nameToLevel:
         _root_logger.setLevel(level)
