@@ -42,10 +42,13 @@ class RecSysDataSet(Generic[T]):
     _folds_file_pattern = re.compile(r"(\d+)\/(?:train|val|test)\.csv")
 
     def __init__(
-        self, data: Optional[T] = None, meta: _DatasetMeta = _DatasetMeta()
+        self, data: Optional[T] = None, meta: Optional[_DatasetMeta] = None
     ) -> None:
         if data:
             self._data = data
+
+        if meta is None:
+            meta = _DatasetMeta()
         self._meta = meta
 
     @staticmethod
