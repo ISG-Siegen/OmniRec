@@ -2,10 +2,13 @@ import json
 import socket
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser
+from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import dataclass
+from enum import IntEnum
 from pathlib import Path
 from time import time
-from typing import Any, Dict, List, Type
+from typing import Any, Callable, Dict, List, Type
+from uuid import uuid4
 
 import rpyc
 from rpyc.utils.authenticators import SSLAuthenticator
@@ -45,10 +48,13 @@ class RunnerService(ABC):
     ): ...
 
     @abstractmethod
-    def _fit(self): ...
+    def _fit(self) -> str: ...
 
     @abstractmethod
-    def _predict(self): ...
+    def _predict(self) -> str: ...
+
+    @abstractmethod
+    def _status(self, job_id: str) -> "JobState": ...
 
 
 @rpyc.service
@@ -65,6 +71,18 @@ class Runner(RunnerService, rpyc.Service, ABC):
         address = server.get_address()
         print(f"{address[0]} {address[1]}")
         server.start()
+
+    def __init__(self) -> None:
+        super().__init__()
+
+        self._executor = ThreadPoolExecutor(max_workers=1)
+        self._jobs: dict[str, Future[None]] = {}
+
+    def _submit_job(self, job: Callable[[], None]):
+        job_id = str(uuid4())
+        fut = self._executor.submit(job)
+        self._jobs[job_id] = fut
+        return job_id
 
     @rpyc.exposed
     def _config(
@@ -93,26 +111,53 @@ class Runner(RunnerService, rpyc.Service, ABC):
     # TODO: Preparing files somewhere? Adapter code in each runner impl?
     @rpyc.exposed
     def _fit(self):
-        start = time()
-        self.setup_fit()
-        setup_end = time()
-        self.fit()
-        fit_end = time()
-        self.post_fit()
-        end = time()
+        def fit_job():
+            start = time()
+            self.setup_fit()
+            setup_end = time()
+            self.fit()
+            fit_end = time()
+            self.post_fit()
+            end = time()
+
+        return self._submit_job(fit_job)
 
     @rpyc.exposed
     def _predict(self):
-        start = time()
-        self.setup_predict()
-        setup_end = time()
+        def predict_job():
+            start = time()
+            self.setup_predict()
+            setup_end = time()
 
-        predictions = self.predict()
-        self.predictions_file.write_text(json.dumps(predictions))
+            predictions = self.predict()
+            self.predictions_file.write_text(json.dumps(predictions))
 
-        post_predict_start = time()
-        self.post_predict()
-        post_predict_end = time()
+            post_predict_start = time()
+            self.post_predict()
+            post_predict_end = time()
+
+        return self._submit_job(predict_job)
+
+    @rpyc.exposed
+    def _status(self, job_id: str):
+        fut = self._jobs.get(job_id)
+        if fut is None:
+            return JobState.INVALID_ID
+
+        if fut.cancelled():
+            return JobState.CANCELLED
+
+        if fut.running():
+            return JobState.RUNNING
+
+        if fut.done():
+            exc = fut.exception()
+            if exc is None:
+                return JobState.FINISHED
+            else:
+                raise exc
+
+        return JobState.PENDING
 
     def setup_fit(self): ...
 
@@ -141,3 +186,11 @@ class RunnerServer:
 
     def start(self):
         self._server.start()
+
+
+class JobState(IntEnum):
+    PENDING = 1
+    RUNNING = 2
+    FINISHED = 3
+    CANCELLED = 4
+    INVALID_ID = 5

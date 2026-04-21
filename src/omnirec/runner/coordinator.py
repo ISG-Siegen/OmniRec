@@ -3,15 +3,16 @@ import json
 import subprocess
 import sys
 import tempfile
+import time
 import traceback
 from os import PathLike
 from pathlib import Path
 from threading import Event, Thread
-from typing import IO, Any, Iterable, Optional, TypeVar
+from typing import IO, Any, Callable, Iterable, Optional, TypeVar
 
 import pandas as pd
 import rpyc
-from omnirec_runner.runner import RunnerService
+from omnirec_runner.runner import JobState, RunnerService
 
 from omnirec.data_variants import DataVariant, FoldedData, SplitData
 from omnirec.recsys_data_set import RecSysDataSet
@@ -136,7 +137,6 @@ class Coordinator:
                     port,
                     get_key_pth(Side.Client),
                     get_cert_pth(Side.Client),
-                    config={"sync_request_timeout": 600},
                 )
                 root: RunnerService = conn.root
 
@@ -342,14 +342,14 @@ class Coordinator:
         if get_phase() <= Phase.Fit:
             did_progress = True
             self.log_phase_info(dataset_name, algo_name, "'Fit'")
-            root._fit()
+            self.wait_for_job(root._fit, root)
 
             advance_phase()
 
         if get_phase() <= Phase.Predict:
             did_progress = True
             self.log_phase_info(dataset_name, algo_name, "'Predict'")
-            root._predict()
+            self.wait_for_job(root._predict, root)
 
             advance_phase()
 
@@ -373,6 +373,28 @@ class Coordinator:
                 logger.info(
                     f"All phases for {dataset_name}/{algo_name} already complete, skipping..."
                 )
+
+    def wait_for_job(self, job: Callable[[], str], root: RunnerService):
+        logger.debug("Starting job...")
+        job_id = job()
+        logger.debug(f"Job started with id {job_id}")
+
+        while True:
+            state = root._status(job_id)
+            state = JobState(state)
+            logger.debug(f"Received job state {JobState(state).name} ({state})")
+
+            if state is JobState.INVALID_ID:
+                raise ValueError(f"Tried to get job status with invalid id: {job_id}")
+
+            if state is JobState.CANCELLED:
+                raise Exception("Job was unexpectedly cancelled.")
+
+            if state is JobState.FINISHED:
+                logger.debug(f"Job {job_id} finished!")
+                break
+
+            time.sleep(10)
 
     def log_phase_info(self, dataset_name: str, algo_name: str, phase: str):
         logger.info(f"Running phase {phase} for {dataset_name}/{algo_name}")
