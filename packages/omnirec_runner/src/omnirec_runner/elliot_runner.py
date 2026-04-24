@@ -11,15 +11,12 @@ from elliot.dataset.dataset import DataSetLoader
 from elliot.namespace.namespace_model_builder import NameSpaceBuilder
 from elliot.utils import logging as el_logging
 
-from omnirec_runner.runner import Runner
+from omnirec_runner.runner import Runner, RunnerService
 
 here = path.abspath(path.dirname(__file__))
 
 
 class Elliot(Runner):
-    def __init__(self) -> None:
-        super().__init__()
-
     def setup_fit(self):
         self.convert_data()
         self.setup_elliot()
@@ -211,4 +208,4 @@ class Elliot(Runner):
 
 
 if __name__ == "__main__":
-    Elliot.main()
+    RunnerService(Elliot).run()

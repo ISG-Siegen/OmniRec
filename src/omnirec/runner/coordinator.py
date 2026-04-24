@@ -12,7 +12,7 @@ from typing import IO, Any, Callable, Iterable, Optional, TypeVar
 
 import pandas as pd
 import rpyc
-from omnirec_runner.runner import JobState, RunnerService
+from omnirec_runner.runner import JobState, _RunnerService
 
 from omnirec.data_variants import DataVariant, FoldedData, SplitData
 from omnirec.recsys_data_set import RecSysDataSet
@@ -67,6 +67,7 @@ class Coordinator:
 
         self._out_reader: Optional[OutputReader] = None
         self._err_reader: Optional[OutputReader] = None
+        self._root: Optional[_RunnerService] = None
 
         ensure_certs()
 
@@ -138,7 +139,8 @@ class Coordinator:
                     get_key_pth(Side.Client),
                     get_cert_pth(Side.Client),
                 )
-                root: RunnerService = conn.root
+                root: _RunnerService = conn.root
+                self._root = conn.root
 
                 for current_dataset in datasets:
                     for current_config in current_config_list:
@@ -298,7 +300,7 @@ class Coordinator:
 
     def run_split(
         self,
-        root: RunnerService,
+        root: _RunnerService,
         progress: "RunProgress",
         algorithm: str,
         algo_config: dict[str, Any],
@@ -374,7 +376,7 @@ class Coordinator:
                     f"All phases for {dataset_name}/{algo_name} already complete, skipping..."
                 )
 
-    def wait_for_job(self, job: Callable[[], str], root: RunnerService):
+    def wait_for_job(self, job: Callable[[], str], root: _RunnerService):
         logger.debug("Starting job...")
         job_id = job()
         logger.debug(f"Job started with id {job_id}")
@@ -441,6 +443,10 @@ class Coordinator:
 
     def stop(self, logger_fn=logger.critical):
         logger_fn("Stopping runner...")
+
+        if self._root is not None:
+            self._root._shutdown()
+
         # FIXME: self._proc might be None here
         self._proc.terminate()
         try:
@@ -479,17 +485,23 @@ class OutputReader:
         Thread(target=self._read, args=(pipe,), daemon=True).start()
 
     def _read(self, pipe: IO[str]):
-        for line in pipe:
-            # TODO: Check if we have \n at the of line and strip/log without line break. Also see below when writing to file
-            self._output.append(line)
-            if self._is_err:
-                runner_logger.debug(f"Runner sterr: {line.rstrip('\n')}")
-            else:
-                runner_logger.debug(f"Runner stdout: {line.rstrip('\n')}")
-        self._done_event.set()
+        try:
+            for line in pipe:
+                # TODO: Check if we have \n at the of line and strip/log without line break. Also see below when writing to file
+                self._output.append(line)
+                if self._is_err:
+                    runner_logger.debug(f"Runner sterr: {line.rstrip('\n')}")
+                else:
+                    runner_logger.debug(f"Runner stdout: {line.rstrip('\n')}")
+        finally:
+            self._done_event.set()
 
     def stop(self, out_dir: Path):
-        self._done_event.wait()
+        no_timeout = self._done_event.wait(10)
+        if not no_timeout:
+            logger.warning(
+                f"Ran into timeout while waiting for {"stderr" if self._is_err else "stdout"} flush for {self._runner_name}. Logs might be incomplete for this stream!"
+            )
 
         if self._is_err:
             out_file = out_dir / "err.log"
