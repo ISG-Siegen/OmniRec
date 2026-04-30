@@ -180,3 +180,47 @@ class Recall(RankingMetric):
         ]
         scores_dict = {k: score for k, score in zip(self._k_list, scores)}
         return MetricResult(__class__.__name__, scores_dict)
+
+
+class Precision(RankingMetric):
+    def __init__(self, k: int | list[int]) -> None:
+        """Initializes the Precision@k metric.
+
+        Precision@k measures the fraction of relevant items among the top-k
+        recommended items.
+
+        Args:
+            k (int | list[int]): The number of top predictions to consider.
+        """
+        super().__init__(k)
+
+    def calculate(self, predictions: DataFrame, test: DataFrame) -> MetricResult:
+        """Computes Precision@k for one or multiple k values.
+
+        Args:
+            predictions (DataFrame): Contains columns [user, item, score, rank].
+            test (DataFrame): Ground truth items per user.
+
+        Returns:
+            MetricResult: Average Precision scores across users for each k.
+        """
+        top_k_dict = self.make_topk_dict(predictions)
+
+        precision_per_user_per_k: dict[int, list[float]] = {k: [] for k in self._k_list}
+
+        for user, (pred, _) in top_k_dict.items():
+            positive_test_interactions = test["item"][test["user"] == user].to_numpy()
+
+            max_k = max(self._k_list)
+            hits = np.isin(pred[:max_k], positive_test_interactions)
+
+            for k in self._k_list:
+                user_precision = hits[:k].sum() / k
+                precision_per_user_per_k[k].append(float(user_precision))
+
+        scores_dict = {
+            k: sum(user_scores) / len(user_scores) if user_scores else 0.0
+            for k, user_scores in precision_per_user_per_k.items()
+        }
+
+        return MetricResult(self.__class__.__name__, scores_dict)

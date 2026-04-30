@@ -2,10 +2,13 @@ import json
 import socket
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser
+from concurrent.futures import Future, ProcessPoolExecutor
 from dataclasses import dataclass
+from enum import IntEnum
 from pathlib import Path
 from time import time
-from typing import Any, Dict, List, Type
+from typing import Any, Callable, Dict, List, Type
+from uuid import uuid4
 
 import rpyc
 from rpyc.utils.authenticators import SSLAuthenticator
@@ -29,7 +32,7 @@ class RunnerConfig:
     tmp_dir: Path
 
 
-class RunnerService(ABC):
+class _RunnerService(ABC):
     @abstractmethod
     def _config(
         self,
@@ -45,26 +48,45 @@ class RunnerService(ABC):
     ): ...
 
     @abstractmethod
-    def _fit(self): ...
+    def _fit(self) -> str: ...
 
     @abstractmethod
-    def _predict(self): ...
+    def _predict(self) -> str: ...
+
+    @abstractmethod
+    def _status(self, job_id: str) -> "JobState": ...
+
+    @abstractmethod
+    def _shutdown(self): ...
 
 
 @rpyc.service
-class Runner(RunnerService, rpyc.Service, ABC):
-    @classmethod
-    def main(cls):
+class RunnerService(_RunnerService, rpyc.Service):
+
+    def __init__(self, runner_cls: Type["Runner"]) -> None:
+        super().__init__()
+
+        self._executor = ProcessPoolExecutor(max_workers=1)
+        self._jobs: dict[str, Future[None]] = {}
+        self._runner_cls = runner_cls
+
+    def run(self):
         parser = ArgumentParser()
         parser.add_argument("key_pth", type=Path)
         parser.add_argument("cert_pth", type=Path)
 
         args = parser.parse_args()
 
-        server = RunnerServer(args.key_pth, args.cert_pth, cls)
+        server = RunnerServer(args.key_pth, args.cert_pth, self)
         address = server.get_address()
         print(f"{address[0]} {address[1]}")
         server.start()
+
+    def _submit_job(self, job: Callable[[], None]):
+        job_id = str(uuid4())
+        fut = self._executor.submit(job)
+        self._jobs[job_id] = fut
+        return job_id
 
     @rpyc.exposed
     def _config(
@@ -79,20 +101,69 @@ class Runner(RunnerService, rpyc.Service, ABC):
         checkpoint_dir: str,
         tmp_dir: str,
     ):
-        self.algorithm_name = algorithm_name
-        self.algorithm_config: dict[str, Any] = json.loads(algorithm_config)
-        self.dataset_name = dataset_name
-        self.train_file = Path(train_file)
-        self.val_file = Path(val_file)
-        self.test_file = Path(test_file)
-        self.predictions_file = Path(predictions_file)
-        self.checkpoint_dir = Path(checkpoint_dir)
-        self.tmp_dir = Path(tmp_dir)
+        self._runner = self._runner_cls(
+            algorithm_name,
+            json.loads(algorithm_config),
+            dataset_name,
+            Path(train_file),
+            Path(val_file),
+            Path(test_file),
+            Path(predictions_file),
+            Path(checkpoint_dir),
+            Path(tmp_dir),
+        )
 
     # TODO: Stopping time
     # TODO: Preparing files somewhere? Adapter code in each runner impl?
     @rpyc.exposed
     def _fit(self):
+        return self._submit_job(self._runner._fit_job)
+
+    @rpyc.exposed
+    def _predict(self):
+        return self._submit_job(self._runner._predict_job)
+
+    @rpyc.exposed
+    def _status(self, job_id: str):
+        fut = self._jobs.get(job_id)
+        if fut is None:
+            return JobState.INVALID_ID
+
+        if fut.cancelled():
+            return JobState.CANCELLED
+
+        if fut.running():
+            return JobState.RUNNING
+
+        if fut.done():
+            exc = fut.exception()
+            if exc is None:
+                return JobState.FINISHED
+            else:
+                raise exc
+
+        return JobState.PENDING
+
+    @rpyc.exposed
+    def _shutdown(self):
+        self._executor.shutdown(cancel_futures=True)
+
+
+@dataclass
+class Runner(ABC):
+    algorithm_name: str
+    algorithm_config: dict[str, Any]
+    dataset_name: str
+    train_file: Path
+    val_file: Path
+    test_file: Path
+    predictions_file: Path
+    checkpoint_dir: Path
+    tmp_dir: Path
+
+    def _fit_job(self):
+        self.init_runner()
+
         start = time()
         self.setup_fit()
         setup_end = time()
@@ -101,8 +172,9 @@ class Runner(RunnerService, rpyc.Service, ABC):
         self.post_fit()
         end = time()
 
-    @rpyc.exposed
-    def _predict(self):
+    def _predict_job(self):
+        self.init_runner()
+
         start = time()
         self.setup_predict()
         setup_end = time()
@@ -113,6 +185,8 @@ class Runner(RunnerService, rpyc.Service, ABC):
         post_predict_start = time()
         self.post_predict()
         post_predict_end = time()
+
+    def init_runner(self): ...
 
     def setup_fit(self): ...
 
@@ -130,10 +204,15 @@ class Runner(RunnerService, rpyc.Service, ABC):
 
 
 class RunnerServer:
-    def __init__(self, key_pth: Path, cert_pth: Path, cls: Type[Runner]) -> None:
+    def __init__(
+        self,
+        key_pth: Path,
+        cert_pth: Path,
+        service: RunnerService,
+    ) -> None:
         auth = SSLAuthenticator(key_pth, cert_pth)
 
-        self._server = ThreadedServer(cls(), authenticator=auth)
+        self._server = ThreadedServer(service, authenticator=auth)
 
     def get_address(self):
         host = socket.gethostbyname(socket.gethostname())
@@ -141,3 +220,11 @@ class RunnerServer:
 
     def start(self):
         self._server.start()
+
+
+class JobState(IntEnum):
+    PENDING = 1
+    RUNNING = 2
+    FINISHED = 3
+    CANCELLED = 4
+    INVALID_ID = 5

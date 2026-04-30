@@ -12,13 +12,10 @@ from recbole.trainer.trainer import Trainer
 from recbole.utils import ModelType, get_model, get_trainer, init_logger, init_seed
 from recbole.utils.case_study import full_sort_topk
 
-from omnirec_runner.runner import Runner
+from omnirec_runner.runner import Runner, RunnerService
 
 
 class RecBole(Runner):
-    def __init__(self) -> None:
-        super().__init__()
-
     def setup_fit(self):
         # RecBole drops tensorboard logs in CWD
         os.chdir(self.checkpoint_dir)
@@ -225,4 +222,4 @@ class RecBole(Runner):
 
 
 if __name__ == "__main__":
-    RecBole.main()
+    RunnerService(RecBole).run()
