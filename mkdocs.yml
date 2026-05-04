@@ -16,16 +16,35 @@ nav:
       - Evaluation: evaluator.md
       - Checkpointing and Results: checkpointing.md
       - SLURM Integration: slurm_integration.md
-  - API Reference: API_references.md
+  - API Reference:
+      - Dataset Management: api/dataset_management.md
+      - Data Loaders: api/data_loaders.md
+      - Preprocessing Pipeline: api/preprocessing_pipeline.md
+      - Evaluation Metrics: api/evaluation_metrics.md
+      - Experiment Planning: api/experiment_planning.md
+      - Plan Components: api/plan_components.md
+      - Runner Function: api/runner_function.md
+      - Coordinator Class: api/coordinator_class.md
+      - Utility Functions: api/utility_functions.md
 
 theme: 
   name: material
   features:
-    - navigation.tabs
-    - navigation.tabs.sticky
+    - content.tabs.link
+    - content.code.annotate
     - content.code.copy
+    - announce.dismiss
+    - navigation.tabs
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.preview
+    - navigation.instant.progress
+    - navigation.path
     - navigation.sections
-    - toc.integrate
+    - navigation.top
+    - navigation.tracking
+    - search.suggest
+    - toc.follow
   toc_depth: 2
   palette:
 
@@ -60,6 +79,7 @@ theme:
 
 plugins:
   - search
+  - mike
   - mkdocstrings:
       handlers:
         python:
@@ -89,6 +109,13 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.arithmatex:
       generic: true
+
+extra:
+  version:
+    provider: mike
+    location: sidebar
+    default: latest
+    alias: true
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js

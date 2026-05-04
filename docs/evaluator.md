@@ -2,11 +2,11 @@
 
 This section explains how to configure and use metrics to evaluate recommendation algorithms. The evaluation system provides a flexible approach to compute various metrics after model predictions, supporting both explicit and implicit feedback scenarios.
 
-The [`Evaluator`](API_references.md#omnirec.runner.evaluation.Evaluator) class manages metric computation across all algorithm runs. It automatically loads predictions and applies the specified metrics, supporting both holdout and cross-validation splits.
+The [`Evaluator`](api/evaluation_metrics.md#omnirec.runner.evaluation.Evaluator) class manages metric computation across all algorithm runs. It automatically loads predictions and applies the specified metrics, supporting both holdout and cross-validation splits.
 
 ## Evaluator Class
 
-The [`Evaluator`](API_references.md#omnirec.runner.evaluation.Evaluator) class coordinates metric calculation across experiments. Create an evaluator by passing one or more metric instances, then provide it to [`run_omnirec`](API_references.md#omnirec.util.run.run_omnirec) to automatically evaluate all algorithm runs:
+The [`Evaluator`](api/evaluation_metrics.md#omnirec.runner.evaluation.Evaluator) class coordinates metric calculation across experiments. Create an evaluator by passing one or more metric instances, then provide it to [`run_omnirec`](api/runner_function.md#omnirec.util.run.run_omnirec) to automatically evaluate all algorithm runs:
 
 ```python
 from omnirec.runner.evaluation import Evaluator
@@ -20,7 +20,7 @@ evaluator = Evaluator(
 )
 ```
 
-The evaluator can combine multiple metrics of the same type in a single evaluation run. Choose metrics appropriate for your feedback type: use prediction metrics ([`RMSE`](API_references.md#omnirec.metrics.prediction.RMSE), [`MAE`](API_references.md#omnirec.metrics.prediction.MAE)) for explicit ratings, and ranking metrics ([`NDCG`](API_references.md#omnirec.metrics.ranking.NDCG), [`HR`](API_references.md#omnirec.metrics.ranking.HR), [`Recall`](API_references.md#omnirec.metrics.ranking.Recall)) for implicit feedback or top-k recommendations.
+The evaluator can combine multiple metrics of the same type in a single evaluation run. Choose metrics appropriate for your feedback type: use prediction metrics ([`RMSE`](api/evaluation_metrics.md#omnirec.metrics.prediction.RMSE), [`MAE`](api/evaluation_metrics.md#omnirec.metrics.prediction.MAE)) for explicit ratings, and ranking metrics ([`NDCG`](api/evaluation_metrics.md#omnirec.metrics.ranking.NDCG), [`HR`](api/evaluation_metrics.md#omnirec.metrics.ranking.HR), [`Recall`](api/evaluation_metrics.md#omnirec.metrics.ranking.Recall)) for implicit feedback or top-k recommendations.
 
 ## Available Metrics
 
@@ -53,11 +53,11 @@ hr = HR([5, 10])
 recall = Recall([10, 20])
 ```
 
-Ranking metrics evaluate the quality of top-k recommendation lists. Specify cutoff values (k) to measure performance at different list lengths. For example, [`NDCG([5, 10, 20])`](API_references.md#omnirec.metrics.ranking.NDCG) computes NDCG@5, NDCG@10, and NDCG@20.
+Ranking metrics evaluate the quality of top-k recommendation lists. Specify cutoff values (k) to measure performance at different list lengths. For example, [`NDCG([5, 10, 20])`](api/evaluation_metrics.md#omnirec.metrics.ranking.NDCG) computes NDCG@5, NDCG@10, and NDCG@20.
 
 ## Running Experiments with Evaluation
 
-Provide the evaluator when launching experiments with [`run_omnirec`](API_references.md#omnirec.util.run.run_omnirec). The framework automatically applies all metrics after each algorithm completes:
+Provide the evaluator when launching experiments with [`run_omnirec`](api/runner_function.md#omnirec.util.run.run_omnirec). The framework automatically applies all metrics after each algorithm completes:
 
 ```python
 from omnirec import RecSysDataSet
@@ -92,11 +92,11 @@ run_omnirec(dataset, plan, evaluator)
 
 All metric computations happen automatically without additional code. Ensure your metrics match your data type: ranking metrics (NDCG, HR, Recall) for implicit feedback, and prediction metrics (RMSE, MAE) for explicit feedback.
 
-After all experiments complete, `run_omnirec` automatically prints a formatted results table to the console — one table per dataset — using [`get_tables()`](API_references.md#omnirec.runner.evaluation.Evaluator.get_tables). No extra code is required to see the results.
+After all experiments complete, `run_omnirec` automatically prints a formatted results table to the console — one table per dataset — using [`get_tables()`](api/evaluation_metrics.md#omnirec.runner.evaluation.Evaluator.get_tables). No extra code is required to see the results.
 
 ## Accessing Evaluation Results
 
-After an experiment finishes, you can access all computed metrics programmatically using [`get_results()`](API_references.md#omnirec.runner.evaluation.Evaluator.get_results):
+After an experiment finishes, you can access all computed metrics programmatically using [`get_results()`](api/evaluation_metrics.md#omnirec.runner.evaluation.Evaluator.get_results):
 
 ```python
 results = evaluator.get_results()
@@ -106,7 +106,7 @@ for dataset_id, df in results.items():
     print(df.head())
 ```
 
-[`get_results()`](API_references.md#omnirec.runner.evaluation.Evaluator.get_results) returns a dictionary mapping dataset identifiers (dataset name + hash) to pandas DataFrames containing the evaluation results.
+[`get_results()`](api/evaluation_metrics.md#omnirec.runner.evaluation.Evaluator.get_results) returns a dictionary mapping dataset identifiers (dataset name + hash) to pandas DataFrames containing the evaluation results.
 
 Each DataFrame has the following structure:
 
@@ -145,7 +145,7 @@ This format makes it easy to filter, aggregate, or export results for further an
 
 ## Saving and Loading Results
 
-Use [`save_results()`](API_references.md#omnirec.runner.evaluation.Evaluator.save_results) to persist evaluation results to a JSON file after a run, and [`load_results()`](API_references.md#omnirec.runner.evaluation.Evaluator.load_results) to restore them later without re-running experiments:
+Use [`save_results()`](api/evaluation_metrics.md#omnirec.runner.evaluation.Evaluator.save_results) to persist evaluation results to a JSON file after a run, and [`load_results()`](api/evaluation_metrics.md#omnirec.runner.evaluation.Evaluator.load_results) to restore them later without re-running experiments:
 
 ```python
 from pathlib import Path
@@ -173,11 +173,11 @@ for table in evaluator.get_tables():
     console.print(table)
 ```
 
-[`get_tables()`](API_references.md#omnirec.runner.evaluation.Evaluator.get_tables) returns a list of [Rich](https://github.com/Textualize/rich) `Table` objects — one per dataset — with algorithms as rows and metric–k combinations (e.g. `NDCG@10`) as columns. This is the same output that `run_omnirec` prints automatically; calling it directly is useful when reloading saved results.
+[`get_tables()`](api/evaluation_metrics.md#omnirec.runner.evaluation.Evaluator.get_tables) returns a list of [Rich](https://github.com/Textualize/rich) `Table` objects — one per dataset — with algorithms as rows and metric–k combinations (e.g. `NDCG@10`) as columns. This is the same output that `run_omnirec` prints automatically; calling it directly is useful when reloading saved results.
 
 ## Custom Metrics
 
-To implement custom evaluation metrics, create a subclass of [`omnirec.metrics.base.Metric`](API_references.md#omnirec.metrics.base.Metric) and implement the [`calculate`](API_references.md#omnirec.metrics.base.Metric.calculate) method:
+To implement custom evaluation metrics, create a subclass of [`omnirec.metrics.base.Metric`](api/evaluation_metrics.md#omnirec.metrics.base.Metric) and implement the [`calculate`](api/evaluation_metrics.md#omnirec.metrics.base.Metric.calculate) method:
 
 ```python
 from omnirec.metrics.base import Metric, MetricResult

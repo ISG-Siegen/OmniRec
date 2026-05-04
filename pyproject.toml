@@ -47,6 +47,7 @@ packages = ["src/omnirec"]
 [dependency-groups]
 dev = [
     "matplotlib>=3.10.3",
+    "mike>=2.2.0",
     "mkdocs>=1.6.1",
     "mkdocs-material>=9.6.16",
     "mkdocstrings[python]>=0.30.0",

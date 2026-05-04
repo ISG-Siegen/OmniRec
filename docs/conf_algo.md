@@ -2,11 +2,11 @@
 
 This section explains how to configure algorithms and hyperparameters for recommendation experiments. The experiment planning system provides a flexible approach to define algorithm configurations and automatically generate all hyperparameter combinations.
 
-The [`ExperimentPlan`](API_references.md#omnirec.runner.plan.ExperimentPlan) class manages algorithm configurations and hyperparameter grids. It expands every combination you define, automating the execution of multiple algorithm variants with different hyperparameter settings.
+The [`ExperimentPlan`](api/experiment_planning.md#omnirec.runner.plan.ExperimentPlan) class manages algorithm configurations and hyperparameter grids. It expands every combination you define, automating the execution of multiple algorithm variants with different hyperparameter settings.
 
 ## ExperimentPlan
 
-The [`ExperimentPlan`](API_references.md#omnirec.runner.plan.ExperimentPlan) class serves as the central configuration for all algorithms in your experiments. Create a plan by optionally providing a name, then add algorithms with their hyperparameters:
+The [`ExperimentPlan`](api/experiment_planning.md#omnirec.runner.plan.ExperimentPlan) class serves as the central configuration for all algorithms in your experiments. Create a plan by optionally providing a name, then add algorithms with their hyperparameters:
 
 ```python
 from omnirec.runner.plan import ExperimentPlan
@@ -32,7 +32,7 @@ recbole_algo = RecBole.LightGCN          # "RecBole.LightGCN"
 
 ### Adding Algorithms
 
-Add algorithms to the plan using the [`add_algorithm`](API_references.md#omnirec.runner.plan.ExperimentPlan.add_algorithm) method. Provide the algorithm identifier and a dictionary of hyperparameters:
+Add algorithms to the plan using the [`add_algorithm`](api/experiment_planning.md#omnirec.runner.plan.ExperimentPlan.add_algorithm) method. Provide the algorithm identifier and a dictionary of hyperparameters:
 
 ```python
 from omnirec.runner.algos import LensKit
@@ -53,9 +53,9 @@ plan.add_algorithm(
 - `algorithm` (str | Enum): Algorithm identifier in format `<Runner>.<Algorithm>`
 - `algorithm_config` (dict): Dictionary of hyperparameter names and values. Each value can be either a plain value or a plan component instance that controls how hyperparameter combinations are generated:
   - Plain values: Parameter is fixed across all runs
-  - [`Grid(values)`](API_references.md#omnirec.runner.plan_components.Grid): Enumerate all provided values (exhaustive grid search)
-  - [`RandomChoice(choices, n)`](API_references.md#omnirec.runner.plan_components.RandomChoice): Randomly sample `n` items from a discrete list
-  - [`RandomRange(start, end, n)`](API_references.md#omnirec.runner.plan_components.RandomRange): Randomly sample `n` values from a numeric range (supports both `int` and `float`)
+  - [`Grid(values)`](api/plan_components.md#omnirec.runner.plan_components.Grid): Enumerate all provided values (exhaustive grid search)
+  - [`RandomChoice(choices, n)`](api/plan_components.md#omnirec.runner.plan_components.RandomChoice): Randomly sample `n` items from a discrete list
+  - [`RandomRange(start, end, n)`](api/plan_components.md#omnirec.runner.plan_components.RandomRange): Randomly sample `n` values from a numeric range (supports both `int` and `float`)
 
 
 **Hyperparameter Reference:**
@@ -68,7 +68,7 @@ Wrap hyperparameter values in a plan component subclass to control how combinati
 
 #### Grid Search
 
-[`Grid(values)`](API_references.md#omnirec.runner.plan_components.Grid) enumerates all provided values. The framework creates separate runs for every combination across all `Grid` parameters:
+[`Grid(values)`](api/plan_components.md#omnirec.runner.plan_components.Grid) enumerates all provided values. The framework creates separate runs for every combination across all `Grid` parameters:
 
 ```python
 from omnirec.runner.algos import LensKit
@@ -96,7 +96,7 @@ This configuration generates four separate runs (2 × 2 combinations):
 
 For large hyperparameter spaces, use random sampling instead of exhaustive grid search:
 
-[`RandomChoice(choices, n)`](API_references.md#omnirec.runner.plan_components.RandomChoice) randomly samples `n` items from a discrete list:
+[`RandomChoice(choices, n)`](api/plan_components.md#omnirec.runner.plan_components.RandomChoice) randomly samples `n` items from a discrete list:
 
 ```python
 from omnirec.runner.plan_components import RandomChoice
@@ -110,7 +110,7 @@ plan.add_algorithm(
 )
 ```
 
-[`RandomRange(start, end, n)`](API_references.md#omnirec.runner.plan_components.RandomRange) randomly samples `n` values from a continuous or integer range:
+[`RandomRange(start, end, n)`](api/plan_components.md#omnirec.runner.plan_components.RandomRange) randomly samples `n` values from a continuous or integer range:
 
 ```python
 from omnirec.runner.plan_components import RandomRange
@@ -153,11 +153,11 @@ plan.add_algorithm(
 )
 ```
 
-Each call to [`add_algorithm`](API_references.md#omnirec.runner.plan.ExperimentPlan.add_algorithm) appends a new algorithm configuration. Avoid using the same algorithm identifier multiple times unless you intend to overwrite the previous configuration.
+Each call to [`add_algorithm`](api/experiment_planning.md#omnirec.runner.plan.ExperimentPlan.add_algorithm) appends a new algorithm configuration. Avoid using the same algorithm identifier multiple times unless you intend to overwrite the previous configuration.
 
 ### Updating Algorithms
 
-Modify existing algorithm configurations using the [`update_algorithm`](API_references.md#omnirec.runner.plan.ExperimentPlan.update_algorithm) method:
+Modify existing algorithm configurations using the [`update_algorithm`](api/experiment_planning.md#omnirec.runner.plan.ExperimentPlan.update_algorithm) method:
 
 ```python
 from omnirec.runner.plan_components import Grid
@@ -176,7 +176,7 @@ The update merges with the existing configuration, adding new parameters and upd
 
 ## Running Experiments
 
-Pass the configured plan to [`run_omnirec`](API_references.md#omnirec.util.run.run_omnirec) alongside your dataset and evaluator to execute all algorithm configurations:
+Pass the configured plan to [`run_omnirec`](api/runner_function.md#omnirec.util.run.run_omnirec) alongside your dataset and evaluator to execute all algorithm configurations:
 
 ```python
 from omnirec import RecSysDataSet

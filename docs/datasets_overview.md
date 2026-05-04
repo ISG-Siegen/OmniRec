@@ -1,7 +1,7 @@
 TODO: Expand dataset overview
 # Dataset Overview
 
-The framework includes many built-in datasets. Use the exact name with the [`use_dataloader`](API_references.md#omnirec.recsys_data_set.RecSysDataSet.use_dataloader) function to load a dataset. Here is the comprehensive list with all dataset names:
+The framework includes many built-in datasets. Use the exact name with the [`use_dataloader`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet.use_dataloader) function to load a dataset. Here is the comprehensive list with all dataset names:
 
 | Dataset Name | Number of Users | Number of Items | Number of Ratings | Feedback Type |
 |:---|---:|---:|---:|:---|
@@ -240,7 +240,7 @@ The framework includes many built-in datasets. Use the exact name with the [`use
 
 ## Listing Available Datasets
 
-To see all registered datasets use [`list_datasets()`](API_references.md#omnirec.data_loaders.registry.list_datasets):
+To see all registered datasets use [`list_datasets()`](api/data_loaders.md#omnirec.data_loaders.registry.list_datasets):
 
 ```python
 from omnirec import list_datasets

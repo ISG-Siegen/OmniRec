@@ -2,11 +2,11 @@
 
 This section explains how to preprocess datasets using the framework's preprocessing pipeline. The preprocessing system provides a modular approach to transform datasets through various operations like subsampling, feedback conversion, core pruning, and data splitting.
 
-All preprocessing operations inherit from the [`Preprocessor`](API_references.md#omnirec.preprocess.base.Preprocessor) base class, which defines a common interface for processing datasets. Each preprocessor takes a [`RecSysDataSet`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) as input and returns a transformed dataset, potentially of a different data variant.
+All preprocessing operations inherit from the [`Preprocessor`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor) base class, which defines a common interface for processing datasets. Each preprocessor takes a [`RecSysDataSet`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet) as input and returns a transformed dataset, potentially of a different data variant.
 
 ## Pipe Class
 
-The [`Pipe`](API_references.md#omnirec.preprocess.pipe.Pipe) class allows you to chain multiple preprocessing steps together into a single preprocessing pipeline:
+The [`Pipe`](api/preprocessing_pipeline.md#omnirec.preprocess.pipe.Pipe) class allows you to chain multiple preprocessing steps together into a single preprocessing pipeline:
 
 ```python
 from omnirec.preprocess.pipe import Pipe
@@ -230,22 +230,22 @@ All operations that involve randomness (sampling, splitting) use a consistent ra
 
 The preprocessing operations transform datasets between different data variants:
 
-- [`Subsample`](API_references.md#omnirec.preprocess.subsample.Subsample), [`MakeImplicit`](API_references.md#omnirec.preprocess.feedback_conversion.MakeImplicit), [`CorePruning`](API_references.md#omnirec.preprocess.core_pruning.CorePruning), [`TimeFilter`](API_references.md#omnirec.preprocess.filter.TimeFilter), [`RatingFilter`](API_references.md#omnirec.preprocess.filter.RatingFilter): RawData → RawData
-- [`UserHoldout`](API_references.md#omnirec.preprocess.split.UserHoldout), [`RandomHoldout`](API_references.md#omnirec.preprocess.split.RandomHoldout), [`TimeBasedHoldout`](API_references.md#omnirec.preprocess.split.TimeBasedHoldout): RawData → SplitData  
-- [`UserCrossValidation`](API_references.md#omnirec.preprocess.split.UserCrossValidation), [`RandomCrossValidation`](API_references.md#omnirec.preprocess.split.RandomCrossValidation): RawData → FoldedData
+- [`Subsample`](api/preprocessing_pipeline.md#omnirec.preprocess.subsample.Subsample), [`MakeImplicit`](api/preprocessing_pipeline.md#omnirec.preprocess.feedback_conversion.MakeImplicit), [`CorePruning`](api/preprocessing_pipeline.md#omnirec.preprocess.core_pruning.CorePruning), [`TimeFilter`](api/preprocessing_pipeline.md#omnirec.preprocess.filter.TimeFilter), [`RatingFilter`](api/preprocessing_pipeline.md#omnirec.preprocess.filter.RatingFilter): RawData → RawData
+- [`UserHoldout`](api/preprocessing_pipeline.md#omnirec.preprocess.split.UserHoldout), [`RandomHoldout`](api/preprocessing_pipeline.md#omnirec.preprocess.split.RandomHoldout), [`TimeBasedHoldout`](api/preprocessing_pipeline.md#omnirec.preprocess.split.TimeBasedHoldout): RawData → SplitData  
+- [`UserCrossValidation`](api/preprocessing_pipeline.md#omnirec.preprocess.split.UserCrossValidation), [`RandomCrossValidation`](api/preprocessing_pipeline.md#omnirec.preprocess.split.RandomCrossValidation): RawData → FoldedData
 
 
 ## Custom Preprocessing Steps
 
-You can create custom preprocessing steps by inheriting from the [`Preprocessor`](API_references.md#omnirec.preprocess.base.Preprocessor) base class and implementing the [`process()`](API_references.md#omnirec.preprocess.base.Preprocessor.process) method.
+You can create custom preprocessing steps by inheriting from the [`Preprocessor`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor) base class and implementing the [`process()`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor.process) method.
 
 **Implementation**
 
 Custom preprocessors must:
 
-1. Inherit from [`Preprocessor[T, U]`](API_references.md#omnirec.preprocess.base.Preprocessor) where `T` is the input data variant and `U` is the output data variant
+1. Inherit from [`Preprocessor[T, U]`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor) where `T` is the input data variant and `U` is the output data variant
 2. Call `super().__init__()` in the constructor
-3. Implement the [`process()`](API_references.md#omnirec.preprocess.base.Preprocessor.process) method that transforms a `RecSysDataSet[T]` to `RecSysDataSet[U]`
+3. Implement the [`process()`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor.process) method that transforms a `RecSysDataSet[T]` to `RecSysDataSet[U]`
 
 **Available Data Variants:**
 
@@ -284,7 +284,7 @@ class CustomPreprocessor(Preprocessor[RawData, RawData]):
         return dataset
 ```
 
-Custom preprocessors can be used directly or within a [`Pipe`](API_references.md#omnirec.preprocess.pipe.Pipe):
+Custom preprocessors can be used directly or within a [`Pipe`](api/preprocessing_pipeline.md#omnirec.preprocess.pipe.Pipe):
 
 ```python
 from omnirec.preprocess.pipe import Pipe

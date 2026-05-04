@@ -7,7 +7,7 @@ If you want to use a HPC cluster with SLURM to run your experiments, you can lev
 
 ## Enabling SLURM Integration
 
-To enable SLURM integration, pass the path to a SLURM script to the [`run_omnirec()`](API_references.md#omnirec.util.run.run_omnirec) function using the `slurm_script` parameter:
+To enable SLURM integration, pass the path to a SLURM script to the [`run_omnirec()`](api/runner_function.md#omnirec.util.run.run_omnirec) function using the `slurm_script` parameter:
 
 ```python
 from omnirec.util.run import run_omnirec
@@ -64,9 +64,9 @@ Configure other SLURM directives (e.g., `--nodes`, `--cpus-per-task`, `--partiti
 
 ## How It Works
 
-When you run [`run_omnirec()`](API_references.md#omnirec.util.run.run_omnirec) with the `slurm_script` parameter, the framework will:
+When you run [`run_omnirec()`](api/runner_function.md#omnirec.util.run.run_omnirec) with the `slurm_script` parameter, the framework will:
 
-1. Generate a separate SLURM job for each algorithm configuration in your [`ExperimentPlan`](API_references.md#omnirec.runner.plan.ExperimentPlan)
+1. Generate a separate SLURM job for each algorithm configuration in your [`ExperimentPlan`](api/experiment_planning.md#omnirec.runner.plan.ExperimentPlan)
 2. Replace template variables (`${runner}`, `${log_path}`, `${job_name}`) with appropriate values
 3. Submit each job to the SLURM scheduler using `sbatch`
 4. Allow distributed execution across your HPC cluster's compute nodes
