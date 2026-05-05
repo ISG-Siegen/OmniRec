@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/about_us/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/about_us/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/algorithms_overview/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/algorithms_overview/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/checkpointing/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/checkpointing/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/conf_algo/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/conf_algo/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/custom_algorithms/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/custom_algorithms/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/datasets_overview/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/datasets_overview/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/evaluator/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/evaluator/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/getting_started/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/getting_started/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/loading_datasets/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/loading_datasets/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/preprocessing/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/preprocessing/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/slurm_integration/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/slurm_integration/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/api/coordinator_class/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/api/coordinator_class/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/api/data_loaders/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/api/data_loaders/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/api/dataset_management/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/api/dataset_management/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/api/evaluation_metrics/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/api/evaluation_metrics/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/api/experiment_planning/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/api/experiment_planning/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/api/plan_components/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/api/plan_components/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/api/preprocessing_pipeline/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/api/preprocessing_pipeline/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/api/runner_function/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/api/runner_function/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
     <url>
-         <loc>https://omnirec.recommender-systems.com/dev/api/utility_functions/</loc>
+         <loc>https://omnirec.recommender-systems.com/latest/dev/api/utility_functions/</loc>
          <lastmod>2026-05-05</lastmod>
     </url>
 </urlset>
