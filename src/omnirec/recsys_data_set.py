@@ -14,6 +14,7 @@ import pandas as pd
 from omnirec.data_loaders import registry
 from omnirec.data_loaders.datasets import DataSet
 from omnirec.data_variants import DataVariant, FoldedData, RawData, SplitData
+from omnirec.types import CountSummary
 from omnirec.util import util
 from omnirec.util.util import get_data_dir
 
@@ -204,11 +205,9 @@ class RecSysDataSet(Generic[T]):
     ) -> dict[int, dict[str, int]]: ...
 
     @overload
-    def num_interactions(
-        self: "RecSysDataSet[T]",
-    ) -> int | dict[str, int] | dict[int, dict[str, int]]: ...
+    def num_interactions(self: "RecSysDataSet[T]") -> CountSummary: ...
 
-    def num_interactions(self):
+    def num_interactions(self) -> CountSummary:
         if isinstance(self._data, RawData):
             return len(self._data.df)
         elif isinstance(self._data, SplitData):
@@ -216,6 +215,36 @@ class RecSysDataSet(Generic[T]):
         elif isinstance(self._data, FoldedData):
             return {
                 fold_num: {split: len(df) for split, df in fold_data.iter_splits()}
+                for fold_num, fold_data in self._data.folds.items()
+            }
+        else:
+            logger.error("Unknown data variant!")
+            return -1
+
+    @overload
+    def num_columns(self: "RecSysDataSet[RawData]") -> int: ...
+
+    @overload
+    def num_columns(self: "RecSysDataSet[SplitData]") -> dict[str, int]: ...
+
+    @overload
+    def num_columns(
+        self: "RecSysDataSet[FoldedData]",
+    ) -> dict[int, dict[str, int]]: ...
+
+    @overload
+    def num_columns(self: "RecSysDataSet[T]") -> CountSummary: ...
+
+    def num_columns(self) -> CountSummary:
+        if isinstance(self._data, RawData):
+            return len(self._data.df.columns)
+        elif isinstance(self._data, SplitData):
+            return {split: len(df.columns) for split, df in self._data.iter_splits()}
+        elif isinstance(self._data, FoldedData):
+            return {
+                fold_num: {
+                    split: len(df.columns) for split, df in fold_data.iter_splits()
+                }
                 for fold_num, fold_data in self._data.folds.items()
             }
         else:
