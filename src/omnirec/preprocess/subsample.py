@@ -17,7 +17,7 @@ class Subsample(Preprocessor[RawData, RawData]):
         super().__init__()
         self.sample_size = sample_size
 
-    def process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
+    def _process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
         if isinstance(self.sample_size, int):
             if len(dataset._data.df) < self.sample_size:
                 self.logger.critical(

@@ -17,7 +17,7 @@ class MakeImplicit(Preprocessor[RawData, RawData]):
         super().__init__()
         self.threshold = threshold
 
-    def process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
+    def _process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
         self.logger.info(f"Making data set implicit with threshold {self.threshold}.")
         self.logger.info(f"Minimum rating: {dataset.min_rating()}")
         self.logger.info(f"Maximum rating: {dataset.max_rating()}")

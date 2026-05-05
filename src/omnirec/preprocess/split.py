@@ -40,7 +40,7 @@ class UserHoldout(DataSplit[RawData, SplitData]):
         super().__init__(validation_size)
         self._test_size = test_size
 
-    def process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[SplitData]:
+    def _process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[SplitData]:
         df = dataset._data.df
 
         indices = {"train": np.array([]), "valid": np.array([]), "test": np.array([])}
@@ -79,7 +79,7 @@ class UserCrossValidation(DataSplit[RawData, FoldedData]):
         super().__init__(validation_size)
         self._num_folds = num_folds
 
-    def process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[FoldedData]:
+    def _process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[FoldedData]:
         data_splits: dict[int, dict[str, list[pd.DataFrame]]] = {}
         for fold in range(self._num_folds):
             data_splits[fold] = {"train": [], "val": [], "test": []}
@@ -140,7 +140,7 @@ class RandomHoldout(DataSplit[RawData, SplitData]):
         super().__init__(validation_size)
         self._test_size = test_size
 
-    def process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[SplitData]:
+    def _process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[SplitData]:
         data = dataset._data.df
 
         train, test = train_test_split(
@@ -166,7 +166,7 @@ class RandomCrossValidation(DataSplit[RawData, FoldedData]):
         super().__init__(validation_size)
         self._num_folds = num_folds
 
-    def process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[FoldedData]:
+    def _process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[FoldedData]:
         data = dataset._data.df
         data_splits: dict[int, SplitDataDict] = {}
 
@@ -214,7 +214,7 @@ class TimeBasedHoldout(DataSplit[RawData, SplitData]):
         self._valid_size = validation
         self._test_size = test
 
-    def process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[SplitData]:
+    def _process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[SplitData]:
         df = dataset._data.df
         df = df.sort_values("timestamp").reset_index(drop=True)
         n = len(df)

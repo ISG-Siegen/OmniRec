@@ -14,6 +14,7 @@ import pandas as pd
 from omnirec.data_loaders import registry
 from omnirec.data_loaders.datasets import DataSet
 from omnirec.data_variants import DataVariant, FoldedData, RawData, SplitData
+from omnirec.preprocess.trace import Trace
 from omnirec.types import CountSummary
 from omnirec.util import util
 from omnirec.util.util import get_data_dir
@@ -41,10 +42,13 @@ class _DatasetMeta:
 
 class RecSysDataSet(Generic[T]):
     _folds_file_pattern = re.compile(r"(\d+)\/(?:train|val|test)\.csv")
+    _lineage: list[Trace]
 
     def __init__(
         self, data: Optional[T] = None, meta: Optional[_DatasetMeta] = None
     ) -> None:
+        self._lineage = []
+
         if data:
             self._data = data
 
@@ -189,6 +193,7 @@ class RecSysDataSet(Generic[T]):
     def replace_data(self, new_data: R) -> "RecSysDataSet[R]":
         new = cast(RecSysDataSet[R], copy.copy(self))
         new._data = new_data
+        new._lineage = list(self._lineage)
         return new
 
     # region Dataset Statistics
