@@ -19,21 +19,21 @@ class MakeImplicit(Preprocessor[RawData, RawData]):
 
     def _process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
         self.logger.info(f"Making data set implicit with threshold {self.threshold}.")
-        self.logger.info(f"Minimum rating: {dataset.min_rating()}")
-        self.logger.info(f"Maximum rating: {dataset.max_rating()}")
+        min_rating = dataset.min_rating()
+        max_rating = dataset.max_rating()
+        self.logger.info(f"Minimum rating: {min_rating}")
+        self.logger.info(f"Maximum rating: {max_rating}")
         self.logger.info(f"Number of interactions before: {dataset.num_interactions()}")
+        df = dataset._data.df
+        keep_columns = ["user", "item"]
+        if "timestamp" in df.columns:
+            keep_columns.append("timestamp")
         if isinstance(self.threshold, int):
-            dataset._data.df = dataset._data.df[
-                dataset._data.df["rating"] >= self.threshold
-            ][["user", "item"]]
+            dataset._data.df = df.loc[df["rating"] >= self.threshold, keep_columns]
         elif isinstance(self.threshold, float) and (0 <= self.threshold <= 1):
-            scaled_max_rating = abs(dataset.max_rating()) + abs(dataset.min_rating())
-            rating_cutoff = round(scaled_max_rating * self.threshold) - abs(
-                dataset.min_rating()
-            )
-            dataset._data.df = dataset._data.df[
-                dataset._data.df["rating"] >= rating_cutoff
-            ][["user", "item"]]
+            scaled_max_rating = abs(max_rating) + abs(min_rating)
+            rating_cutoff = round(scaled_max_rating * self.threshold) - abs(min_rating)
+            dataset._data.df = df.loc[df["rating"] >= rating_cutoff, keep_columns]
         else:
             self.logger.critical(
                 f"Threshold must be an integer or a float between 0 and 1. Got {type(self.threshold)} with value {self.threshold} instead."
