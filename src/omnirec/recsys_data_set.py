@@ -279,14 +279,15 @@ class RecSysDataSet(Generic[T]):
             ts = self._data.df["timestamp"]
             if pd.api.types.is_numeric_dtype(ts):
                 ts = (
-                    pd.to_datetime(ts, unit="s", errors="coerce", utc=True).view(
+                    pd.to_datetime(ts, unit="s", errors="coerce", utc=True).astype(
                         "int64"
                     )
                     // 10**9
                 )
             else:
                 ts = (
-                    pd.to_datetime(ts, errors="coerce", utc=True).view("int64") // 10**9
+                    pd.to_datetime(ts, errors="coerce", utc=True).astype("int64")
+                    // 10**9
                 )
             self._data.df["timestamp"] = ts
             logger.info("Done.")
