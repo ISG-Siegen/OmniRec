@@ -3,6 +3,7 @@ import re
 from dataclasses import dataclass
 from os import PathLike
 from pathlib import Path
+from pprint import pformat
 from time import time
 from typing import Generic, Optional, TypeVar, cast, overload
 
@@ -23,8 +24,6 @@ logger = util._root_logger.getChild("data")
 
 # TODO: Raw Initialization, i.e. from dataframe?
 
-# TODO: __str__ and __repr__ methods
-
 # TODO (Python 3.12+): Replace TypeVar with inline generic syntax `class Box[T](...)`
 T = TypeVar("T", bound=DataVariant)
 R = TypeVar("R", bound=DataVariant)
@@ -35,6 +34,16 @@ class DatasetMeta:
     canon_pth: Optional[Path] = None
     raw_dir: Optional[Path] = None
     name: str = "UnnamedDataset"
+
+    def format_details(self) -> str:
+        lines = [f"Name: {self.name}"]
+        lines.append(
+            f"Canonical path: {self.canon_pth if self.canon_pth is not None else 'unknown'}"
+        )
+        lines.append(
+            f"Raw dir: {self.raw_dir if self.raw_dir is not None else 'unknown'}"
+        )
+        return "\n".join(lines)
 
 
 class RecSysDataSet(Generic[T]):
@@ -52,6 +61,101 @@ class RecSysDataSet(Generic[T]):
         if meta is None:
             meta = DatasetMeta()
         self._meta = meta
+
+    @staticmethod
+    def _append_field(
+        lines: list[str], label: str, value: object, indent_level: int = 1
+    ) -> None:
+        prefix = "  " * indent_level
+
+        if value is None:
+            rendered = "unknown"
+        elif isinstance(value, (dict, list, tuple, set)):
+            rendered = pformat(value, sort_dicts=False)
+        else:
+            rendered = str(value)
+
+        rendered_lines = rendered.splitlines()
+        if len(rendered_lines) == 1:
+            lines.append(f"{prefix}{label}: {rendered_lines[0]}")
+            return
+
+        lines.append(f"{prefix}{label}:")
+        lines.extend(f"{prefix}  {line}" for line in rendered_lines)
+
+    def _data_variant_name(self) -> str:
+        if not hasattr(self, "_data"):
+            return "Uninitialized"
+        return type(self._data).__name__
+
+    def _interaction_summary(self) -> CountSummary | None:
+        if not hasattr(self, "_data"):
+            return None
+        return self.num_interactions()
+
+    def _column_summary(self) -> CountSummary | None:
+        if not hasattr(self, "_data"):
+            return None
+        return self.num_columns()
+
+    @property
+    def meta(self) -> DatasetMeta:
+        """Return a shallow copy of the dataset metadata."""
+        return copy.copy(self._meta)
+
+    @property
+    def lineage(self) -> tuple[Trace, ...]:
+        """Return the recorded preprocessing lineage as a read-only snapshot."""
+        return tuple(copy.deepcopy(self._lineage))
+
+    def format_lineage(self, details: bool = False) -> str:
+        """Render the dataset lineage in either compact or detailed form."""
+        if not self._lineage:
+            return "No preprocessing lineage recorded."
+
+        if not details:
+            return "\n".join(
+                f"{index}. {trace!r}"
+                for index, trace in enumerate(self._lineage, start=1)
+            )
+
+        return "\n\n".join(
+            "\n".join((f"Step {index}", trace.format_details()))
+            for index, trace in enumerate(self._lineage, start=1)
+        )
+
+    def format_details(
+        self, include_lineage: bool = True, lineage_details: bool = False
+    ) -> str:
+        """Render a human-readable summary of the dataset and its provenance."""
+        lines = [f"RecSysDataSet: {self._meta.name}"]
+        self._append_field(lines, "Variant", self._data_variant_name())
+        self._append_field(lines, "Interactions", self._interaction_summary())
+        self._append_field(lines, "Columns", self._column_summary())
+
+        lines.append("  Metadata:")
+        lines.extend(f"    {line}" for line in self._meta.format_details().splitlines())
+
+        self._append_field(lines, "Lineage steps", len(self._lineage))
+        if include_lineage:
+            lines.append("  Lineage:")
+            formatted_lineage = self.format_lineage(details=lineage_details)
+            lines.extend(f"    {line}" for line in formatted_lineage.splitlines())
+
+        return "\n".join(lines)
+
+    def __repr__(self) -> str:
+        return (
+            "RecSysDataSet("
+            f"name={self._meta.name!r}, "
+            f"variant={self._data_variant_name()!r}, "
+            f"interactions={self._interaction_summary()!r}, "
+            f"columns={self._column_summary()!r}, "
+            f"lineage_steps={len(self._lineage)}"
+            ")"
+        )
+
+    __str__ = __repr__
 
     @staticmethod
     def use_dataloader(
