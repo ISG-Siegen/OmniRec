@@ -1,6 +1,7 @@
 import os
 import subprocess
 import sys
+from importlib import metadata
 from os import PathLike
 from pathlib import Path
 from subprocess import Popen
@@ -28,7 +29,9 @@ class Env:
         if local_lib_pth.exists():
             self._packages = (str(local_lib_pth.resolve()),) + packages
         else:
-            self._packages = ("omnirec-runner",) + packages
+            self._packages = (
+                f"omnirec-runner=={metadata.version('omnirec-runner')}",
+            ) + packages
         if path:
             self._path = Path(path)
         else:
