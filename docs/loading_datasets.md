@@ -67,6 +67,37 @@ min_rating = dataset.min_rating()
 max_rating = dataset.max_rating()
 ```
 
+### Dataset Provenance
+
+Every dataset also carries provenance information:
+
+```python
+# Compact one-line dataset summary
+print(dataset)
+
+# Full dataset overview with metadata and compact lineage
+print(dataset.format_details())
+
+# Full dataset overview with detailed trace information
+print(dataset.format_details(lineage_details=True))
+
+# Compact lineage-only summary
+print(dataset.format_lineage())
+
+# Detailed lineage report with full trace metadata
+print(dataset.format_lineage(details=True))
+
+# Inspect metadata directly
+print(dataset.meta.name)
+print(dataset.meta.canon_pth)
+print(dataset.meta.raw_dir)
+print(dataset.meta.format_details())
+
+# Access the lineage programmatically
+for trace in dataset.lineage:
+    print(trace)
+```
+
 ### Saving and Loading Datasets
 
 Save any [`RecSysDataSet`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet) object to a compressed `.rsds` file with the [`save()`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet.save) function:
@@ -82,6 +113,7 @@ dataset.save("/path/to/my_dataset.rsds")
 The save format preserves:
 - All data variants (Raw, Split, or Folded)
 - Metadata about the dataset
+- Preprocessing lineage
 - Version information for compatibility
 
 You can load previously saved datasets with the [`load()`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet.load) function:
