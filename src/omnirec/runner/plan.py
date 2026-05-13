@@ -66,10 +66,14 @@ class ExperimentPlan:
             algorithm_name = algorithm.value
         else:
             algorithm_name = algorithm
-        # TODO: Force option?
+
         if not algorithm_config:
             algorithm_config = {}
-        if algorithm_name in self._config:
+        if algorithm_name in self._config and force:
+            logger.info(
+                f'Config for "{algorithm_name}" already exists, but {force=}. Overwriting...'
+            )
+        elif algorithm_name in self._config:
             logger.critical(
                 f'Config for "{algorithm_name}" already exists! Use "force=True" to overwrite or update it using "update_algorithm_config()"'
             )
