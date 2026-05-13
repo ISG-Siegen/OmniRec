@@ -1,6 +1,6 @@
 [project]
 name = "omnirec"
-version = "0.2.0"
+version = "1.0.0"
 description = "OmniRec: The all-in-one Python library providing a unified, cross-framework pipeline for reproducible and interoperable recommender system experimentation."
 readme = "README.md"
 authors = [
@@ -12,7 +12,7 @@ dependencies = [
     "dacite>=1.9.2",
     "pandas>=2.3.0,<3",
     "pydantic>=2.11.7",
-    "omnirec-runner",
+    "omnirec-runner==1.0.0",
     "requests>=2.32.4",
     "rpyc>=6.0.2",
     "scikit-learn>=1.7.0",

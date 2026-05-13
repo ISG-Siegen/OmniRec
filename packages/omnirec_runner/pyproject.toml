@@ -1,6 +1,6 @@
 [project]
 name = "omnirec-runner"
-version = "0.1.1"
+version = "1.0.0"
 description = "This package is part of the omnirec package. Please look there for more details."
 readme = "README.md"
 authors = [
