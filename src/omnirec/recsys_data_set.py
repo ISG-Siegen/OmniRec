@@ -1,9 +1,6 @@
 import copy
-import json
 import re
-import sys
-import zipfile
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from os import PathLike
 from pathlib import Path
 from time import time
@@ -34,7 +31,7 @@ R = TypeVar("R", bound=DataVariant)
 
 
 @dataclass
-class _DatasetMeta:
+class DatasetMeta:
     canon_pth: Optional[Path] = None
     raw_dir: Optional[Path] = None
     name: str = "UnnamedDataset"
@@ -45,7 +42,7 @@ class RecSysDataSet(Generic[T]):
     _lineage: list[Trace]
 
     def __init__(
-        self, data: Optional[T] = None, meta: Optional[_DatasetMeta] = None
+        self, data: Optional[T] = None, meta: Optional[DatasetMeta] = None
     ) -> None:
         self._lineage = []
 
@@ -53,7 +50,7 @@ class RecSysDataSet(Generic[T]):
             self._data = data
 
         if meta is None:
-            meta = _DatasetMeta()
+            meta = DatasetMeta()
         self._meta = meta
 
     @staticmethod
@@ -287,44 +284,13 @@ class RecSysDataSet(Generic[T]):
         Args:
             file (str | PathLike): The path where the file is saved.
         """
+        from omnirec.rsds.dispatcher import save_dataset
+
         file = Path(file)
         if not file.suffix:
             file = file.with_suffix(".rsds")
-        with zipfile.ZipFile(file, "w", zipfile.ZIP_STORED) as zf:
-            if isinstance(self._data, RawData):
-                with zf.open("data.csv", "w") as data_file:
-                    self._data.df.to_csv(data_file, index=False)
-                zf.writestr("VARIANT", "RawData")
-            elif isinstance(self._data, SplitData):
-                for filename, data in zip(
-                    ["train", "val", "test"],
-                    [self._data.train, self._data.val, self._data.test],
-                ):
-                    with zf.open(filename + ".csv", "w") as data_file:
-                        data.to_csv(data_file, index=False)
-                zf.writestr("VARIANT", "SplitData")
-            elif isinstance(self._data, FoldedData):
-                # TODO: Leveraging the new SplitData.get method this can be simplified:
-                def write_fold(fold: int, split: str, data: pd.DataFrame):
-                    with zf.open(f"{fold}/{split}.csv", "w") as data_file:
-                        data.to_csv(data_file, index=False)
 
-                for fold, splits in self._data.folds.items():
-                    write_fold(fold, "train", splits.train)
-                    write_fold(fold, "val", splits.val)
-                    write_fold(fold, "test", splits.test)
-
-                zf.writestr("VARIANT", "FoldedData")
-
-            else:
-                logger.critical(
-                    f"Unknown data variant: {type(self._data).__name__}! Aborting save operation..."
-                )
-                sys.exit(1)
-
-            zf.writestr("META", json.dumps(asdict(self._meta), default=str))
-            # HACK: Very simple versioning implementation in case we change anything in the future
-            zf.writestr("VERSION", "1.0.0")
+        save_dataset(self, file)
 
     # TODO: Check file exists
     # TODO: Error handling: logger.critical and sys.exit(1) if any step causes an error
@@ -338,58 +304,11 @@ class RecSysDataSet(Generic[T]):
         Returns:
             RecSysDataSet[T]: The loaded RecSysDataSet object.
         """
-        with zipfile.ZipFile(file, "r", zipfile.ZIP_STORED) as zf:
-            version = zf.read("VERSION").decode()
-            # HACK: Very simple versioning implementation in case we change anything in the future
-            if version != "1.0.0":
-                logger.critical(f"Unknown rsds-file version: {version}")
-                sys.exit(1)
+        from omnirec.rsds.dispatcher import load_dataset
 
-            variant = zf.read("VARIANT").decode()
+        file = Path(file)
 
-            if variant == "RawData":
-                with zf.open("data.csv", "r") as data_file:
-                    data = RawData(pd.read_csv(data_file))
-            elif variant == "SplitData":
-                dfs: list[pd.DataFrame] = []
-
-                for filename in ["train", "val", "test"]:
-                    with zf.open(filename + ".csv", "r") as data_file:
-                        dfs.append(pd.read_csv(data_file))
-
-                data = SplitData(dfs[0], dfs[1], dfs[2])
-            elif variant == "FoldedData":
-                folds: dict[int, SplitData] = {}
-
-                for p in zf.namelist():
-                    match = RecSysDataSet._folds_file_pattern.match(p)
-                    if not match:
-                        continue
-
-                    fold = match.group(1)
-                    folds.setdefault(
-                        int(fold), SplitData(*[pd.DataFrame() for _ in range(3)])
-                    )
-
-                # TODO: Leveraging the new FoldedData.from_split_dict method this can be simplified:
-                def read_fold(fold: int, split: str) -> pd.DataFrame:
-                    with zf.open(f"{fold}/{split}.csv", "r") as data_file:
-                        return pd.read_csv(data_file)
-
-                for fold, split_data in folds.items():
-                    split_data.train = read_fold(fold, "train")
-                    split_data.val = read_fold(fold, "val")
-                    split_data.test = read_fold(fold, "test")
-
-                data = FoldedData(folds)
-            else:
-                logger.critical(
-                    f"Unknown data variant: {variant}! Aborting load operation..."
-                )
-                sys.exit(1)
-
-            meta = zf.read("META").decode()
-            meta = _DatasetMeta(**json.loads(meta))
-            return cast(RecSysDataSet[T], RecSysDataSet(data, meta))
+        ds = load_dataset(file)
+        return cast(RecSysDataSet[T], ds)
 
     # endregion
