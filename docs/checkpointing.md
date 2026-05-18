@@ -29,7 +29,7 @@ checkpoints/
 
 **Hash-Based Organization**
 
-The [`Coordinator`](API_references.md#omnirec.runner.coordinator.Coordinator) generates unique hashes for datasets and configurations:
+The [`Coordinator`](api/coordinator_class.md#omnirec.runner.coordinator.Coordinator) generates unique hashes for datasets and configurations:
 
 - **Dataset hash**: Based on the number of interactions, ensuring identical datasets share the same checkpoint directory
 - **Configuration hash**: Based on algorithm name and hyperparameters, ensuring identical configurations are deduplicated
@@ -51,6 +51,7 @@ run_omnirec(datasets=dataset, plan=plan, evaluator=evaluator)
 ```
 
 The framework automatically:
+
 1. Loads the progress tracker from `progress.json`
 2. Skips completed phases (Fit, Predict, Eval)
 3. Continues from the last incomplete phase

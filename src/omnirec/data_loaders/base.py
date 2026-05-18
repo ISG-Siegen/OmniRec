@@ -11,35 +11,24 @@ class DatasetInfo:
     """
     Metadata about a dataset.
 
-    Attributes
-    __________
-    
-    download_urls : Optional[Union[str, List[str]]]
-        URL or list of URLs to download the dataset.
-        If a list is provided, URLs are tried in order until one succeeds
-        (skipping on checksum mismatch or HTTP errors).
+    Attributes:
+        download_urls (Optional[Union[str, List[str]]]):
+            URL or list of URLs to download the dataset.
+            If a list is provided, URLs are tried in order until one succeeds
+            (skipping on checksum mismatch or HTTP errors).
 
-    checksum : Optional[str]
-        Optional SHA256 checksum to verify the downloaded file's integrity.
-        If provided, the downloaded file will be hashed using SHA256 and compared
-        to this value. Use e.g. `hashlib.sha256()` to compute the checksum in python:
-    download_file_name : Optional[str]
-        Optional custom file name to use when saving the downloaded dataset.
-        If not provided, the name will be inferred from the URL.
-    verify_tls : bool
-        Whether to verify TLS/SSL certificates when downloading.
-        Defaults is `True`.
-    license_or_registration : bool
-        Indicates if the dataset requires a license agreement or registration to access.
-        Default is `False`.
-    ```
-    import hashlib
-    hasher = hashlib.sha256()
-    with open("ml-100k.zip", "rb") as f:
-        for chunk in iter(lambda: f.read(8192), b""):
-            hasher.update(chunk)
-    print(hasher.hexdigest())
-    ```
+        checksum (Optional[str]):
+            Optional SHA256 checksum to verify the downloaded file's integrity.
+            If provided, the downloaded file will be hashed using SHA256 and compared to this value.
+        download_file_name (Optional[str]):
+            Optional custom file name to use when saving the downloaded dataset.
+            If not provided, the name will be inferred from the URL.
+        verify_tls (bool):
+            Whether to verify TLS/SSL certificates when downloading.
+            Defaults is `True`.
+        license_or_registration (bool):
+            Indicates if the dataset requires a license agreement or registration to access.
+            Default is `False`.
     """
 
     download_urls: Optional[str | list[str]] = None

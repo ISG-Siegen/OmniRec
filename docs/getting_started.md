@@ -12,7 +12,7 @@ pip install omnirec
 
 ## Loading Datasets
 
-Central part of the OmniRec library is the [`RecSysDataSet`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) class. You can load data by calling the static [`use_dataloader()`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) function that returns a [`RecSysDataSet`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) object. If provided a registered dataset name with DataSet.<dataset_name>, [`use_dataloader()`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) downloads the dataset, removes duplicates and normalizes the identifiers:
+Central part of the OmniRec library is the [`RecSysDataSet`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet) class. You can load data by calling the static [`use_dataloader()`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet) function that returns a [`RecSysDataSet`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet) object. If provided a registered dataset name with DataSet.<dataset_name>, [`use_dataloader()`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet) downloads the dataset, removes duplicates and normalizes the identifiers:
 
 ```python
 from omnirec import RecSysDataSet
@@ -45,9 +45,9 @@ pipe = Pipe(
 dataset = pipe.process(dataset)
 ```
 
-The [`pipe.process()`](API_references.md#omnirec.preprocess.pipe.Pipe) function iteratively executes the preprocessing steps.
+The [`pipe.process()`](api/preprocessing_pipeline.md#omnirec.preprocess.pipe.Pipe) function iteratively executes the preprocessing steps.
 
-Alternatively, this can be done step by step by creating a single preprocessing step and calling [`process()`](API_references.md#omnirec.preprocess.subsample.Subsample) on it:
+Alternatively, this can be done step by step by creating a single preprocessing step and calling [`process()`](api/preprocessing_pipeline.md#omnirec.preprocess.subsample.Subsample) on it:
 
 ```python
 from omnirec.preprocess.subsample import Subsample
@@ -61,11 +61,12 @@ More details about the available preprocessing steps can be found in [Preprocess
 
 ## Configuring Experiments
 
-To run experiments, you need to create an [`ExperimentPlan`](API_references.md#omnirec.runner.plan.ExperimentPlan) that specifies which algorithms to run and their hyperparameters:
+To run experiments, you need to create an [`ExperimentPlan`](api/experiment_planning.md#omnirec.runner.plan.ExperimentPlan) that specifies which algorithms to run and their hyperparameters:
 
 ```python
 from omnirec.runner.plan import ExperimentPlan
 from omnirec.runner.algos import LensKit, RecBole
+from omnirec.runner.plan_components import Grid
 
 # Create a new experiment plan
 plan = ExperimentPlan(plan_name="My First Experiment")
@@ -74,14 +75,14 @@ plan = ExperimentPlan(plan_name="My First Experiment")
 # For LensKit ItemKNN with different neighborhood sizes
 plan.add_algorithm(
     LensKit.ItemKNNScorer,
-    {"max_nbrs": [10, 20, 30], "min_nbrs": 5}
+    {"max_nbrs": Grid([10, 20, 30]), "min_nbrs": 5}
 )
 
 # Add RecBole BPR algorithm with default parameters
 plan.add_algorithm(RecBole.BPR)
 ```
 
-When you provide a list of values for a hyperparameter (like `[10, 20, 30]` for `max_nbrs`), the framework will run separate experiments for each value.
+When you wrap values in [`Grid`](api/plan_components.md#omnirec.runner.plan_components.Grid) (like `Grid([10, 20, 30])` for `max_nbrs`), the framework will run separate experiments for each value. Plain values are used as-is in every run.
 
 You can find more information about the available algorithms and how to use them with OmniRec in the [Algorithms Overview](algorithms_overview.md) and [Configure Algorithms](conf_algo.md) documentation.
 
@@ -104,7 +105,7 @@ You can find more details about the available metrics and how to use them in the
 
 ## Running Experiments
 
-Now we can run the experiments using the [`run_omnirec`](API_references.md#omnirec.util.run.run_omnirec) function:
+Now we can run the experiments using the [`run_omnirec`](api/runner_function.md#omnirec.util.run.run_omnirec) function:
 
 ```python
 from omnirec.util.run import run_omnirec
@@ -117,7 +118,7 @@ run_omnirec(
 )
 ```
 
-The [`run_omnirec`](API_references.md#omnirec.util.run.run_omnirec) function will:
+The [`run_omnirec`](api/runner_function.md#omnirec.util.run.run_omnirec) function will:
 
 1. Set up isolated Python environments for each algorithm framework
 2. Train each algorithm configuration on the training data
@@ -129,13 +130,13 @@ After experiments complete, the results will be printed to the console and can a
 
 ## Checkpointing and Results
 
-OmniRec automatically saves experiment progress and results to the checkpoint directory. If an experiment is interrupted, simply run it again—the [`run_omnirec`](API_references.md#omnirec.util.run.run_omnirec) function will automatically resume from the last completed phase.
+OmniRec automatically saves experiment progress and results to the checkpoint directory. If an experiment is interrupted, simply run it again—the [`run_omnirec`](api/runner_function.md#omnirec.util.run.run_omnirec) function will automatically resume from the last completed phase.
 
 For detailed information about checkpoint structure, resuming experiments, and result formats, see the [Checkpointing and Results](checkpointing.md) documentation.
 
 ## Reproducibility
 
-OmniRec uses a global random state to ensure reproducible results across experiments. By default, the random state is set to 42. You can control this using the [`set_random_state()`](API_references.md#omnirec.util.util.set_random_state) and [`get_random_state()`](API_references.md#omnirec.util.util.get_random_state) functions:
+OmniRec uses a global random state to ensure reproducible results across experiments. By default, the random state is set to 42. You can control this using the [`set_random_state()`](api/utility_functions.md#omnirec.util.util.set_random_state) and [`get_random_state()`](api/utility_functions.md#omnirec.util.util.get_random_state) functions:
 
 ```python
 from omnirec.util.util import set_random_state, get_random_state
@@ -163,6 +164,7 @@ from omnirec.preprocess.core_pruning import CorePruning
 from omnirec.preprocess.split import UserHoldout
 from omnirec.runner.plan import ExperimentPlan
 from omnirec.runner.algos import LensKit, RecBole
+from omnirec.runner.plan_components import Grid
 from omnirec.runner.evaluation import Evaluator
 from omnirec import NDCG, HR
 from omnirec.util.run import run_omnirec
@@ -179,7 +181,7 @@ dataset = pipeline.process(dataset)
 
 # Configure experiments
 plan = ExperimentPlan(plan_name="MovieLens Comparison")
-plan.add_algorithm(LensKit.ItemKNNScorer, {"max_nbrs": [20, 30]})
+plan.add_algorithm(LensKit.ItemKNNScorer, {"max_nbrs": Grid([20, 30])})
 plan.add_algorithm(RecBole.BPR)
 
 # Set up evaluation

@@ -1,39 +1,67 @@
 TODO: Expand dataset overview
 # Dataset Overview
 
-The framework includes many built-in datasets. Use the exact name with the [`use_dataloader`](API_references.md#omnirec.recsys_data_set.RecSysDataSet.use_dataloader) function to load a dataset. Here is the comprehensive list with all dataset names:
+The framework includes many built-in datasets. Use the exact name with the [`use_dataloader`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet.use_dataloader) function to load a dataset. Here is the comprehensive list with all dataset names:
 
 | Dataset Name | Number of Users | Number of Items | Number of Ratings | Feedback Type |
 |:---|---:|---:|---:|:---|
 | **AdressaOneWeek** | 640.503 | 20.428 | 2.817.881 | implicit |
 | **AlibabaIFashion** | 3.569.112 | 4.463.302 | 191.394.393 | implicit |
 | **AlibabaMobile** | 10.000 | 2.876.947 | 4.686.904 | implicit |
+| **Amazon2013AmazonInstantVideo** | ? | ? | ? | explicit |
+| **Amazon2013Arts** | ? | ? | ? | explicit |
+| **Amazon2013Automotive** | ? | ? | ? | explicit |
+| **Amazon2013Baby** | ? | ? | ? | explicit |
+| **Amazon2013Beauty** | ? | ? | ? | explicit |
+| **Amazon2013Books** | ? | ? | ? | explicit |
+| **Amazon2013CellPhonesAndAccessories** | ? | ? | ? | explicit |
+| **Amazon2013ClothingAndAccessories** | ? | ? | ? | explicit |
+| **Amazon2013Electronics** | ? | ? | ? | explicit |
+| **Amazon2013GourmetFoods** | ? | ? | ? | explicit |
+| **Amazon2013Health** | ? | ? | ? | explicit |
+| **Amazon2013HomeAndKitchen** | ? | ? | ? | explicit |
+| **Amazon2013IndustrialAndScientific** | ? | ? | ? | explicit |
+| **Amazon2013Jewelry** | ? | ? | ? | explicit |
+| **Amazon2013KindleStore** | ? | ? | ? | explicit |
+| **Amazon2013MoviesAndTV** | ? | ? | ? | explicit |
+| **Amazon2013Music** | ? | ? | ? | explicit |
+| **Amazon2013MusicalInstruments** | ? | ? | ? | explicit |
+| **Amazon2013OfficeProducts** | ? | ? | ? | explicit |
+| **Amazon2013Patio** | ? | ? | ? | explicit |
+| **Amazon2013PetSupplies** | ? | ? | ? | explicit |
+| **Amazon2013Shoes** | ? | ? | ? | explicit |
+| **Amazon2013Software** | ? | ? | ? | explicit |
+| **Amazon2013SportsAndOutdoors** | ? | ? | ? | explicit |
+| **Amazon2013ToolsAndHomeImprovement** | ? | ? | ? | explicit |
+| **Amazon2013ToysAndGames** | ? | ? | ? | explicit |
+| **Amazon2013VideoGames** | ? | ? | ? | explicit |
+| **Amazon2013Watches** | ? | ? | ? | explicit |
+| **Amazon2014AmazonInstantVideo** | 426.922 | 23.965 | 583.933 | explicit |
+| **Amazon2014AppsForAndroid** | 1.323.884 | 61.275 | 2.638.172 | explicit |
+| **Amazon2014Automotive** | 851.418 | 320.112 | 1.373.768 | explicit |
+| **Amazon2014Baby** | 531.890 | 64.426 | 915.446 | explicit |
+| **Amazon2014Beauty** | 1.210.271 | 249.274 | 2.023.070 | explicit |
 | **Amazon2014Books** | 8.026.324 | 2.330.066 | 22.507.155 | explicit |
-| **Amazon2014Electronics** | 4.201.696 | 476.002 | 7.824.482 | explicit |
-| **Amazon2014MoviesAndTv** | 2.088.620 | 200.941 | 4.607.047 | explicit |
 | **Amazon2014CdsAndVinyl** | 1.578.597 | 486.360 | 3.749.004 | explicit |
+| **Amazon2014CellPhonesAndAccessories** | 2.261.045 | 319.678 | 3.447.249 | explicit |
 | **Amazon2014ClothingShoesAndJewelry** | 3.117.268 | 1.136.004 | 5.748.920 | explicit |
+| **Amazon2014DigitalMusic** | 478.235 | 266.414 | 836.006 | explicit |
+| **Amazon2014Electronics** | 4.201.696 | 476.002 | 7.824.482 | explicit |
+| **Amazon2014GroceryAndGourmetFood** | 768.438 | 166.049 | 1.297.156 | explicit |
+| **Amazon2014HealthAndPersonalCare** | 1.851.132 | 252.331 | 2.982.326 | explicit |
 | **Amazon2014HomeAndKitchen** | 2.511.610 | 410.243 | 4.253.926 | explicit |
 | **Amazon2014KindleStore** | 1.406.890 | 430.530 | 3.205.467 | explicit |
+| **Amazon2014MoviesAndTv** | 2.088.620 | 200.941 | 4.607.047 | explicit |
+| **Amazon2014MusicalInstruments** | 339.231 | 83.046 | 500.176 | explicit |
+| **Amazon2014OfficeProducts** | 909.314 | 130.006 | 1.243.186 | explicit |
+| **Amazon2014PatioLawnAndGarden** | 714.791 | 105.984 | 993.490 | explicit |
+| **Amazon2014PetSupplies** | 740.985 | 103.288 | 1.235.316 | explicit |
 | **Amazon2014SportsAndOutdoors** | 1.990.521 | 478.898 | 3.268.695 | explicit |
-| **Amazon2014CellPhonesAndAccessories** | 2.261.045 | 319.678 | 3.447.249 | explicit |
-| **Amazon2014HealthAndPersonalCare** | 1.851.132 | 252.331 | 2.982.326 | explicit |
+| **Amazon2014ToolsAndHomeImprovement** | 1.212.468 | 260.659 | 1.926.047 | explicit |
 | **Amazon2014ToysAndGames** | 1.342.911 | 327.698 | 2.252.771 | explicit |
 | **Amazon2014VideoGames** | 826.767 | 50.210 | 1.324.753 | explicit |
-| **Amazon2014ToolsAndHomeImprovement** | 1.212.468 | 260.659 | 1.926.047 | explicit |
-| **Amazon2014Beauty** | 1.210.271 | 249.274 | 2.023.070 | explicit |
-| **Amazon2014AppsForAndroid** | 1.323.884 | 61.275 | 2.638.172 | explicit |
-| **Amazon2014OfficeProducts** | 909.314 | 130.006 | 1.243.186 | explicit |
-| **Amazon2014PetSupplies** | 740.985 | 103.288 | 1.235.316 | explicit |
-| **Amazon2014Automotive** | 851.418 | 320.112 | 1.373.768 | explicit |
-| **Amazon2014GroceryAndGourmetFood** | 768.438 | 166.049 | 1.297.156 | explicit |
-| **Amazon2014PatioLawnAndGarden** | 714.791 | 105.984 | 993.490 | explicit |
-| **Amazon2014Baby** | 531.890 | 64.426 | 915.446 | explicit |
-| **Amazon2014DigitalMusic** | 478.235 | 266.414 | 836.006 | explicit |
-| **Amazon2014MusicalInstruments** | 339.231 | 83.046 | 500.176 | explicit |
-| **Amazon2014AmazonInstantVideo** | 426.922 | 23.965 | 583.933 | explicit |
-| **Amazon2018AmazonFashion** | 186.189 | 749.233 | 875.121 | explicit |
 | **Amazon2018AllBeauty** | 32.586 | 324.038 | 361.605 | explicit |
+| **Amazon2018AmazonFashion** | 186.189 | 749.233 | 875.121 | explicit |
 | **Amazon2018Appliances** | 30.252 | 515.650 | 590.844 | explicit |
 | **Amazon2018ArtsCraftsAndSewing** | 302.809 | 1.579.230 | 2.733.842 | explicit |
 | **Amazon2018Automotive** | 925.387 | 3.873.247 | 7.815.540 | explicit |
@@ -93,12 +121,37 @@ The framework includes many built-in datasets. Use the exact name with the [`use
 | **Amazon2023SubscriptionBoxes** | 15.200 | 641 | 16.200 | explicit |
 | **Amazon2023ToolsAndHomeImprovement** | 12.200.000 | 1.500.000 | 27.000.000 | explicit |
 | **Amazon2023ToysAndGames** | 8.100.000 | 890.700 | 16.300.000 | explicit |
-| **Amazon2023VideoGames** | 2.800.000 | 137.200 | 4.600.000 | explicit |
 | **Amazon2023Unknown** | 23.100.000 | 13.200.000 | 63.800.000 | explicit |
+| **Amazon2023VideoGames** | 2.800.000 | 137.200 | 4.600.000 | explicit |
+| **AmazonMP3** | ? | ? | ? | ? |
+| **AmazonRatings** | ? | ? | ? | ? |
 | **Anime** | 73.515 | 11.200 | 7.813.730 | explicit |
 | **BeerAdvocate** | 33.388 | 66.055 | 1.571.808 | explicit |
-| **RateBeer** | 29.265 | 110.369 | 2.855.232 | explicit |
 | **Behance** | 63.497 | 178.788 | 1.000.000 | implicit |
+| **BookCrossing** | ? | ? | ? | explicit |
+| **CiaoDVD** | ? | ? | ? | ? |
+| **CiteULikeA** | ? | ? | ? | implicit |
+| **CiteULikeT** | ? | ? | ? | implicit |
+| **DeliveryHeroSE** | ? | ? | ? | implicit |
+| **DeliveryHeroSG** | ? | ? | ? | implicit |
+| **DeliveryHeroTW** | ? | ? | ? | implicit |
+| **DianpingSequentialRec** | ? | ? | ? | implicit |
+| **DianpingSocialRec** | ? | ? | ? | ? |
+| **DoubanBook** | ? | ? | ? | ? |
+| **DoubanMovie** | ? | ? | ? | ? |
+| **DoubanMusic** | ? | ? | ? | ? |
+| **DoubanShort** | ? | ? | ? | ? |
+| **FilmTrust** | ? | ? | ? | ? |
+| **Frappe** | ? | ? | ? | implicit |
+| **GoodreadsChildren** | ? | ? | ? | explicit |
+| **GoodreadsComicsAndGraphic** | ? | ? | ? | explicit |
+| **GoodreadsFantasyAndParanormal** | ? | ? | ? | explicit |
+| **GoodreadsHistoryAndBiography** | ? | ? | ? | explicit |
+| **GoodreadsMysteryThrillerAndCrime** | ? | ? | ? | explicit |
+| **GoodreadsPoetry** | ? | ? | ? | explicit |
+| **GoodreadsRomance** | ? | ? | ? | explicit |
+| **GoodreadsYoungAdult** | ? | ? | ? | explicit |
+| **GoogleLocal2018** | ? | ? | ? | ? |
 | **GoogleLocal2021Alabama** | 2.077.087 | 74.600 | 8.803.325 | explicit |
 | **GoogleLocal2021Alaska** | 278.695 | 12.689 | 1.032.752 | explicit |
 | **GoogleLocal2021Arizona** | 4.020.106 | 108.062 | 18.006.480 | explicit |
@@ -152,14 +205,31 @@ The framework includes many built-in datasets. Use the exact name with the [`use
 | **GoogleLocal2021Wyoming** | 392.550 | 12.016 | 1.112.674 | explicit |
 | **Gowalla** | 107.092 | 1.280.969 | 3.981.334 | implicit |
 | **HetrecLastFM** | 1.892 | 12.523 | 71.064 | implicit |
+| **Jester1_1** | ? | ? | ? | explicit |
+| **Jester1_2** | ? | ? | ? | explicit |
+| **Jester1_3** | ? | ? | ? | explicit |
+| **Jester2** | ? | ? | ? | explicit |
+| **Jester2Plus** | ? | ? | ? | explicit |
+| **Jester3** | ? | ? | ? | explicit |
+| **Jester4** | ? | ? | ? | explicit |
+| **Libimseti** | ? | ? | ? | ? |
 | **MovieLens100K** | 943 | 1.682 | 100.000 | explicit |
+| **MovieLens10M** | 69.878 | 10.677 | 10.000.054 | explicit |
 | **MovieLens1BSynthetic** | 2.197.225 | 855.723 | 1.226.159.268 | implicit |
+| **MovieLens1M** | 6.040 | 3.706 | 1.000.209 | explicit |
 | **MovieLens20M** | 138.493 | 26.744 | 20.000.263 | explicit |
 | **MovieLens25M** | 162.541 | 59.047 | 25.000.095 | explicit |
 | **MovieLensLatest** | 330.975 | 83.239 | 33.832.162 | explicit |
 | **MovieLensLatestSmall** | 610 | 9.724 | 100.836 | explicit |
-| **MovieLens1M** | 6.040 | 3.706 | 1.000.209 | explicit |
-| **MovieLens10M** | 69.878 | 10.677 | 10.000.054 | explicit |
+| **RateBeer** | 29.265 | 110.369 | 2.855.232 | explicit |
+| **StackOverflow** | ? | ? | ? | ? |
+| **SteamAustralianLibraries** | ? | ? | ? | implicit |
+| **SteamAustralianReviews** | ? | ? | ? | implicit |
+| **SteamRecommendations** | ? | ? | ? | implicit |
+| **SteamReviews** | ? | ? | ? | implicit |
+| **TripAdvisor** | ? | ? | ? | ? |
+| **WikiLens** | ? | ? | ? | ? |
+| **YahooSongs** | ? | ? | ? | ? |
 | **Yelp2018** | 1.326.101 | 174.567 | 5.261.667 | explicit |
 | **Yelp2019** | 1.637.138 | 192.606 | 6.461.396 | explicit |
 | **Yelp2020** | 1.968.703 | 209.393 | 7.735.091 | explicit |
@@ -170,10 +240,10 @@ The framework includes many built-in datasets. Use the exact name with the [`use
 
 ## Listing Available Datasets
 
-To see all registered datasets use [`list_datasets()`](API_references.md#omnirec.data_loaders.registry.list_datasets):
+To see all registered datasets use [`list_datasets()`](api/data_loaders.md#omnirec.data_loaders.registry.list_datasets):
 
 ```python
-from omnirec.data_loaders.registry import list_datasets
+from omnirec import list_datasets
 
 available_datasets = list_datasets()
 print("Available datasets:", available_datasets)

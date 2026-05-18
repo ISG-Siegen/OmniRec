@@ -3,16 +3,16 @@ import json
 import subprocess
 import sys
 import tempfile
+import time
 import traceback
 from os import PathLike
 from pathlib import Path
 from threading import Event, Thread
-from typing import IO, Any, Iterable, Optional, TypeVar
+from typing import IO, Any, Callable, Iterable, Optional, TypeVar
 
-import omnirec_runner
 import pandas as pd
 import rpyc
-from omnirec_runner.runner import RunnerInfo, RunnerService
+from omnirec_runner.runner import JobState, _RunnerService
 
 from omnirec.data_variants import DataVariant, FoldedData, SplitData
 from omnirec.recsys_data_set import RecSysDataSet
@@ -20,14 +20,12 @@ from omnirec.runner.envs import Env
 from omnirec.runner.evaluation import Evaluator
 from omnirec.runner.plan import ExperimentPlan
 from omnirec.runner.progress import Phase, RunProgress
+from omnirec.runner.registry import _RUNNER_REGISTRY
 from omnirec.util import util
 from omnirec.util.cert import Side, ensure_certs, get_cert_pth, get_key_pth
 
 logger = util._root_logger.getChild("coordinator")
 runner_logger = util._root_logger.getChild("runner")
-
-
-_RUNNER_REGISTRY: dict[str, RunnerInfo] = {}
 
 
 # TODO (Python 3.12+): Replace TypeVar with inline generic syntax `class Box[T](...)`
@@ -69,138 +67,13 @@ class Coordinator:
 
         self._out_reader: Optional[OutputReader] = None
         self._err_reader: Optional[OutputReader] = None
+        self._root: Optional[_RunnerService] = None
 
-        self._register_default_runners()
         ensure_certs()
 
     def __del__(self):
         if self._tmp_dir_obj:
             self._tmp_dir_obj.cleanup()
-
-    def _register_default_runners(self):
-        runner_dir = Path(omnirec_runner.__file__).parent.resolve()
-
-        # TODO: Add other runner:
-        # TODO: Maybe move this to a config file or smth and dont hard code
-        self.register_runner(
-            "LensKit",
-            RunnerInfo(
-                runner_dir / "lenskit_runner.py",
-                [
-                    "PopScorer",
-                    "ItemKNNScorer",
-                    "UserKNNScorer",
-                    "ImplicitMFScorer",
-                    "BiasedMFScorer",
-                    "FunkSVDScorer",
-                ],
-                "3.11",
-                ["lenskit==2025.2.0", "binpickle", "numba"],
-            ),
-        )
-
-        self.register_runner(
-            "RecBole",
-            RunnerInfo(
-                runner_dir / "recbole_runner.py",
-                [
-                    "Pop",
-                    "ItemKNN",
-                    "BPR",
-                    "NeuMF",
-                    "ConvNCF",
-                    "DMF",
-                    "FISM",
-                    "NAIS",
-                    "SpectralCF",
-                    "GCMC",
-                    "NGCF",
-                    "LightGCN",
-                    "DGCF",
-                    "LINE",
-                    "MultiVAE",
-                    "MultiDAE",
-                    "MacridVAE",
-                    "CDAE",
-                    "ENMF",
-                    "NNCF",
-                    "RecVAE",
-                    "EASE",
-                    "SLIMElastic",
-                    "SGL",
-                    "ADMMSLIM",
-                    "NCEPLRec",
-                    "SimpleX",
-                    "NCL",
-                    "Random",
-                    "DiffRec",
-                    "LDiffRec",
-                ],
-                "3.11",
-                [
-                    "recbole==1.2.1",
-                    "numpy==1.26.4",
-                    "torch==2.5.1",
-                ],
-            ),
-        )
-
-        self.register_runner(
-            "RecPack",
-            RunnerInfo(
-                runner_dir / "recpack_runner.py",
-                ["SVD", "NMF", "ItemKNN"],
-                "3.12",
-                ["recpack==0.3.6"],
-            ),
-        )
-        self.register_runner(
-            "Elliot",
-            RunnerInfo(
-                runner_dir / "elliot_runner.py",
-                [
-                    "ItemKNN",
-                    "UserKNN",
-                    "AMF",
-                    "SlopeOne",
-                    "MultiDAE",
-                    "MultiVAE",
-                    "LightGCN",
-                    "NGCF",
-                    "MostPop",
-                    "BPRMF",
-                    "BPRMF_batch",
-                    "FM",
-                    "FunkSVD",
-                    "NonNegMF",
-                    "PureSVD",
-                    "SVDpp",
-                    "WRMF",
-                    "ConvMF",
-                    "DeepFM",
-                    "DMF",
-                    "GMF",
-                    "ItemAutoRec",
-                    "NeuMF",
-                    "UserAutoRec",
-                ],
-                "3.8",
-                [
-                    # patched elliot version
-                    "git+https://github.com/moritz-baumgart/elliot.git",
-                ],
-            ),
-        )
-
-    def register_runner(self, name: str, info: RunnerInfo):
-        if name in _RUNNER_REGISTRY:
-            logger.critical(
-                f"A runner with the name {name} is already registered. Choose a different one!"
-            )
-            sys.exit(1)
-
-        _RUNNER_REGISTRY[name] = info
-        logger.debug(f"Runner {name} registered")
 
     def run(
         self,
@@ -265,14 +138,14 @@ class Coordinator:
                     port,
                     get_key_pth(Side.Client),
                     get_cert_pth(Side.Client),
-                    config={"sync_request_timeout": 600},
                 )
-                root: RunnerService = conn.root
+                root: _RunnerService = conn.root
+                self._root = conn.root
 
                 for current_dataset in datasets:
                     for current_config in current_config_list:
                         dataset_namehash = f"{current_dataset._meta.name}-{self.dataset_hash(current_dataset)[:8]}"
-                        config_namehash = f"{current_algo}-{self.config_hash(current_algo, current_config)[:8]}"
+                        config_namehash = f"{current_algo}-{self.config_hash(current_algo, current_config)[:8]}-{util.get_random_state()}"
                         current_checkpoint_dir = (
                             self._checkpoint_dir / dataset_namehash / config_namehash
                         )
@@ -287,7 +160,8 @@ class Coordinator:
                         logger.debug(f"Using tmp dir: {current_tmp_dir}")
 
                         progress = RunProgress.load_or_create(
-                            self._checkpoint_dir, (dataset_namehash, config_namehash)
+                            self._checkpoint_dir,
+                            (dataset_namehash, config_namehash, current_config),
                         )
 
                         if isinstance(current_dataset._data, FoldedData):
@@ -426,7 +300,7 @@ class Coordinator:
 
     def run_split(
         self,
-        root: RunnerService,
+        root: _RunnerService,
         progress: "RunProgress",
         algorithm: str,
         algo_config: dict[str, Any],
@@ -470,14 +344,14 @@ class Coordinator:
         if get_phase() <= Phase.Fit:
             did_progress = True
             self.log_phase_info(dataset_name, algo_name, "'Fit'")
-            root._fit()
+            self.wait_for_job(root._fit, root)
 
             advance_phase()
 
         if get_phase() <= Phase.Predict:
             did_progress = True
             self.log_phase_info(dataset_name, algo_name, "'Predict'")
-            root._predict()
+            self.wait_for_job(root._predict, root)
 
             advance_phase()
 
@@ -501,6 +375,28 @@ class Coordinator:
                 logger.info(
                     f"All phases for {dataset_name}/{algo_name} already complete, skipping..."
                 )
+
+    def wait_for_job(self, job: Callable[[], str], root: _RunnerService):
+        logger.debug("Starting job...")
+        job_id = job()
+        logger.debug(f"Job started with id {job_id}")
+
+        while True:
+            state = root._status(job_id)
+            state = JobState(state)
+            logger.debug(f"Received job state {JobState(state).name} ({state})")
+
+            if state is JobState.INVALID_ID:
+                raise ValueError(f"Tried to get job status with invalid id: {job_id}")
+
+            if state is JobState.CANCELLED:
+                raise Exception("Job was unexpectedly cancelled.")
+
+            if state is JobState.FINISHED:
+                logger.debug(f"Job {job_id} finished!")
+                break
+
+            time.sleep(10)
 
     def log_phase_info(self, dataset_name: str, algo_name: str, phase: str):
         logger.info(f"Running phase {phase} for {dataset_name}/{algo_name}")
@@ -547,6 +443,10 @@ class Coordinator:
 
     def stop(self, logger_fn=logger.critical):
         logger_fn("Stopping runner...")
+
+        if self._root is not None:
+            self._root._shutdown()
+
         # FIXME: self._proc might be None here
         self._proc.terminate()
         try:
@@ -585,17 +485,23 @@ class OutputReader:
         Thread(target=self._read, args=(pipe,), daemon=True).start()
 
     def _read(self, pipe: IO[str]):
-        for line in pipe:
-            # TODO: Check if we have \n at the of line and strip/log without line break. Also see below when writing to file
-            self._output.append(line)
-            if self._is_err:
-                runner_logger.debug(f"Runner sterr: {line.rstrip('\n')}")
-            else:
-                runner_logger.debug(f"Runner stdout: {line.rstrip('\n')}")
-        self._done_event.set()
+        try:
+            for line in pipe:
+                # TODO: Check if we have \n at the of line and strip/log without line break. Also see below when writing to file
+                self._output.append(line)
+                if self._is_err:
+                    runner_logger.debug(f"Runner sterr: {line.rstrip('\n')}")
+                else:
+                    runner_logger.debug(f"Runner stdout: {line.rstrip('\n')}")
+        finally:
+            self._done_event.set()
 
     def stop(self, out_dir: Path):
-        self._done_event.wait()
+        no_timeout = self._done_event.wait(10)
+        if not no_timeout:
+            logger.warning(
+                f"Ran into timeout while waiting for {"stderr" if self._is_err else "stdout"} flush for {self._runner_name}. Logs might be incomplete for this stream!"
+            )
 
         if self._is_err:
             out_file = out_dir / "err.log"

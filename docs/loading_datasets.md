@@ -3,9 +3,9 @@ This section explains how to load and save datasets, what datasets are available
 
 ## RecSysDataSet Class
 
-The core of the framework's data model is the [`RecSysDataSet`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) class. This generic class provides a unified interface for handling different types of recommendation system datasets.
+The core of the framework's data model is the [`RecSysDataSet`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet) class. This generic class provides a unified interface for handling different types of recommendation system datasets.
 
-The [`RecSysDataSet`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) can contain one of three different variants of data:
+The [`RecSysDataSet`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet) can contain one of three different variants of data:
 
 - **RawData**: Contains a single pandas DataFrame with all interactions
 - **SplitData**: Contains train, validation, and test DataFrames 
@@ -22,7 +22,7 @@ All datasets follow a standardized column structure:
 
 ## Using Built-in Data Loaders
 
-The recommended way to load datasets is using the [`use_dataloader`](API_references.md#omnirec.recsys_data_set.RecSysDataSet.use_dataloader) method with registered data loaders:
+The recommended way to load datasets is using the [`use_dataloader`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet.use_dataloader) method with registered data loaders:
 
 ```python
 from omnirec import RecSysDataSet
@@ -47,6 +47,7 @@ dataset = RecSysDataSet.use_dataloader(
 ```
 
 The data loading process includes:
+
 1. **Download**: Raw data is downloaded if not already present
 2. **Canonicalization**: Data is cleaned and standardized:
    - Duplicate interactions are removed (keeping the latest)
@@ -66,9 +67,40 @@ min_rating = dataset.min_rating()
 max_rating = dataset.max_rating()
 ```
 
+### Dataset Provenance
+
+Every dataset also carries provenance information:
+
+```python
+# Compact one-line dataset summary
+print(dataset)
+
+# Full dataset overview with metadata and compact lineage
+print(dataset.format_details())
+
+# Full dataset overview with detailed trace information
+print(dataset.format_details(lineage_details=True))
+
+# Compact lineage-only summary
+print(dataset.format_lineage())
+
+# Detailed lineage report with full trace metadata
+print(dataset.format_lineage(details=True))
+
+# Inspect metadata directly
+print(dataset.meta.name)
+print(dataset.meta.canon_pth)
+print(dataset.meta.raw_dir)
+print(dataset.meta.format_details())
+
+# Access the lineage programmatically
+for trace in dataset.lineage:
+    print(trace)
+```
+
 ### Saving and Loading Datasets
 
-Save any [`RecSysDataSet`](API_references.md#omnirec.recsys_data_set.RecSysDataSet) object to a compressed `.rsds` file with the [`save()`](API_references.md#omnirec.recsys_data_set.RecSysDataSet.save) function:
+Save any [`RecSysDataSet`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet) object to a compressed `.rsds` file with the [`save()`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet.save) function:
 
 ```python
 # Save to file (extension .rsds will be added automatically)
@@ -81,9 +113,10 @@ dataset.save("/path/to/my_dataset.rsds")
 The save format preserves:
 - All data variants (Raw, Split, or Folded)
 - Metadata about the dataset
+- Preprocessing lineage
 - Version information for compatibility
 
-You can load previously saved datasets with the [`load()`](API_references.md#omnirec.recsys_data_set.RecSysDataSet.load) function:
+You can load previously saved datasets with the [`load()`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet.load) function:
 
 ```python
 # Load from .rsds file
@@ -130,7 +163,7 @@ for fold_idx, split_data in dataset._data.folds.items():
 
 **Creating Custom Data Loaders**
 
-To implement a custom data loader, create a class that inherits from [`Loader`](API_references.md#omnirec.data_loaders.base.Loader) and implement the [`info()`](API_references.md#omnirec.data_loaders.base.Loader.info) and [`load()`](API_references.md#omnirec.data_loaders.base.Loader.load) function:
+To implement a custom data loader, create a class that inherits from [`Loader`](api/data_loaders.md#omnirec.data_loaders.base.Loader) and implement the [`info()`](api/data_loaders.md#omnirec.data_loaders.base.Loader.info) and [`load()`](api/data_loaders.md#omnirec.data_loaders.base.Loader.load) function:
 
 ```python
 from pathlib import Path
@@ -163,7 +196,7 @@ dataset = RecSysDataSet.use_dataloader("MyDataset")
 
 **Loader Registration**
 
-You can register loaders under multiple names using [`register_dataloader()`](API_references.md#omnirec.data_loaders.registry.register_dataloader):
+You can register loaders under multiple names using [`register_dataloader()`](api/data_loaders.md#omnirec.data_loaders.registry.register_dataloader):
 
 ```python
 # Register under multiple names
@@ -172,7 +205,7 @@ register_dataloader(["Dataset1", "Dataset2", "AliasName"], MyCustomLoader)
 
 **DatasetInfo**
 
-The [`DatasetInfo`](API_references.md#omnirec.data_loaders.base.DatasetInfo) class provides metadata about your dataset:
+The [`DatasetInfo`](api/data_loaders.md#omnirec.data_loaders.base.DatasetInfo) class provides metadata about your dataset:
 
 - `download_urls`: URL(s) to download the dataset (string or list of strings)
 - `checksum`: Optional SHA256 checksum for integrity verification

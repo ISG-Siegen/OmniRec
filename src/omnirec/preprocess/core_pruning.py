@@ -15,7 +15,7 @@ class CorePruning(Preprocessor[RawData, RawData]):
         super().__init__()
         self.core = core
 
-    def process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
+    def _process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
         self.logger.info(f"Pruning data set to {self.core}-core.")
         self.logger.info(f"Number of interactions before: {dataset.num_interactions()}")
 

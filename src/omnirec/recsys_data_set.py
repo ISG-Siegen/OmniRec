@@ -1,11 +1,9 @@
 import copy
-import json
 import re
-import sys
-import zipfile
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from os import PathLike
 from pathlib import Path
+from pprint import pformat
 from time import time
 from typing import Generic, Optional, TypeVar, cast, overload
 
@@ -14,6 +12,8 @@ import pandas as pd
 from omnirec.data_loaders import registry
 from omnirec.data_loaders.datasets import DataSet
 from omnirec.data_variants import DataVariant, FoldedData, RawData, SplitData
+from omnirec.preprocess.trace import Trace
+from omnirec.types import CountSummary
 from omnirec.util import util
 from omnirec.util.util import get_data_dir
 
@@ -24,29 +24,138 @@ logger = util._root_logger.getChild("data")
 
 # TODO: Raw Initialization, i.e. from dataframe?
 
-# TODO: __str__ and __repr__ methods
-
 # TODO (Python 3.12+): Replace TypeVar with inline generic syntax `class Box[T](...)`
 T = TypeVar("T", bound=DataVariant)
 R = TypeVar("R", bound=DataVariant)
 
 
 @dataclass
-class _DatasetMeta:
+class DatasetMeta:
     canon_pth: Optional[Path] = None
     raw_dir: Optional[Path] = None
     name: str = "UnnamedDataset"
 
+    def format_details(self) -> str:
+        lines = [f"Name: {self.name}"]
+        lines.append(
+            f"Canonical path: {self.canon_pth if self.canon_pth is not None else 'unknown'}"
+        )
+        lines.append(
+            f"Raw dir: {self.raw_dir if self.raw_dir is not None else 'unknown'}"
+        )
+        return "\n".join(lines)
+
 
 class RecSysDataSet(Generic[T]):
     _folds_file_pattern = re.compile(r"(\d+)\/(?:train|val|test)\.csv")
+    _lineage: list[Trace]
 
     def __init__(
-        self, data: Optional[T] = None, meta: _DatasetMeta = _DatasetMeta()
+        self, data: Optional[T] = None, meta: Optional[DatasetMeta] = None
     ) -> None:
+        self._lineage = []
+
         if data:
             self._data = data
+
+        if meta is None:
+            meta = DatasetMeta()
         self._meta = meta
+
+    @staticmethod
+    def _append_field(
+        lines: list[str], label: str, value: object, indent_level: int = 1
+    ) -> None:
+        prefix = "  " * indent_level
+
+        if value is None:
+            rendered = "unknown"
+        elif isinstance(value, (dict, list, tuple, set)):
+            rendered = pformat(value, sort_dicts=False)
+        else:
+            rendered = str(value)
+
+        rendered_lines = rendered.splitlines()
+        if len(rendered_lines) == 1:
+            lines.append(f"{prefix}{label}: {rendered_lines[0]}")
+            return
+
+        lines.append(f"{prefix}{label}:")
+        lines.extend(f"{prefix}  {line}" for line in rendered_lines)
+
+    def _data_variant_name(self) -> str:
+        if not hasattr(self, "_data"):
+            return "Uninitialized"
+        return type(self._data).__name__
+
+    def _interaction_summary(self) -> CountSummary | None:
+        if not hasattr(self, "_data"):
+            return None
+        return self.num_interactions()
+
+    def _column_summary(self) -> CountSummary | None:
+        if not hasattr(self, "_data"):
+            return None
+        return self.num_columns()
+
+    @property
+    def meta(self) -> DatasetMeta:
+        """Return a shallow copy of the dataset metadata."""
+        return copy.copy(self._meta)
+
+    @property
+    def lineage(self) -> tuple[Trace, ...]:
+        """Return the recorded preprocessing lineage as a read-only snapshot."""
+        return tuple(copy.deepcopy(self._lineage))
+
+    def format_lineage(self, details: bool = False) -> str:
+        """Render the dataset lineage in either compact or detailed form."""
+        if not self._lineage:
+            return "No preprocessing lineage recorded."
+
+        if not details:
+            return "\n".join(
+                f"{index}. {trace!r}"
+                for index, trace in enumerate(self._lineage, start=1)
+            )
+
+        return "\n\n".join(
+            "\n".join((f"Step {index}", trace.format_details()))
+            for index, trace in enumerate(self._lineage, start=1)
+        )
+
+    def format_details(
+        self, include_lineage: bool = True, lineage_details: bool = False
+    ) -> str:
+        """Render a human-readable summary of the dataset and its provenance."""
+        lines = [f"RecSysDataSet: {self._meta.name}"]
+        self._append_field(lines, "Variant", self._data_variant_name())
+        self._append_field(lines, "Interactions", self._interaction_summary())
+        self._append_field(lines, "Columns", self._column_summary())
+
+        lines.append("  Metadata:")
+        lines.extend(f"    {line}" for line in self._meta.format_details().splitlines())
+
+        self._append_field(lines, "Lineage steps", len(self._lineage))
+        if include_lineage:
+            lines.append("  Lineage:")
+            formatted_lineage = self.format_lineage(details=lineage_details)
+            lines.extend(f"    {line}" for line in formatted_lineage.splitlines())
+
+        return "\n".join(lines)
+
+    def __repr__(self) -> str:
+        return (
+            "RecSysDataSet("
+            f"name={self._meta.name!r}, "
+            f"variant={self._data_variant_name()!r}, "
+            f"interactions={self._interaction_summary()!r}, "
+            f"columns={self._column_summary()!r}, "
+            f"lineage_steps={len(self._lineage)}"
+            ")"
+        )
+
+    __str__ = __repr__
 
     @staticmethod
     def use_dataloader(
@@ -170,14 +279,15 @@ class RecSysDataSet(Generic[T]):
             ts = self._data.df["timestamp"]
             if pd.api.types.is_numeric_dtype(ts):
                 ts = (
-                    pd.to_datetime(ts, unit="s", errors="coerce", utc=True).view(
+                    pd.to_datetime(ts, unit="s", errors="coerce", utc=True).astype(
                         "int64"
                     )
                     // 10**9
                 )
             else:
                 ts = (
-                    pd.to_datetime(ts, errors="coerce", utc=True).view("int64") // 10**9
+                    pd.to_datetime(ts, errors="coerce", utc=True).astype("int64")
+                    // 10**9
                 )
             self._data.df["timestamp"] = ts
             logger.info("Done.")
@@ -185,6 +295,7 @@ class RecSysDataSet(Generic[T]):
     def replace_data(self, new_data: R) -> "RecSysDataSet[R]":
         new = cast(RecSysDataSet[R], copy.copy(self))
         new._data = new_data
+        new._lineage = list(self._lineage)
         return new
 
     # region Dataset Statistics
@@ -201,11 +312,9 @@ class RecSysDataSet(Generic[T]):
     ) -> dict[int, dict[str, int]]: ...
 
     @overload
-    def num_interactions(
-        self: "RecSysDataSet[T]",
-    ) -> int | dict[str, int] | dict[int, dict[str, int]]: ...
+    def num_interactions(self: "RecSysDataSet[T]") -> CountSummary: ...
 
-    def num_interactions(self):
+    def num_interactions(self) -> CountSummary:
         if isinstance(self._data, RawData):
             return len(self._data.df)
         elif isinstance(self._data, SplitData):
@@ -213,6 +322,36 @@ class RecSysDataSet(Generic[T]):
         elif isinstance(self._data, FoldedData):
             return {
                 fold_num: {split: len(df) for split, df in fold_data.iter_splits()}
+                for fold_num, fold_data in self._data.folds.items()
+            }
+        else:
+            logger.error("Unknown data variant!")
+            return -1
+
+    @overload
+    def num_columns(self: "RecSysDataSet[RawData]") -> int: ...
+
+    @overload
+    def num_columns(self: "RecSysDataSet[SplitData]") -> dict[str, int]: ...
+
+    @overload
+    def num_columns(
+        self: "RecSysDataSet[FoldedData]",
+    ) -> dict[int, dict[str, int]]: ...
+
+    @overload
+    def num_columns(self: "RecSysDataSet[T]") -> CountSummary: ...
+
+    def num_columns(self) -> CountSummary:
+        if isinstance(self._data, RawData):
+            return len(self._data.df.columns)
+        elif isinstance(self._data, SplitData):
+            return {split: len(df.columns) for split, df in self._data.iter_splits()}
+        elif isinstance(self._data, FoldedData):
+            return {
+                fold_num: {
+                    split: len(df.columns) for split, df in fold_data.iter_splits()
+                }
                 for fold_num, fold_data in self._data.folds.items()
             }
         else:
@@ -250,44 +389,13 @@ class RecSysDataSet(Generic[T]):
         Args:
             file (str | PathLike): The path where the file is saved.
         """
+        from omnirec.rsds.dispatcher import save_dataset
+
         file = Path(file)
         if not file.suffix:
             file = file.with_suffix(".rsds")
-        with zipfile.ZipFile(file, "w", zipfile.ZIP_STORED) as zf:
-            if isinstance(self._data, RawData):
-                with zf.open("data.csv", "w") as data_file:
-                    self._data.df.to_csv(data_file, index=False)
-                zf.writestr("VARIANT", "RawData")
-            elif isinstance(self._data, SplitData):
-                for filename, data in zip(
-                    ["train", "val", "test"],
-                    [self._data.train, self._data.val, self._data.test],
-                ):
-                    with zf.open(filename + ".csv", "w") as data_file:
-                        data.to_csv(data_file, index=False)
-                zf.writestr("VARIANT", "SplitData")
-            elif isinstance(self._data, FoldedData):
-                # TODO: Leveraging the new SplitData.get method this can be simplified:
-                def write_fold(fold: int, split: str, data: pd.DataFrame):
-                    with zf.open(f"{fold}/{split}.csv", "w") as data_file:
-                        data.to_csv(data_file, index=False)
 
-                for fold, splits in self._data.folds.items():
-                    write_fold(fold, "train", splits.train)
-                    write_fold(fold, "val", splits.val)
-                    write_fold(fold, "test", splits.test)
-
-                zf.writestr("VARIANT", "FoldedData")
-
-            else:
-                logger.critical(
-                    f"Unknown data variant: {type(self._data).__name__}! Aborting save operation..."
-                )
-                sys.exit(1)
-
-            zf.writestr("META", json.dumps(asdict(self._meta), default=str))
-            # HACK: Very simple versioning implementation in case we change anything in the future
-            zf.writestr("VERSION", "1.0.0")
+        save_dataset(self, file)
 
     # TODO: Check file exists
     # TODO: Error handling: logger.critical and sys.exit(1) if any step causes an error
@@ -301,58 +409,11 @@ class RecSysDataSet(Generic[T]):
         Returns:
             RecSysDataSet[T]: The loaded RecSysDataSet object.
         """
-        with zipfile.ZipFile(file, "r", zipfile.ZIP_STORED) as zf:
-            version = zf.read("VERSION").decode()
-            # HACK: Very simple versioning implementation in case we change anything in the future
-            if version != "1.0.0":
-                logger.critical(f"Unknown rsds-file version: {version}")
-                sys.exit(1)
+        from omnirec.rsds.dispatcher import load_dataset
 
-            variant = zf.read("VARIANT").decode()
+        file = Path(file)
 
-            if variant == "RawData":
-                with zf.open("data.csv", "r") as data_file:
-                    data = RawData(pd.read_csv(data_file))
-            elif variant == "SplitData":
-                dfs: list[pd.DataFrame] = []
-
-                for filename in ["train", "val", "test"]:
-                    with zf.open(filename + ".csv", "r") as data_file:
-                        dfs.append(pd.read_csv(data_file))
-
-                data = SplitData(dfs[0], dfs[1], dfs[2])
-            elif variant == "FoldedData":
-                folds: dict[int, SplitData] = {}
-
-                for p in zf.namelist():
-                    match = RecSysDataSet._folds_file_pattern.match(p)
-                    if not match:
-                        continue
-
-                    fold = match.group(1)
-                    folds.setdefault(
-                        int(fold), SplitData(*[pd.DataFrame() for _ in range(3)])
-                    )
-
-                # TODO: Leveraging the new FoldedData.from_split_dict method this can be simplified:
-                def read_fold(fold: int, split: str) -> pd.DataFrame:
-                    with zf.open(f"{fold}/{split}.csv", "r") as data_file:
-                        return pd.read_csv(data_file)
-
-                for fold, split_data in folds.items():
-                    split_data.train = read_fold(fold, "train")
-                    split_data.val = read_fold(fold, "val")
-                    split_data.test = read_fold(fold, "test")
-
-                data = FoldedData(folds)
-            else:
-                logger.critical(
-                    f"Unknown data variant: {variant}! Aborting load operation..."
-                )
-                sys.exit(1)
-
-            meta = zf.read("META").decode()
-            meta = _DatasetMeta(**json.loads(meta))
-            return cast(RecSysDataSet[T], RecSysDataSet(data, meta))
+        ds = load_dataset(file)
+        return cast(RecSysDataSet[T], ds)
 
     # endregion

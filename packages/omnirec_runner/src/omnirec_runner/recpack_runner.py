@@ -7,12 +7,11 @@ from pandas import DataFrame
 from recpack.algorithms import NMF, SVD, Algorithm, ItemKNN
 from scipy.sparse import csr_matrix
 
-from omnirec_runner.runner import Runner
+from omnirec_runner.runner import Runner, RunnerService
 
 
 class RecPack(Runner):
-    def __init__(self) -> None:
-        super().__init__()
+    def init_runner(self):
         self.algorithms: dict[str, type[Algorithm]] = {
             "SVD": SVD,
             "NMF": NMF,
@@ -101,4 +100,4 @@ class RecPack(Runner):
 
 
 if __name__ == "__main__":
-    RecPack.main()
+    RunnerService(RecPack).run()

@@ -21,7 +21,7 @@ class TimeFilter(Preprocessor[RawData, RawData]):
         self._start = start
         self._end = end
 
-    def process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
+    def _process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
         df = dataset._data.df
         mask = pd.Series(True, index=df.index)
         if self._start is not None:
@@ -46,7 +46,7 @@ class RatingFilter(Preprocessor[RawData, RawData]):
         self._lower = lower
         self._upper = upper
 
-    def process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
+    def _process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
         df = dataset._data.df
         mask = pd.Series(True, index=df.index)
         if self._lower is not None:

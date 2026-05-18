@@ -19,12 +19,11 @@ from lenskit.pipeline.components import Component
 from lenskit.training import TrainingOptions
 from pydantic import BaseModel
 
-from omnirec_runner.runner import Runner
+from omnirec_runner.runner import Runner, RunnerService
 
 
 class Lenskit(Runner):
-    def __init__(self) -> None:
-        super().__init__()
+    def init_runner(self) -> None:
         self.algorithms: dict[str, tuple[type[Component], type[BaseModel]]] = {
             a.__name__: (a, c)
             for a, c in [
@@ -131,4 +130,4 @@ class Lenskit(Runner):
 
 
 if __name__ == "__main__":
-    Lenskit.main()
+    RunnerService(Lenskit).run()
