@@ -23,5 +23,4 @@ class Frappe(Loader):
         with zipfile.ZipFile(source_dir / "Mobile_Frappe.zip") as zipf:
             with zipf.open("Mobile_Frappe/frappe/frappe.csv") as file:
                 data = pd.read_csv(file, sep="\t", header=0, usecols=["user", "item"])
-                data["rating"] = 1
                 return data

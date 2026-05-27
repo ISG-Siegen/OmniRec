@@ -38,5 +38,4 @@ class AlibabaMobile(Loader):
                 },
                 inplace=True,
             )
-            data["rating"] = 1
             return data

@@ -30,5 +30,4 @@ class SteamAustralianLibraries(Loader):
                     item_id = item["item_id"]
                     data.append([user, item_id])
             df = pd.DataFrame(data, columns=["user", "item"])
-            df["rating"] = 1
             return df

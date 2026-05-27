@@ -53,5 +53,4 @@ class Adressa(Loader):
                     )
                 )
             df = pd.concat(data)
-            df["rating"] = 1
             return df

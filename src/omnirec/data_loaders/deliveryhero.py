@@ -75,6 +75,5 @@ class DeliveryHero(Loader):
                     },
                     inplace=True,
                 )
-                df["rating"] = 1
 
-                return df[["user", "item", "rating", "timestamp"]]
+                return df[["user", "item", "timestamp"]]

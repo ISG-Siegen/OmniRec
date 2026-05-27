@@ -33,5 +33,4 @@ class SteamRecommendations(Loader):
                 ],
             )
             data = data[data["rating"]]
-            data["rating"] = 1
             return data
