@@ -52,7 +52,7 @@ def list_datasets() -> list[str]:
     return list(_DATA_LOADERS.keys())
 
 
-def _loader(names: str | list[str]):
+def _loader[T: type[Loader]](names: str | list[str]):
     """
     Internal decorator to simplify registering loader classes.
 
@@ -61,7 +61,7 @@ def _loader(names: str | list[str]):
     Used only internally to avoid repetitive registration calls.
     """
 
-    def decorator(cls: type):
+    def decorator(cls: T):
         register_dataloader(names, cls)
         return cls
 
