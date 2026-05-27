@@ -3,9 +3,14 @@ import inspect
 from abc import ABC, abstractmethod
 from datetime import UTC, datetime
 from time import perf_counter
-from typing import Any, Generic, Self, TypeVar, final
+from typing import Any, Generic, Self, TypeVar, cast, final
 
 from omnirec.preprocess.trace import Trace
+from omnirec.preprocess.validation import (
+    PreprocessorValidationError,
+    ValidationFailureMode,
+    ValidationRule,
+)
 from omnirec.recsys_data_set import DataVariant, RecSysDataSet
 from omnirec.util import util
 
@@ -49,6 +54,9 @@ class Preprocessor(ABC, Generic[T, U]):
 
             cls.__init__ = wrapped_init
 
+    def validation_rules(self) -> list[ValidationRule]:
+        return []
+
     @abstractmethod
     def _process(self, dataset: RecSysDataSet[T]) -> RecSysDataSet[U]:
         """Implementation hook for transforming a dataset.
@@ -78,6 +86,22 @@ class Preprocessor(ABC, Generic[T, U]):
         Returns:
             RecSysDataSet[U]: The processed dataset with an appended trace entry.
         """
+        for rule in self.validation_rules():
+            for name, df in dataset.iter_dataframes():
+                is_valid, msg = rule.is_valid(df, name, dataset._meta.name)
+                if not is_valid:
+                    match rule.on_error:
+                        case ValidationFailureMode.RAISE:
+                            raise PreprocessorValidationError(msg)
+                        case ValidationFailureMode.WARN:
+                            self.logger.warning(f"{msg}\nContinuing anyway.")
+                        case ValidationFailureMode.SKIP:
+                            self.logger.warning(
+                                f"{msg}\nSkipping {type(self).__name__}"
+                            )
+                            # HACK: This might not be the best way here:
+                            return cast(RecSysDataSet[U], dataset)
+
         before_rows = dataset.num_interactions()
         before_columns = dataset.num_columns()
         start_time = perf_counter()
