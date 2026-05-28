@@ -237,7 +237,7 @@ The preprocessing operations transform datasets between different data variants:
 
 ## Custom Preprocessing Steps
 
-You can create custom preprocessing steps by inheriting from the [`Preprocessor`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor) base class and implementing the [`process()`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor.process) method.
+You can create custom preprocessing steps by inheriting from the [`Preprocessor`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor) base class and implementing the [`_process()`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor._process) method (which is called internally by [`process()`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor.process)).
 
 **Implementation**
 
@@ -245,7 +245,7 @@ Custom preprocessors must:
 
 1. Inherit from [`Preprocessor[T, U]`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor) where `T` is the input data variant and `U` is the output data variant
 2. Call `super().__init__()` in the constructor
-3. Implement the [`process()`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor.process) method that transforms a `RecSysDataSet[T]` to `RecSysDataSet[U]`
+3. Implement the [`_process()`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor._process) method that transforms a `RecSysDataSet[T]` to `RecSysDataSet[U]`
 
 **Available Data Variants:**
 
@@ -271,7 +271,7 @@ class CustomPreprocessor(Preprocessor[RawData, RawData]):
         self.param1 = param1
         self.param2 = param2
     
-    def process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
+    def _process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
         # Log what you're doing
         self.logger.info(f"Applying custom preprocessing with params: {self.param1}, {self.param2}")
         
@@ -284,11 +284,16 @@ class CustomPreprocessor(Preprocessor[RawData, RawData]):
         return dataset
 ```
 
-Custom preprocessors can be used directly or within a [`Pipe`](api/preprocessing_pipeline.md#omnirec.preprocess.pipe.Pipe):
+Custom preprocessors can be used directly (via [`process()`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor.process)) or within a [`Pipe`](api/preprocessing_pipeline.md#omnirec.preprocess.pipe.Pipe):
 
 ```python
 from omnirec.preprocess.pipe import Pipe
 from omnirec.preprocess.core_pruning import CorePruning
+
+my_preprocessor = CustomPreprocessor(10, 5)
+dataset = my_preprocessor.process(dataset)
+
+# Alternative:
 
 pipeline = Pipe(
     CustomPreprocessor(10, 0.5),

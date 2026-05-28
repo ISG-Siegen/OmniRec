@@ -77,7 +77,7 @@ class Preprocessor(ABC, Generic[T, U]):
         """Processes a dataset and records execution metadata in the lineage.
 
         This is the public entry point for running a preprocessor. It delegates
-        the actual transformation to ``process_impl()`` and wraps it with shared
+        the actual transformation to ``_process()`` and wraps it with shared
         logic such as timing, dataset shape capture, and trace creation.
 
         Args:
