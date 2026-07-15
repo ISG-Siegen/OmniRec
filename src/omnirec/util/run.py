@@ -1,6 +1,7 @@
 from os import PathLike
 from typing import Iterable, Optional, TypeVar
 
+from pandas import DataFrame
 from rich.console import Console
 
 from omnirec.data_variants import DataVariant
@@ -17,7 +18,7 @@ def run_omnirec(
     plan: ExperimentPlan,
     evaluator: Evaluator,  # TODO: Make optional
     slurm_script: Optional[PathLike | str] = None
-):
+) -> dict[str, DataFrame]:
     """Run the OmniRec framework with the specified datasets, experiment plan, and evaluator.
 
     Args:
@@ -26,6 +27,12 @@ def run_omnirec(
         evaluator (Evaluator): The evaluator to use for the experiment.
         slurm_script (Optional[PathLike | str]): Path to a SLURM script used to schedule experiments
             on an HPC cluster. If not provided, the experiments are run locally in normal mode.
+
+    Returns:
+        dict[str, DataFrame]: The results evaluated during this call, grouped by dataset
+            (see :meth:`~omnirec.runner.evaluation.Evaluator.get_results`). Results restored
+            from the checkpoint directory or produced by earlier calls are not included;
+            use ``evaluator.get_results()`` to retrieve all accumulated results.
     """
     if slurm_script is not None:
         # TODO:
@@ -37,3 +44,5 @@ def run_omnirec(
     for table in evaluator.get_tables():
         console = Console()
         console.print(table)
+
+    return evaluator.get_results(scope="run")

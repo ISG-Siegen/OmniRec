@@ -1,7 +1,7 @@
 import json
 import sys
 from pathlib import Path
-from typing import Iterable, Optional
+from typing import Iterable, Literal, Optional
 
 import pandas as pd
 from pandas import DataFrame
@@ -32,6 +32,7 @@ class Evaluator:
             metrics = [metrics]
         self._metrics = metrics
         self._results: dict[str, DataFrame] = {}
+        self._run_results: dict[str, DataFrame] = {}
 
     def run_evaluation(
         self,
@@ -69,8 +70,38 @@ class Evaluator:
         else:
             self._results[dataset] = pd.concat((old_df, new_df))
 
-    def get_results(self) -> dict[str, DataFrame]:
+        old_run_df = self._run_results.get(dataset)
+        if old_run_df is None:
+            self._run_results[dataset] = new_df
+        else:
+            self._run_results[dataset] = pd.concat((old_run_df, new_df))
+
+    def _start_run(self):
+        """Reset the run-scoped result store. Called by the coordinator at the
+        beginning of each run, before previous results are restored from the
+        checkpoint directory."""
+        self._run_results = {}
+
+    def get_results(
+        self, scope: Literal["all", "run"] = "all"
+    ) -> dict[str, DataFrame]:
         """Return evaluation results grouped by dataset.
+
+        Results accumulate in this Evaluator across experiments and across
+        successive runs. In addition, the coordinator restores previously saved
+        results from ``results.json`` in the checkpoint directory at the start
+        of every run (see :meth:`load_results`), so with ``scope="all"`` the
+        returned results also include results produced by earlier runs and
+        earlier processes that used the same checkpoint directory. Use
+        ``scope="run"`` to get only the results evaluated during the current
+        (most recent) run, or use a fresh checkpoint directory to avoid
+        restoring old results altogether.
+
+        Args:
+            scope: ``"all"`` (default) returns all accumulated results,
+                including results restored from the checkpoint directory.
+                ``"run"`` returns only the results evaluated since the start of
+                the current run.
 
         Returns:
             dict[str, DataFrame]:
@@ -84,6 +115,8 @@ class Evaluator:
                 - "k": cutoff for ranking metrics (e.g., NDCG@k), or None for non-ranking metrics (e.g., RMSE)
                 - "value": metric value
         """
+        if scope == "run":
+            return self._run_results
         return self._results
 
     def get_tables(self) -> list[Table]:
@@ -167,6 +200,8 @@ class Evaluator:
 
         Serialises the internal results dictionary to JSON so that results can be
         reloaded later with :meth:`load_results` without re-running experiments.
+        The coordinator calls this automatically at the end of every run to write
+        ``results.json`` in the checkpoint directory.
 
         Args:
             path (Path): Destination file path. The file is created or overwritten.
@@ -185,7 +220,11 @@ class Evaluator:
 
         Restores results that were written by :meth:`save_results`. After loading,
         :meth:`get_results` and :meth:`get_tables` work as if the experiments had
-        just finished.
+        just finished. The coordinator calls this automatically at the start of
+        every run when ``results.json`` exists in the checkpoint directory, so
+        previously saved results are restored into the passed Evaluator even if
+        it was freshly created. Restored results are not part of the run-scoped
+        results (``get_results(scope="run")``).
 
         Args:
             path (Path): Path to a JSON file previously written by :meth:`save_results`.

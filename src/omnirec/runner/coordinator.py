@@ -124,9 +124,17 @@ class Coordinator:
             sys.exit(1)
 
         self._evaluator = evaluator
+        self._evaluator._start_run()
         self._results_path = self._checkpoint_dir / "results.json"
         if self._results_path.exists():
             self._evaluator.load_results(self._results_path)
+            num_restored = sum(
+                len(df) for df in self._evaluator.get_results().values()
+            )
+            logger.info(
+                f"Restored {num_restored} previous result rows from {self._results_path}. "
+                'get_results() includes them, get_results(scope="run") does not.'
+            )
 
         for current_algo, current_config_list in algorithm_configs:
             try:
