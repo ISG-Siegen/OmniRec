@@ -9,6 +9,7 @@ The checkpoint directory organizes experiments hierarchically:
 ```
 checkpoints/
 ├── progress.json                                    # Global progress tracker
+├── results.json                                     # Accumulated evaluation results
 ├── out.log                                          # Runner stdout logs
 ├── err.log                                          # Runner stderr logs
 └── {dataset-name}-{hash}/                          # Per dataset
@@ -24,6 +25,7 @@ checkpoints/
 **Key files:**
 
 - **`progress.json`**: Tracks experiment phases (Fit, Predict, Eval, Done) for each configuration. Enables resuming interrupted experiments.
+- **`results.json`**: Accumulated evaluation results of all runs that used this checkpoint directory. Automatically restored into the evaluator at the start of every run (see [Resuming Experiments](#resuming-experiments)).
 - **`predictions.json`**: Contains model predictions with columns: `user`, `item`, `score`, `rank`.
 - **`out.log` / `err.log`**: Runner process output for debugging.
 
@@ -67,6 +69,14 @@ Each experiment goes through four phases:
 4. **Done**: Experiment complete
 
 The `progress.json` file tracks the current phase for each experiment configuration. If interrupted, the next run resumes from the last incomplete phase.
+
+**Result Restoring**
+
+At the start of every run, the coordinator loads `results.json` from the checkpoint directory (if it exists) into the passed evaluator and logs how many result rows were restored. At the end of the run, the accumulated results are written back. As a consequence:
+
+- `evaluator.get_results()` returns the union of the current run's results and all previously saved results from the same checkpoint directory — even across separate processes and freshly created `Evaluator` instances.
+- Use the return value of `run_omnirec` or `evaluator.get_results(scope="run")` to get only the results evaluated during the current run.
+- Use a fresh checkpoint directory if you do not want previous results to be restored.
 
 **Cross-Validation Support**
 
