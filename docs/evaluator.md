@@ -143,6 +143,25 @@ for dataset_id, df in evaluator.get_results().items():
 
 This format makes it easy to filter, aggregate, or export results for further analysis.
 
+## Result Semantics: Accumulated vs. Current Run
+
+The evaluator accumulates results across experiments and across successive runs. In addition, at the start of every run the coordinator automatically restores previously saved results from `results.json` in the checkpoint directory (see [Checkpointing and Results](checkpointing.md)). This means `get_results()` may also contain results from earlier runs and earlier processes that used the same checkpoint directory — even if the `Evaluator` instance was freshly created.
+
+To work only with the results of the current run, use the return value of [`run_omnirec`](api/runner_function.md#omnirec.util.run.run_omnirec) or call `get_results(scope="run")`:
+
+```python
+# Returns only the results evaluated during this call
+results = run_omnirec(datasets=dataset, plan=plan, evaluator=evaluator)
+
+# Equivalent: run-scoped results from the evaluator
+results = evaluator.get_results(scope="run")
+
+# All accumulated results, including those restored from the checkpoint directory
+all_results = evaluator.get_results()
+```
+
+Alternatively, use a fresh checkpoint directory to avoid restoring old results altogether.
+
 ## Saving and Loading Results
 
 Use [`save_results()`](api/evaluation_metrics.md#omnirec.runner.evaluation.Evaluator.save_results) to persist evaluation results to a JSON file after a run, and [`load_results()`](api/evaluation_metrics.md#omnirec.runner.evaluation.Evaluator.load_results) to restore them later without re-running experiments:
