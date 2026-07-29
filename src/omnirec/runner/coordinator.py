@@ -60,6 +60,7 @@ class Coordinator:
         """
         self._checkpoint_dir = Path(checkpoint_dir)
         if tmp_dir:
+            self._tmp_dir_obj = None
             self._tmp_dir = Path(tmp_dir)
         else:
             self._tmp_dir_obj: Optional[tempfile.TemporaryDirectory[str]] = (
