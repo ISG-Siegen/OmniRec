@@ -1,5 +1,8 @@
 import sys
 
+import pandera.pandas as pa
+
+from omnirec.preprocess.validation import ValidationRule
 from omnirec.recsys_data_set import RawData, RecSysDataSet
 
 from .base import Preprocessor
@@ -43,3 +46,10 @@ class MakeImplicit(Preprocessor[RawData, RawData]):
 
         self.logger.info(f"Number of interactions after: {dataset.num_interactions()}")
         return dataset
+
+    def validation_rules(self) -> list[ValidationRule]:
+        return [
+            ValidationRule(
+                pa.DataFrameSchema({"rating": pa.Column(float, coerce=True)})
+            )
+        ]
