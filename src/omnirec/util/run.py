@@ -5,7 +5,7 @@ from rich.console import Console
 
 from omnirec.data_variants import DataVariant
 from omnirec.recsys_data_set import RecSysDataSet
-from omnirec.runner.coordinator import Coordinator
+from omnirec.runner.coordinator import DEFAULT_CHECKPOINT_DIR, Coordinator
 from omnirec.runner.evaluation import Evaluator
 from omnirec.runner.plan import ExperimentPlan
 
@@ -16,7 +16,9 @@ def run_omnirec(
     datasets: RecSysDataSet[T] | Iterable[RecSysDataSet[T]],
     plan: ExperimentPlan,
     evaluator: Evaluator,  # TODO: Make optional
-    slurm_script: Optional[PathLike | str] = None
+    checkpoint_dir: PathLike | str = DEFAULT_CHECKPOINT_DIR,
+    tmp_dir: Optional[PathLike | str] = None,
+    slurm_script: Optional[PathLike | str] = None,
 ):
     """Run the OmniRec framework with the specified datasets, experiment plan, and evaluator.
 
@@ -31,7 +33,7 @@ def run_omnirec(
         # TODO:
         raise NotImplementedError()
 
-    c = Coordinator()
+    c = Coordinator(checkpoint_dir, tmp_dir)
     c.run(datasets, plan, evaluator)
 
     for table in evaluator.get_tables():

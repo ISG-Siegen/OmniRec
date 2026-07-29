@@ -31,11 +31,13 @@ runner_logger = util._root_logger.getChild("runner")
 # TODO (Python 3.12+): Replace TypeVar with inline generic syntax `class Box[T](...)`
 T = TypeVar("T", bound=DataVariant)
 
+DEFAULT_CHECKPOINT_DIR = Path("./checkpoints")
+
 
 class Coordinator:
     def __init__(
         self,
-        checkpoint_dir: PathLike | str = Path("./checkpoints"),
+        checkpoint_dir: PathLike | str = DEFAULT_CHECKPOINT_DIR,
         tmp_dir: Optional[PathLike | str] = None,
     ) -> None:
         """Initialize the Coordinator for orchestrating recommendation algorithm experiments.
