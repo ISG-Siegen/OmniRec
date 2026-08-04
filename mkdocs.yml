@@ -2,7 +2,7 @@ site_name: OmniRec Docs
 site_url: https://omnirec.recommender-systems.com
 
 nav:
-  - Home: 
+  - Home:
       - Overview: index.md
       - About Us: about_us.md
   - User Guide:
@@ -27,7 +27,7 @@ nav:
       - Coordinator Class: api/coordinator_class.md
       - Utility Functions: api/utility_functions.md
 
-theme: 
+theme:
   name: material
   features:
     - content.tabs.link
@@ -48,33 +48,32 @@ theme:
     - toc.follow
   toc_depth: 2
   palette:
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
 
-  # Palette toggle for automatic mode
-  - media: "(prefers-color-scheme)"
-    toggle:
-      icon: material/brightness-auto
-      name: Switch to light mode
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
 
-  # Palette toggle for light mode
-  - media: "(prefers-color-scheme: light)"
-    scheme: default 
-    toggle:
-      icon: material/weather-sunny
-      name: Switch to dark mode
+      primary: blue grey
+      accent: amber
 
-    primary: blue grey
-    accent: amber
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to system preference
 
-  # Palette toggle for dark mode
-  - media: "(prefers-color-scheme: dark)"
-    scheme: slate
-    toggle:
-      icon: material/weather-night
-      name: Switch to system preference
+      primary: blue grey
+      accent: amber
 
-    primary: blue grey
-    accent: amber
-  
   code:
     highlight_theme: material
 
@@ -119,4 +118,5 @@ extra:
     alias: true
 
 extra_javascript:
+  - javascript/mathjax.js
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
