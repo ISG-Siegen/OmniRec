@@ -41,12 +41,12 @@ class NDCG(RankingMetric):
         $DCG@k(u) = \\sum_{i=1}^{k} \\frac{\\mathbf{1}\\{\\text{pred}_i \\in \\text{Rel}(u)\\}}{\\log_2(i+1)}$
 
         where $\\mathbf{1}\\{\\cdot\\}$ is the indicator function and
-        
+
         $\\text{Rel}(u)$ is the set of relevant items for user u.
 
         The ideal discounted cumulative gain is
 
-        $IDCG@k = \\sum_{i=1}^{k} \\frac{1}{\\log_2(i+1)}$
+        $IDCG@k = \\sum_{i=1}^{min(|Rel(u)|,~k)} \\frac{1}{\\log_2(i+1)}$
 
         The normalized score is
 
