@@ -34,6 +34,11 @@
       show_root_heading: true
       show_root_toc_entry: false
 
+::: omnirec.metrics.ranking.Precision
+    options:
+      show_root_heading: true
+      show_root_toc_entry: false
+
 ::: omnirec.metrics.ranking.Recall
     options:
       show_root_heading: true

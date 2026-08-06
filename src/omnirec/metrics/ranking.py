@@ -184,13 +184,16 @@ class Recall(RankingMetric):
 
 class Precision(RankingMetric):
     def __init__(self, k: int | list[int]) -> None:
-        """Initializes the Precision@k metric.
+        """Calculates the average precision at k for one or multiple k values. Precision at k is defined as the proportion of top-k recommendations that are relevant.
 
-        Precision@k measures the fraction of relevant items among the top-k
-        recommended items.
+        It follows the formula:
+
+        $Precision@k = \\frac{1}{|U|} \\sum_{u \\in U} \\frac{|\\text{Rel}(u) \\cap \\text{Pred}_k(u)|}{k}$
+
+        where $\\text{Pred}_k(u)$ is the set of top-k predicted items for user u.
 
         Args:
-            k (int | list[int]): The number of top predictions to consider.
+            k (int | list[int]): The number of top recommendations to consider.
         """
         super().__init__(k)
 
