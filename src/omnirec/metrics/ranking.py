@@ -86,7 +86,12 @@ class NDCG(RankingMetric):
             hits = np.isin(pred[: max(self._k_list)], positive_test_interactions)
             user_dcg = np.where(hits, discounted_gain_per_k[: len(hits)], 0)
             for k in self._k_list:
-                user_ndcg = user_dcg[:k].sum() / ideal_discounted_gain_per_k[k - 1]
+                user_ndcg = (
+                    user_dcg[:k].sum()
+                    / ideal_discounted_gain_per_k[
+                        min(k, len(positive_test_interactions)) - 1
+                    ]
+                )
                 ndcg_per_user_per_k.setdefault(k, []).append(user_ndcg)
 
         scores: list[float] = [
