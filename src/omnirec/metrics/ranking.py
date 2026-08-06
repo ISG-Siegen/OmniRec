@@ -27,9 +27,48 @@ class RankingMetric(Metric):
             topk[user] = (items, scores)
         return topk
 
+    def make_evaluable_user_dict(
+        self, predictions: DataFrame, test: DataFrame
+    ) -> dict[int, tuple[list[int], np.ndarray]]:
+        """Prepare predictions and relevant test items for evaluable users.
+
+        Users with predictions but without test interactions are excluded
+        from ranking-metric calculations and reported through the metric logger.
+        """
+        top_k_dict = self.make_topk_dict(predictions)
+        positive_test_interactions_per_user = {
+            user: group["item"].to_numpy() for user, group in test.groupby("user")
+        }
+
+        evaluable_users: dict[int, tuple[list[int], np.ndarray]] = {}
+        skipped_users: list[int] = []
+        for user, (pred, _) in top_k_dict.items():
+            positive_test_interactions = positive_test_interactions_per_user.get(user)
+            if (
+                positive_test_interactions is None
+                or len(positive_test_interactions) == 0
+            ):
+                skipped_users.append(user)
+                continue
+
+            evaluable_users[user] = (pred, positive_test_interactions)
+
+        if skipped_users:
+            self.logger.warning(
+                "Skipped %d user(s) when calculating %s because they have an empty test set.",
+                len(skipped_users),
+                self.__class__.__name__,
+            )
+            self.logger.debug(
+                "Skipped user IDs when calculating %s: %s",
+                self.__class__.__name__,
+                skipped_users,
+            )
+
+        return evaluable_users
+
 
 class NDCG(RankingMetric):
-
     def __init__(self, k: int | list[int]) -> None:
         """Initializes the NDCG (Normalized Discounted Cumulative Gain) metric. k is the number of top predictions to consider.
         It can be a single integer or a list of integers, in which case the metric will be computed for each value of k.
@@ -52,9 +91,9 @@ class NDCG(RankingMetric):
 
         $NDCG@k(u) = \\frac{DCG@k(u)}{IDCG@k}$
 
-        Finally, the reported score is averaged over all users:
+        Finally, the reported score is averaged over users with at least one relevant test interaction:
 
-        $\\text{NDCG@k} = \\frac{1}{|U|} \\sum_{u \\in U} NDCG@k(u)$
+        $\\text{NDCG@k} = \\frac{1}{|U_{\\text{eligible}}|} \\sum_{u \\in U_{\\text{eligible}}} NDCG@k(u)$
 
         Args:
             k (int | list[int]): The number of top predictions to consider.
@@ -71,7 +110,7 @@ class NDCG(RankingMetric):
         Returns:
             MetricResult: The computed NDCG scores for each value k. If multiple users are provided, the scores are averaged.
         """
-        top_k_dict = self.make_topk_dict(predictions)
+        evaluable_users = self.make_evaluable_user_dict(predictions, test)
 
         discounted_gain_per_k = np.array(
             [1 / np.log2(i + 1) for i in range(1, max(self._k_list) + 1)]
@@ -80,9 +119,9 @@ class NDCG(RankingMetric):
             discounted_gain_per_k[: ind + 1].sum()
             for ind in range(len(discounted_gain_per_k))
         ]
-        ndcg_per_user_per_k: dict[int, list] = {}
-        for user, (pred, _) in top_k_dict.items():
-            positive_test_interactions = test["item"][test["user"] == user].to_numpy()
+
+        ndcg_per_user_per_k: dict[int, list[float]] = {k: [] for k in self._k_list}
+        for pred, positive_test_interactions in evaluable_users.values():
             hits = np.isin(pred[: max(self._k_list)], positive_test_interactions)
             user_dcg = np.where(hits, discounted_gain_per_k[: len(hits)], 0)
             for k in self._k_list:
@@ -92,24 +131,23 @@ class NDCG(RankingMetric):
                         min(k, len(positive_test_interactions)) - 1
                     ]
                 )
-                ndcg_per_user_per_k.setdefault(k, []).append(user_ndcg)
+                ndcg_per_user_per_k[k].append(user_ndcg)
 
-        scores: list[float] = [
-            float(sum(v)) / len(v) for v in ndcg_per_user_per_k.values()
-        ]
-        scores_dict = {k: score for k, score in zip(self._k_list, scores)}
+        scores_dict = {
+            k: float(sum(user_scores)) / len(user_scores) if user_scores else 0.0
+            for k, user_scores in ndcg_per_user_per_k.items()
+        }
         return MetricResult(__class__.__name__, scores_dict)
 
 
 class HR(RankingMetric):
-    
     def __init__(self, k: int | list[int]) -> None:
         """
         Computes the HR metric. k is the number of top recommendations to consider.
         It can be a single integer or a list of integers, in which case the metric will be computed for each value of k.
 
         It follows the formula:
-        
+
         $HR@k = \\frac{1}{|U|} \\sum_{u \\in U} \\mathbf{1}\\{\\text{Rel}(u) \\cap \\text{Pred}_k(u) \\neq \\emptyset\\}$
 
         where $\\text{Pred}_k(u)$ is the set of top-k predicted items for user u.
@@ -129,27 +167,26 @@ class HR(RankingMetric):
         Returns:
             MetricResult: The computed HR scores for each value k. If multiple users are provided, the scores are averaged.
         """
-        top_k_dict = self.make_topk_dict(predictions)
+        evaluable_users = self.make_evaluable_user_dict(predictions, test)
 
-        hr_per_user_per_k: dict[int, list] = {}
-        # FIXME: Fix metric implementation, adapt to new data format
-        for user, (pred, _) in top_k_dict.items():
-            positive_test_interactions = test["item"][test["user"] == user].to_numpy()
+        hr_per_user_per_k: dict[int, list[float]] = {k: [] for k in self._k_list}
+        for pred, positive_test_interactions in evaluable_users.values():
             hits = np.isin(pred[: max(self._k_list)], positive_test_interactions)
             for k in self._k_list:
                 user_hr = hits[:k].sum()
                 user_hr = 1 if user_hr > 0 else 0
-                hr_per_user_per_k.setdefault(k, []).append(user_hr)
-        scores: list[float] = [sum(v) / len(v) for v in hr_per_user_per_k.values()]
-        scores_dict = {k: score for k, score in zip(self._k_list, scores)}
+                hr_per_user_per_k[k].append(float(user_hr))
+        scores_dict = {
+            k: sum(user_scores) / len(user_scores) if user_scores else 0.0
+            for k, user_scores in hr_per_user_per_k.items()
+        }
         return MetricResult(__class__.__name__, scores_dict)
 
 
 class Recall(RankingMetric):
-
     def __init__(self, k: int | list[int]) -> None:
         """Calculates the average recall at k for one or multiple k values. Recall at k is defined as the proportion of relevant items that are found in the top-k recommendations.
-        
+
         It follows the formula:
 
         $Recall@k = \\frac{1}{|U|} \\sum_{u \\in U} \\frac{|\\text{Rel}(u) \\cap \\text{Pred}_k(u)|}{\\min(|\\text{Rel}(u)|, k)}$
@@ -171,19 +208,18 @@ class Recall(RankingMetric):
         Returns:
             list[float]: The computed Recall scores for each value k. If multiple users are provided, the scores are averaged.
         """
-        top_k_dict = self.make_topk_dict(predictions)
+        evaluable_users = self.make_evaluable_user_dict(predictions, test)
 
-        recall_per_user_per_k: dict[int, list] = {}
-        for user, (pred, _) in top_k_dict.items():
-            positive_test_interactions = test["item"][test["user"] == user].to_numpy()
+        recall_per_user_per_k: dict[int, list[float]] = {k: [] for k in self._k_list}
+        for pred, positive_test_interactions in evaluable_users.values():
             hits = np.isin(pred[: max(self._k_list)], positive_test_interactions)
             for k in self._k_list:
                 user_recall = hits[:k].sum() / min(len(positive_test_interactions), k)
-                recall_per_user_per_k.setdefault(k, []).append(user_recall)
-        scores: list[float] = [
-            float(sum(v)) / len(v) for v in recall_per_user_per_k.values()
-        ]
-        scores_dict = {k: score for k, score in zip(self._k_list, scores)}
+                recall_per_user_per_k[k].append(float(user_recall))
+        scores_dict = {
+            k: sum(user_scores) / len(user_scores) if user_scores else 0.0
+            for k, user_scores in recall_per_user_per_k.items()
+        }
         return MetricResult(__class__.__name__, scores_dict)
 
 
@@ -212,14 +248,12 @@ class Precision(RankingMetric):
         Returns:
             MetricResult: Average Precision scores across users for each k.
         """
-        top_k_dict = self.make_topk_dict(predictions)
+        evaluable_users = self.make_evaluable_user_dict(predictions, test)
 
         precision_per_user_per_k: dict[int, list[float]] = {k: [] for k in self._k_list}
 
-        for user, (pred, _) in top_k_dict.items():
-            positive_test_interactions = test["item"][test["user"] == user].to_numpy()
-
-            max_k = max(self._k_list)
+        max_k = max(self._k_list)
+        for pred, positive_test_interactions in evaluable_users.values():
             hits = np.isin(pred[:max_k], positive_test_interactions)
 
             for k in self._k_list:
