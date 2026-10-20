@@ -71,6 +71,7 @@ class Coordinator:
         self._out_reader: Optional[OutputReader] = None
         self._err_reader: Optional[OutputReader] = None
         self._root: Optional[_RunnerService] = None
+        self._proc: Optional[subprocess.Popen] = None
 
         ensure_certs()
 
@@ -450,7 +451,8 @@ class Coordinator:
         if self._root is not None:
             self._root._shutdown()
 
-        # FIXME: self._proc might be None here
+        if self._proc is None:
+            return
         self._proc.terminate()
         try:
             self._proc.wait(5)
