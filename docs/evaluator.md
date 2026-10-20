@@ -20,7 +20,7 @@ evaluator = Evaluator(
 )
 ```
 
-The evaluator can combine multiple metrics of the same type in a single evaluation run. Choose metrics appropriate for your feedback type: use prediction metrics ([`RMSE`](api/evaluation_metrics.md#omnirec.metrics.prediction.RMSE), [`MAE`](api/evaluation_metrics.md#omnirec.metrics.prediction.MAE)) for explicit ratings, and ranking metrics ([`NDCG`](api/evaluation_metrics.md#omnirec.metrics.ranking.NDCG), [`HR`](api/evaluation_metrics.md#omnirec.metrics.ranking.HR), [`Recall`](api/evaluation_metrics.md#omnirec.metrics.ranking.Recall)) for implicit feedback or top-k recommendations.
+The evaluator can combine multiple metrics of the same type in a single evaluation run. Choose metrics appropriate for your feedback type: use prediction metrics ([`RMSE`](api/evaluation_metrics.md#omnirec.metrics.prediction.RMSE), [`MAE`](api/evaluation_metrics.md#omnirec.metrics.prediction.MAE)) for explicit ratings, and ranking metrics ([`NDCG`](api/evaluation_metrics.md#omnirec.metrics.ranking.NDCG), [`HR`](api/evaluation_metrics.md#omnirec.metrics.ranking.HR), [`Recall`](api/evaluation_metrics.md#omnirec.metrics.ranking.Recall), [`Precision`](api/evaluation_metrics.md#omnirec.metrics.ranking.Precision)) for implicit feedback or top-k recommendations.
 
 ## Available Metrics
 
@@ -41,7 +41,7 @@ Use prediction metrics when evaluating algorithms that predict rating values, su
 **Ranking Metrics** - For top-k recommendation scenarios:
 
 ```python
-from omnirec.metrics.ranking import NDCG, HR, Recall
+from omnirec.metrics.ranking import NDCG, HR, Recall, Precision
 
 # Normalized Discounted Cumulative Gain at k=[5, 10, 20]
 ndcg = NDCG([5, 10, 20])
@@ -51,9 +51,29 @@ hr = HR([5, 10])
 
 # Recall at k=[10, 20]
 recall = Recall([10, 20])
+
+# Precision at k=[10, 20]
+precision = Precision([10, 20])
 ```
 
 Ranking metrics evaluate the quality of top-k recommendation lists. Specify cutoff values (k) to measure performance at different list lengths. For example, [`NDCG([5, 10, 20])`](api/evaluation_metrics.md#omnirec.metrics.ranking.NDCG) computes NDCG@5, NDCG@10, and NDCG@20.
+
+### Ranking Metric Semantics
+
+Predictions must contain `user`, `item`, `score`, and `rank`; recommendations are ordered by ascending `rank`. Test rows identify relevant items through their `user` and `item` columns. Ranking metrics treat these interactions as binary relevance and do not weight them by rating values.
+
+Scores are calculated per user and then averaged over users who have both predictions and at least one test interaction. Users with predictions but no test interactions are excluded from the average, with a warning reporting their count and a debug message listing their IDs. Test users without predictions are also outside this average. If no users are evaluable, each requested cutoff returns `0.0`.
+
+| Metric | Per-user calculation at cutoff `k` |
+| --- | --- |
+| NDCG | Discounted gain of the relevant recommendations, divided by the ideal gain for `min(k, number of relevant test items)`. |
+| HR | `1` if any of the top-k recommendations is relevant, otherwise `0`. |
+| Recall | Number of relevant top-k recommendations divided by `min(k, number of relevant test items)`. |
+| Precision | Number of relevant top-k recommendations divided by `k`, even if fewer recommendations were returned. |
+
+For example, if a user has one relevant test item and it is recommended first, NDCG@10 is `1.0`. The ideal gain includes only that one item. Precision@10 is `0.1` in the same case. See the [API reference](api/evaluation_metrics.md#ranking-metrics) for the formulas.
+
+The corrected NDCG normalization and exclusion of users without test interactions can change scores compared with OmniRec 1.0.0. Record the OmniRec version alongside reported results.
 
 ## Running Experiments with Evaluation
 
@@ -90,7 +110,7 @@ evaluator = Evaluator(NDCG([10]), Recall([10]))
 run_omnirec(dataset, plan, evaluator)
 ```
 
-All metric computations happen automatically without additional code. Ensure your metrics match your data type: ranking metrics (NDCG, HR, Recall) for implicit feedback, and prediction metrics (RMSE, MAE) for explicit feedback.
+All metric computations happen automatically without additional code. Ensure your metrics match your data type: ranking metrics (NDCG, HR, Recall, Precision) for implicit feedback, and prediction metrics (RMSE, MAE) for explicit feedback.
 
 After all experiments complete, `run_omnirec` automatically prints a formatted results table to the console — one table per dataset — using [`get_tables()`](api/evaluation_metrics.md#omnirec.runner.evaluation.Evaluator.get_tables). No extra code is required to see the results.
 

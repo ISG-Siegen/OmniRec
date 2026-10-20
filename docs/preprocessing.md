@@ -27,6 +27,20 @@ processed_dataset = pipeline.process(dataset)
 
 The pipeline executes each step in the order they were provided, passing the output of one step as input to the next.
 
+## Input Validation
+
+Before transforming a dataset, each preprocessor checks the rules returned by its [`validation_rules()`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor.validation_rules) method. A rule combines a Pandera schema with a failure policy. The default implementation returns no rules; individual preprocessors declare the inputs they require.
+
+The built-in rules are:
+
+| Preprocessor | Requirement | On failure |
+| --- | --- | --- |
+| `MakeImplicit` | A `rating` column that can be validated as numeric | Raise `PreprocessorValidationError` |
+| `TimeFilter` | A `timestamp` column | Raise `PreprocessorValidationError` |
+| `RatingFilter` | A `rating` column that can be validated as numeric | Log a warning and skip the filter |
+
+For example, applying `RatingFilter` to an implicit dataset without ratings leaves the dataset unchanged. Applying `MakeImplicit` to that dataset raises an error: it already contains implicit interactions and has no ratings to threshold. Place rating-based steps before `MakeImplicit` in a pipeline.
+
 ## Data Processing
 
 **Subsample** - Reduces the dataset size by sampling a subset of interactions:
@@ -68,6 +82,8 @@ dataset = make_implicit.process(dataset)
 - `threshold` (int | float): Threshold for filtering interactions
     - `int`: Direct rating threshold
     - `float`: Fraction of maximum rating (0.0 to 1.0)
+
+The result contains `user` and `item`, plus `timestamp` if present in the input. The `rating` column is removed; each retained row represents a relevant interaction.
 
 **CorePruning** - Removes users and items with fewer than a specified number of interactions:
 
@@ -301,6 +317,53 @@ pipeline = Pipe(
 )
 dataset = pipeline.process(dataset)
 ```
+
+### Declaring Validation Rules
+
+Override `validation_rules()` when a custom step requires particular columns, types, or values. Return a list of [`ValidationRule`](api/preprocessing_pipeline.md#omnirec.preprocess.validation.ValidationRule) objects using `pandera.pandas.DataFrameSchema` instances or `DataFrameModel` classes. For example, this step requires non-null, non-negative numeric ratings before applying a square-root transform:
+
+```python
+import numpy as np
+import pandera.pandas as pa
+
+from omnirec.preprocess.base import Preprocessor
+from omnirec.preprocess.validation import ValidationRule
+from omnirec.recsys_data_set import RawData, RecSysDataSet
+
+
+class SqrtRatings(Preprocessor[RawData, RawData]):
+    def validation_rules(self) -> list[ValidationRule]:
+        return [
+            ValidationRule(
+                schema=pa.DataFrameSchema(
+                    {"rating": pa.Column(float, pa.Check.ge(0), coerce=True)}
+                ),
+                message="SqrtRatings requires non-negative numeric ratings.",
+            )
+        ]
+
+    def _process(self, dataset: RecSysDataSet[RawData]) -> RecSysDataSet[RawData]:
+        # Convert explicitly: validation does not replace the input DataFrame.
+        df = dataset._data.df.copy()
+        df["rating"] = np.sqrt(df["rating"].astype(float))
+        return dataset.replace_data(RawData(df))
+
+
+# Use with a raw dataset that contains ratings.
+dataset = SqrtRatings().process(dataset)
+```
+
+[`process()`](api/preprocessing_pipeline.md#omnirec.preprocess.base.Preprocessor.process) applies each rule in list order to every input DataFrame: `raw`, all train/validation/test splits, or those splits in every fold. Validation happens before `_process()`. It checks requirements within the input data variant; it does not convert a raw-data preprocessor into one that supports split or folded data.
+
+Set a rule's `on_error` argument using [`ValidationFailureMode`](api/preprocessing_pipeline.md#omnirec.preprocess.validation.ValidationFailureMode):
+
+| Mode | Behavior |
+| --- | --- |
+| `RAISE` (default) | Stop with `PreprocessorValidationError` before transforming the dataset. |
+| `WARN` | Log a warning, continue checking rules, and run `_process()` unless a later check raises or skips. The transformation must handle the invalid input. |
+| `SKIP` | Log a warning and skip the entire step, even if only one split or fold failed. Return the original dataset without adding a lineage entry. A surrounding `Pipe` continues with its next step. |
+
+For example, use `on_error=ValidationFailureMode.SKIP` for an optional step, importing the enum from `omnirec.preprocess.validation`. On failure, messages identify the dataset and input frame; `message` replaces the generated summary. Pandera's validated or coerced output is not assigned back to the dataset, so perform any required conversions inside `_process()`.
 
 ## Complete Example
 

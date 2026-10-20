@@ -6,6 +6,15 @@ import pandera.pandas as pa
 
 
 class ValidationFailureMode(StrEnum):
+    """Action taken by a preprocessor when an input validation rule fails.
+
+    Attributes:
+        RAISE: Raise PreprocessorValidationError and stop processing.
+        WARN: Log a warning and continue validation and processing.
+        SKIP: Log a warning and return the original dataset without processing
+            or adding a lineage entry.
+    """
+
     RAISE = auto()
     WARN = auto()
     SKIP = auto()
@@ -13,6 +22,15 @@ class ValidationFailureMode(StrEnum):
 
 @dataclass
 class ValidationRule:
+    """A Pandera input schema and its failure policy.
+
+    Args:
+        schema: A Pandera DataFrameSchema instance or DataFrameModel class.
+        on_error: How the preprocessor handles a failed check. Defaults to RAISE.
+        message: Optional replacement for the generated failure summary.
+            The dataset and DataFrame names are still included for context.
+    """
+
     schema: pa.DataFrameSchema | type[pa.DataFrameModel]
     on_error: ValidationFailureMode = ValidationFailureMode.RAISE
     message: str | None = None
@@ -23,6 +41,18 @@ class ValidationRule:
         df_name: str = "Unnamed",
         dataset_name: str = "UnnamedDataset",
     ) -> tuple[bool, str | None]:
+        """Check a DataFrame without replacing it with Pandera's validated output.
+
+        Args:
+            df: Input DataFrame to check using lazy validation.
+            df_name: Frame name, such as raw, train, or fold_0/test.
+            dataset_name: Dataset name used in error messages.
+
+        Returns:
+            tuple[bool, str | None]: True and None on success, or False and a
+                failure summary on a Pandera SchemaErrors exception. This method
+                does not apply the failure policy; the preprocessor does that.
+        """
         context = f"{dataset_name}/{df_name}"
         try:
             self.schema.validate(df, lazy=True)
@@ -65,4 +95,4 @@ class ValidationRule:
 
 
 class PreprocessorValidationError(Exception):
-    pass
+    """Raised when a preprocessing input fails a rule with RAISE mode."""

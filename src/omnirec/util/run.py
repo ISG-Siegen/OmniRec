@@ -26,6 +26,12 @@ def run_omnirec(
         datasets (RecSysDataSet[T] | Iterable[RecSysDataSet[T]]): The dataset(s) to use for the experiment.
         plan (ExperimentPlan): The experiment plan to follow.
         evaluator (Evaluator): The evaluator to use for the experiment.
+        checkpoint_dir (PathLike | str, optional): Directory for persistent experiment
+            progress, predictions, and results. Use the same directory when resuming
+            a run. Defaults to "./checkpoints".
+        tmp_dir (Optional[PathLike | str], optional): Directory for intermediate files.
+            If None, a temporary directory is created and cleaned up automatically.
+            A supplied directory is not automatically cleaned up. Defaults to None.
         slurm_script (Optional[PathLike | str]): Path to a SLURM script used to schedule experiments
             on an HPC cluster. If not provided, the experiments are run locally in normal mode.
     """

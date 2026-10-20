@@ -299,6 +299,16 @@ class RecSysDataSet(Generic[T]):
         return new
 
     def iter_dataframes(self):
+        """Iterate over (name, DataFrame) pairs for the dataset.
+
+        Raw data yields ``raw``. Split data yields ``train``, ``validation``,
+        and ``test``. Folded data yields those names prefixed with
+        ``fold_<index>/`` for each fold. Frames are not copied; preprocessors
+        use this iterator for input validation.
+
+        Raises:
+            ValueError: The dataset contains an unknown data variant.
+        """
         if isinstance(self._data, RawData):
             yield "raw", self._data.df
         elif isinstance(self._data, SplitData):

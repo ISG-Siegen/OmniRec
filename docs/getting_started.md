@@ -10,6 +10,8 @@ First you need to setup a Python environment with at least Python 3.12 and insta
 pip install omnirec
 ```
 
+Use the documentation version selector to match your installed OmniRec version. You can check it with `python -m pip show omnirec`. Numbered documentation snapshots describe the corresponding release; `latest` follows the newest published documentation. To install a particular release, append `==` and its version number to `omnirec` in the installation command.
+
 ## Loading Datasets
 
 Central part of the OmniRec library is the [`RecSysDataSet`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet) class. You can load data by calling the static [`use_dataloader()`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet) function that returns a [`RecSysDataSet`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet) object. If provided a registered dataset name with DataSet.<dataset_name>, [`use_dataloader()`](api/dataset_management.md#omnirec.recsys_data_set.RecSysDataSet) downloads the dataset, removes duplicates and normalizes the identifiers:

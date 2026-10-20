@@ -24,6 +24,9 @@
       show_root_toc_entry: false
 
 ## Ranking Metrics
+
+All ranking metrics average over users with predictions and at least one relevant test interaction. In the formulas below, `U` (or `U_eligible`) denotes this set. Predicted users without test interactions are skipped and logged; test users without predictions are outside the average. If the set is empty, each cutoff returns `0.0`. See [Ranking Metric Semantics](../evaluator.md#ranking-metric-semantics) for input columns and examples.
+
 ::: omnirec.metrics.ranking.HR
     options:
       show_root_heading: true
