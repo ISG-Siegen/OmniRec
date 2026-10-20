@@ -39,12 +39,13 @@ class Env:
 
     def create(self, force=False):
         flag_file = self._path / ".omnirec"
+        version = metadata.version("omnirec")
 
         if flag_file.exists() and force:
             logger.info(
                 f"Env '{self._name}' already exists at {self._path}, but {force=}! Recreating..."
             )
-        elif flag_file.exists() and not force:
+        elif flag_file.exists() and flag_file.read_text() == version and not force:
             logger.info(f"Reusing existing env '{self._name}' at {self._path}")
             return
 
@@ -59,7 +60,7 @@ class Env:
             ["uv", "pip", "install", "-p", self.py_path.absolute(), *self._packages]
         )
         self._handle_proc(proc)
-        flag_file.touch()
+        flag_file.write_text(version)
         logger.info("Done.")
 
     @property
