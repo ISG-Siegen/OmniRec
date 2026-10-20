@@ -71,6 +71,7 @@ class Coordinator:
         self._out_reader: Optional[OutputReader] = None
         self._err_reader: Optional[OutputReader] = None
         self._root: Optional[_RunnerService] = None
+        self._proc: Optional[subprocess.Popen] = None
 
         ensure_certs()
 
@@ -450,14 +451,14 @@ class Coordinator:
         if self._root is not None:
             self._root._shutdown()
 
-        # FIXME: self._proc might be None here
-        self._proc.terminate()
-        try:
-            self._proc.wait(5)
-        except subprocess.TimeoutExpired:
-            logger_fn("Runner did not respond, killing...")
-            self._proc.kill()
-            self._proc.wait()
+        if self._proc is not None:
+            self._proc.terminate()
+            try:
+                self._proc.wait(5)
+            except subprocess.TimeoutExpired:
+                logger_fn("Runner did not respond, killing...")
+                self._proc.kill()
+                self._proc.wait()
 
         for reader in (self._out_reader, self._err_reader):
             if reader is not None:
