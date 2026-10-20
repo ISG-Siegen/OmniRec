@@ -7,6 +7,8 @@ from pathlib import Path
 from subprocess import Popen
 from typing import Optional
 
+from uv import find_uv_bin
+
 from omnirec.util import util
 from omnirec.util.util import get_data_dir
 
@@ -50,14 +52,23 @@ class Env:
             return
 
         logger.info(f"Creating env '{self._name}' at {self._path}")
+
+        uv_bin = find_uv_bin()
         proc = self._run(
-            ["uv", "venv", "-p", self._python_version, self._path.absolute()]
+            [
+                uv_bin,
+                "venv",
+                "--clear",
+                "-p",
+                self._python_version,
+                self._path.absolute(),
+            ]
         )
         self._handle_proc(proc)
 
         logger.info("Installing packages...")
         proc = self._run(
-            ["uv", "pip", "install", "-p", self.py_path.absolute(), *self._packages]
+            [uv_bin, "pip", "install", "-p", self.py_path.absolute(), *self._packages]
         )
         self._handle_proc(proc)
         flag_file.write_text(version)
