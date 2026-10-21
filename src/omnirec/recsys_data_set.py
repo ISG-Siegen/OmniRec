@@ -298,6 +298,31 @@ class RecSysDataSet(Generic[T]):
         new._lineage = list(self._lineage)
         return new
 
+    def iter_dataframes(self):
+        """Iterate over (name, DataFrame) pairs for the dataset.
+
+        Raw data yields ``raw``. Split data yields ``train``, ``validation``,
+        and ``test``. Folded data yields those names prefixed with
+        ``fold_<index>/`` for each fold. Frames are not copied; preprocessors
+        use this iterator for input validation.
+
+        Raises:
+            ValueError: The dataset contains an unknown data variant.
+        """
+        if isinstance(self._data, RawData):
+            yield "raw", self._data.df
+        elif isinstance(self._data, SplitData):
+            yield "train", self._data.train
+            yield "validation", self._data.val
+            yield "test", self._data.test
+        elif isinstance(self._data, FoldedData):
+            for fold, data in self._data.folds.items():
+                yield f"fold_{fold}/train", data.train
+                yield f"fold_{fold}/validation", data.val
+                yield f"fold_{fold}/test", data.test
+        else:
+            raise ValueError("Unknown data variant!")
+
     # region Dataset Statistics
 
     @overload

@@ -27,5 +27,4 @@ class Behance(Loader):
             compression=None,
         )
 
-        df["rating"] = 1
         return df

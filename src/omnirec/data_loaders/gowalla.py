@@ -31,5 +31,4 @@ class Gowalla(Loader):
             header=None,
             sep="\t",
         )
-        df["rating"] = 1
         return df[["user", "item", "rating", "timestamp"]]

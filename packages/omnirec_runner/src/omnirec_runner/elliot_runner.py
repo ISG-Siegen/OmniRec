@@ -50,9 +50,12 @@ class Elliot(Runner):
                 self.model._model.load_weights(model_file)
 
     def predict(self) -> Dict[Any, Any]:
-        recs = self.model.get_recommendations(
-            self.model.evaluator.get_needed_recommendations()
+        recommendation_n = (
+            self.recommendation_n
+            if self.implicit_feedback and self.recommendation_n is not None
+            else self.model.evaluator.get_needed_recommendations()
         )
+        recs = self.model.get_recommendations(recommendation_n)
 
         recs = {
             int(key): [[int(t[0]) for t in value], [float(t[1]) for t in value]]

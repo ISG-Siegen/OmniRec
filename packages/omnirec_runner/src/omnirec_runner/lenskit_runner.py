@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import binpickle
 import numpy as np
 import pandas as pd
@@ -117,7 +115,7 @@ class Lenskit(Runner):
             self.test.drop(columns="rating", inplace=True)
             predictions = predict(self.model, self.test)
         else:
-            predictions = recommend(self.model, self.test)
+            predictions = recommend(self.model, self.test, n=self.recommendation_n)
 
         predictions_df = predictions.to_df()
         predictions_df.rename(

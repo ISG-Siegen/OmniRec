@@ -188,7 +188,7 @@ class RecBole(Runner):
                     np.array([uid]),
                     self.model,
                     self.test_data,
-                    k=20,
+                    k=self.recommendation_n,
                     device=self.config["device"],
                 )
                 # convert tensor to numpy array and then to list

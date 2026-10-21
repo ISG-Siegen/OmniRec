@@ -130,10 +130,10 @@ def _register_default_runners():
                 "NeuMF",
                 "UserAutoRec",
             ],
-            "3.8",
+            "3.9",
             [
                 # patched elliot version
-                "git+https://github.com/moritz-baumgart/elliot.git",
+                "git+https://github.com/moritz-baumgart/elliot.git@3.9",
             ],
         ),
     )

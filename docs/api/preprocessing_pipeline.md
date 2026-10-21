@@ -4,6 +4,20 @@
     options:
       show_root_heading: true
       show_root_toc_entry: false
+      members:
+        - validation_rules
+        - process
+        - _process
+
+## Input Validation
+
+::: omnirec.preprocess.validation.ValidationRule
+
+::: omnirec.preprocess.validation.ValidationFailureMode
+
+::: omnirec.preprocess.validation.PreprocessorValidationError
+
+## Transformations
 
 ::: omnirec.preprocess.subsample.Subsample
     options:

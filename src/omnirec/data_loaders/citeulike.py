@@ -46,5 +46,4 @@ class CiteULike(Loader):
                         assert item.isdecimal()
                         u_i_pairs.append((user, int(item)))
                 df = pd.DataFrame(u_i_pairs, columns=["user", "item"])
-                df["rating"] = 1
                 return df

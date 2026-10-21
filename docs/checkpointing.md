@@ -2,6 +2,24 @@
 
 OmniRec automatically saves experiment progress and results to enable fault tolerance and result persistence.
 
+## Choosing Run Directories
+
+Pass `checkpoint_dir` and `tmp_dir` to [`run_omnirec`](api/runner_function.md#omnirec.util.run.run_omnirec) to choose where experiment files are stored:
+
+```python
+from omnirec.util.run import run_omnirec
+
+run_omnirec(
+    datasets=dataset,
+    plan=plan,
+    evaluator=evaluator,
+    checkpoint_dir="experiments/my_run",
+    tmp_dir="scratch/my_run",
+)
+```
+
+`checkpoint_dir` defaults to `./checkpoints` and stores persistent progress, predictions, and results. Use the same path when resuming an experiment. `tmp_dir` stores intermediate files such as CSV exports. Its default, `None`, creates a temporary directory that is cleaned up automatically; a directory you supply is retained for you to manage.
+
 ## Checkpoint Directory Structure
 
 The checkpoint directory organizes experiments hierarchically:

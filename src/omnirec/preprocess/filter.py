@@ -1,9 +1,11 @@
 from typing import Optional
 
 import pandas as pd
+import pandera.pandas as pa
 
 from omnirec.data_variants import RawData
 from omnirec.preprocess.base import Preprocessor
+from omnirec.preprocess.validation import ValidationFailureMode, ValidationRule
 from omnirec.recsys_data_set import RecSysDataSet
 
 
@@ -31,6 +33,9 @@ class TimeFilter(Preprocessor[RawData, RawData]):
         df = df.loc[mask]
         return dataset.replace_data(RawData(df))
 
+    def validation_rules(self) -> list[ValidationRule]:
+        return [ValidationRule(pa.DataFrameSchema({"timestamp": pa.Column()}))]
+
 
 class RatingFilter(Preprocessor[RawData, RawData]):
     def __init__(
@@ -55,3 +60,12 @@ class RatingFilter(Preprocessor[RawData, RawData]):
             mask &= df["rating"] <= self._upper
         df = df.loc[mask]
         return dataset.replace_data(RawData(df))
+
+    def validation_rules(self) -> list[ValidationRule]:
+        return [
+            ValidationRule(
+                pa.DataFrameSchema({"rating": pa.Column(float, coerce=True)}),
+                on_error=ValidationFailureMode.SKIP,
+                message=f"No numeric rating column in dataset. Cannot apply {type(self).__name__} without rating column.",
+            )
+        ]

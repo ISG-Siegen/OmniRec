@@ -3,9 +3,14 @@ import inspect
 from abc import ABC, abstractmethod
 from datetime import UTC, datetime
 from time import perf_counter
-from typing import Any, Generic, Self, TypeVar, final
+from typing import Any, Generic, Self, TypeVar, cast, final
 
 from omnirec.preprocess.trace import Trace
+from omnirec.preprocess.validation import (
+    PreprocessorValidationError,
+    ValidationFailureMode,
+    ValidationRule,
+)
 from omnirec.recsys_data_set import DataVariant, RecSysDataSet
 from omnirec.util import util
 
@@ -49,6 +54,29 @@ class Preprocessor(ABC, Generic[T, U]):
 
             cls.__init__ = wrapped_init
 
+    def validation_rules(self) -> list[ValidationRule]:
+        """Return the input validation rules for this preprocessing step.
+
+        Override this hook to declare requirements using Pandera schemas or
+        DataFrameModel classes wrapped in ``ValidationRule`` objects. The default
+        implementation returns an empty list, so validation is optional.
+
+        ``process()`` checks each rule against every input DataFrame before
+        calling ``_process()``: the raw frame, all train/validation/test frames,
+        or those frames in every fold. Rules run in list order. Each rule's
+        ``on_error`` setting controls whether a failure raises
+        ``PreprocessorValidationError`` (RAISE, the default), logs a warning and
+        continues (WARN), or logs a warning and skips this entire preprocessing step (SKIP).
+        A skipped step returns the original dataset without adding a trace.
+
+        Validation checks inputs; the validated or coerced DataFrames returned
+        by Pandera are not assigned back to the dataset.
+
+        Returns:
+            list[ValidationRule]: Rules to check before transforming the dataset.
+        """
+        return []
+
     @abstractmethod
     def _process(self, dataset: RecSysDataSet[T]) -> RecSysDataSet[U]:
         """Implementation hook for transforming a dataset.
@@ -66,18 +94,39 @@ class Preprocessor(ABC, Generic[T, U]):
 
     @final
     def process(self, dataset: RecSysDataSet[T]) -> RecSysDataSet[U]:
-        """Processes a dataset and records execution metadata in the lineage.
+        """Validates and processes a dataset, recording execution metadata in the lineage.
 
-        This is the public entry point for running a preprocessor. It delegates
-        the actual transformation to ``process_impl()`` and wraps it with shared
-        logic such as timing, dataset shape capture, and trace creation.
+        This is the public entry point for running a preprocessor. It checks
+        ``validation_rules()`` before delegating the transformation to
+        ``_process()``, then records timing, dataset shapes, and a trace.
 
         Args:
             dataset (RecSysDataSet[T]): The dataset to process.
 
         Returns:
-            RecSysDataSet[U]: The processed dataset with an appended trace entry.
+            RecSysDataSet[U]: The processed dataset with an appended trace entry,
+                or the original dataset without a new trace if validation skips
+                this step. A skipped dataset retains its original data variant.
+
+        Raises:
+            PreprocessorValidationError: An input fails a rule with RAISE mode.
         """
+        for rule in self.validation_rules():
+            for name, df in dataset.iter_dataframes():
+                is_valid, msg = rule.is_valid(df, name, dataset._meta.name)
+                if not is_valid:
+                    match rule.on_error:
+                        case ValidationFailureMode.RAISE:
+                            raise PreprocessorValidationError(msg)
+                        case ValidationFailureMode.WARN:
+                            self.logger.warning(f"{msg}\nContinuing anyway.")
+                        case ValidationFailureMode.SKIP:
+                            self.logger.warning(
+                                f"{msg}\nSkipping {type(self).__name__}"
+                            )
+                            # HACK: This might not be the best way here:
+                            return cast(RecSysDataSet[U], dataset)
+
         before_rows = dataset.num_interactions()
         before_columns = dataset.num_columns()
         start_time = perf_counter()

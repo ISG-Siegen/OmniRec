@@ -32,5 +32,4 @@ class HetrecLastFM(Loader):
                 },
                 inplace=True,
             )
-            data["rating"] = 1
             return data

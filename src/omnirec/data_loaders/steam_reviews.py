@@ -33,5 +33,4 @@ class SteamReviews(Loader):
                 data,
                 columns=["user", "item", "timestamp"],
             )
-            df["rating"] = 1
             return df

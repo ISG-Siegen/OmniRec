@@ -34,5 +34,4 @@ class MovieLens1BSynthetic(Loader):
                     dfs.append(pd.DataFrame(data, columns=["user", "item"]))
 
         df = pd.concat(dfs, axis=0)
-        df["rating"] = 1
         return df

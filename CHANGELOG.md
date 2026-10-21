@@ -1,3 +1,27 @@
+## v1.1.0 (2026-10-21)
+
+### Feat
+
+- limit length of generated rankings to the maximum metric cutoff
+- expose `Coordinator` checkpoint and temp dir  via  `run_omnirec` helper
+- add validation rules for feedback conversion and filter preprocessors
+- add input dataframe validation to base preprocessor
+
+### Fix
+
+- update python version of elliot environment to 3.9 to support `dict[T, U]` type syntax
+- check if `_proc` is `None` in `Coordinator` cleanup function to prevent `AttributeError` when runner startup failed
+- add `--clear` flag to `uv venv` invocation to support uv >= 0.10
+- save omnirec version to environment flag file to force environment update on version change
+- skip users without test interactions in ranking metrics
+- cap ideal gain in NDCG calculation by available relevant items
+- initialize `_tmp_dir_obj` in `Coordinator` with `None` to avoid AttributeError in `__del__`
+- remove artificial ratings from implicit datasets
+
+### Refactor
+
+- preserve loader type in registration decorator
+
 ## v1.0.0 (2026-05-13)
 
 ### Feat

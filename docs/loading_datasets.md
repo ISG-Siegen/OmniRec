@@ -17,8 +17,10 @@ All datasets follow a standardized column structure:
 
 - `user`: User identifier (normalized to integers starting from 0)
 - `item`: Item identifier (normalized to integers starting from 0)
-- `rating`: Rating value (explicit feedback) or 1 (implicit feedback)
-- `timestamp`: Unix timestamp of the interaction
+- `rating`: Rating value, when provided by the dataset.
+- `timestamp`: Unix timestamp of the interaction, when available
+
+For implicit feedback, each row represents an observed interaction. Use ranking metrics for these interactions; rating-based preprocessing requires a real `rating` column. [`MakeImplicit`](preprocessing.md#data-processing) also removes the rating column after thresholding explicit feedback.
 
 ## Using Built-in Data Loaders
 
@@ -182,7 +184,7 @@ class MyCustomLoader(Loader):
     @staticmethod
     def load(source_dir: Path, name: str) -> pd.DataFrame:
         # Implement your loading logic here
-        # Must return DataFrame with columns: user, item, rating, timestamp
+        # Return user and item; include real ratings and timestamps if available.
         df = pd.read_csv(source_dir / "data.csv")
         # Process and return standardized DataFrame
         return df

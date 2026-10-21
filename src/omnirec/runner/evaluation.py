@@ -8,6 +8,7 @@ from pandas import DataFrame
 from rich.table import Table
 
 from omnirec.metrics.base import Metric
+from omnirec.metrics.ranking import RankingMetric
 from omnirec.util import util
 
 logger = util._root_logger.getChild("eval")
@@ -209,3 +210,14 @@ class Evaluator:
         """
         js = json.loads(path.read_text())
         self._results = {k: pd.DataFrame(v) for k, v in js.items()}
+
+    @property
+    def max_ranking_k(self) -> int | None:
+        """The largest cutoff among the configured ranking metrics.
+
+        Non-ranking metrics are ignored. Returns None if no ranking metrics are configured.
+        """
+        return max(
+            (m.max_k for m in self._metrics if isinstance(m, RankingMetric)),
+            default=None,
+        )

@@ -6,7 +6,7 @@ Welcome to OmniRec! OmniRec is an open-source Python library designed to be an a
 
 Please visit [omnirec.recommender-systems.com](https://omnirec.recommender-systems.com) for comprehensive documentation, including user guides and API references.
 
-You can download the full demo paper <a href="docs/assets/OmniRec_Demo_.pdf">here</a>.
+You can download the full demo paper <a href="https://link.springer.com/chapter/10.1007/978-3-032-21321-1_18">here</a>.
 
 Recommender systems research often faces challenges like fragmented data handling, inconsistent preprocessing, and poor interoperability between different toolkits. These issues can make it difficult to compare results and reproduce studies, slowing down scientific progress. OmniRec tackles these problems by providing a unified, transparent, and easy-to-use workflow for the entire experimentation process.
 
