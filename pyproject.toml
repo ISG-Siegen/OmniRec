@@ -12,7 +12,7 @@ dependencies = [
     "dacite>=1.9.2",
     "pandas>=2.3.0,<3",
     "pydantic>=2.11.7",
-    "omnirec-runner==1.0.0",
+    "omnirec-runner==1.1.0",
     "requests>=2.32.4",
     "rpyc>=6.0.2",
     "scikit-learn>=1.7.0",
