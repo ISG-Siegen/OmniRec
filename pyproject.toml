@@ -1,6 +1,6 @@
 [project]
 name = "omnirec"
-version = "1.0.0"
+version = "1.1.0"
 description = "OmniRec: The all-in-one Python library providing a unified, cross-framework pipeline for reproducible and interoperable recommender system experimentation."
 readme = "README.md"
 authors = [
