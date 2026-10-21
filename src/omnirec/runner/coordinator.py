@@ -201,6 +201,7 @@ class Coordinator:
                                     current_dataset._meta.name,
                                     dataset_namehash,
                                     config_namehash,
+                                    evaluator.max_ranking_k,
                                     *files,
                                     fold,
                                 )
@@ -221,6 +222,7 @@ class Coordinator:
                                 current_dataset._meta.name,
                                 dataset_namehash,
                                 config_namehash,
+                                evaluator.max_ranking_k,
                                 *files,
                             )
                         else:
@@ -311,6 +313,7 @@ class Coordinator:
         dataset_name: str,
         dataset_namehash: str,
         config_namehash: str,
+        recommendation_n: int | None,
         train_file: Path,
         val_file: Path,
         test_file: Path,
@@ -334,6 +337,7 @@ class Coordinator:
             str(predictions_file.resolve()),
             str(current_checkpoint_dir.resolve()),
             str(current_tmp_dir.resolve()),
+            recommendation_n,
         )
 
         def get_phase() -> Phase:

@@ -13,6 +13,11 @@ class RankingMetric(Metric):
         else:
             self._k_list = [k]
 
+    @property
+    def max_k(self) -> int:
+        """The largest configured cutoff for top-k predictions."""
+        return max(self._k_list)
+
     def make_topk_dict(
         self, predictions: DataFrame
     ) -> dict[int, tuple[list[int], list[float]]]:

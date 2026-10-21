@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from enum import IntEnum
 from pathlib import Path
 from time import time
-from typing import Any, Callable, Dict, List, Type
+from typing import Any, Callable, Dict, List, Optional, Type
 from uuid import uuid4
 
 import rpyc
@@ -45,6 +45,7 @@ class _RunnerService(ABC):
         predictions_file: str,
         checkpoint_dir: str,
         tmp_dir: str,
+        recommendation_n: Optional[int],
     ): ...
 
     @abstractmethod
@@ -62,7 +63,6 @@ class _RunnerService(ABC):
 
 @rpyc.service
 class RunnerService(_RunnerService, rpyc.Service):
-
     def __init__(self, runner_cls: Type["Runner"]) -> None:
         super().__init__()
 
@@ -100,6 +100,7 @@ class RunnerService(_RunnerService, rpyc.Service):
         predictions_file: str,
         checkpoint_dir: str,
         tmp_dir: str,
+        recommendation_n: Optional[int],
     ):
         self._runner = self._runner_cls(
             algorithm_name,
@@ -111,6 +112,7 @@ class RunnerService(_RunnerService, rpyc.Service):
             Path(predictions_file),
             Path(checkpoint_dir),
             Path(tmp_dir),
+            recommendation_n,
         )
 
     # TODO: Stopping time
@@ -160,6 +162,7 @@ class Runner(ABC):
     predictions_file: Path
     checkpoint_dir: Path
     tmp_dir: Path
+    recommendation_n: Optional[int]
 
     def _fit_job(self):
         self.init_runner()

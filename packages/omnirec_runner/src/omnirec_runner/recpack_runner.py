@@ -58,6 +58,8 @@ class RecPack(Runner):
         df = pd.DataFrame({"user": row_ind, "item": col_ind, "score": data})
         df = df[df["user"].isin(self.users_to_predict)]
         df = df.sort_values(["user", "score"], ascending=[True, False])
+        if self.recommendation_n is not None:
+            df = df.groupby("user", sort=False).head(self.recommendation_n)
         df["rank"] = df.groupby("user").cumcount() + 1
 
         return df.to_dict(orient="list")
