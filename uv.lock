@@ -904,7 +904,7 @@ wheels = [
 
 [[package]]
 name = "omnirec"
-version = "1.0.0"
+version = "1.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "cryptography" },
@@ -965,7 +965,7 @@ dev = [
 
 [[package]]
 name = "omnirec-runner"
-version = "1.0.0"
+version = "1.1.0"
 source = { editable = "packages/omnirec_runner" }
 dependencies = [
     { name = "rpyc" },
