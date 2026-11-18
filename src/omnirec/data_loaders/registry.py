@@ -167,7 +167,7 @@ def _run_loader(
                 logger.critical(
                     f"Download failed for {name}. Checksum verification failed and no further download links available! Exiting..."
                 )
-                sys.exit()
+                sys.exit(1)
             logger.info(
                 "Continuing with next download link because of checksum verification fail..."
             )
